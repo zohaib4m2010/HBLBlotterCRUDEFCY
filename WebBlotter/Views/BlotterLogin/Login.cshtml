@@ -1,0 +1,74 @@
+﻿@model WebBlotter.Classes.UserProfile
+
+@{
+    ViewBag.Title = "Blotter Login";
+     Layout = "~/Views/Shared/_BlankLayout.cshtml";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="container">
+        <div class="col-lg-4 align-self-center">
+            @using (Html.BeginForm())
+            {
+                <div class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    @if (@ViewBag.Message != null)
+                    {
+                        <div style="border: 1px solid red">
+                            @ViewBag.Message
+                        </div>
+                    }
+                    <h4>Blotter Login</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(a => a.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(a => a.UserName, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(a => a.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(a => a.Password, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            @if (@ViewBag.ErrorMessage != null)
+                            {
+                                <label> @ViewBag.ErrorMessage</label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Login" class="btn btn-default" />
+                    </div>
+
+
+
+                </div>
+            }
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

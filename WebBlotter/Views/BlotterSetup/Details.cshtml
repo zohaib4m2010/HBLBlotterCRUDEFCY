@@ -1,0 +1,38 @@
+﻿@model WebBlotter.Models.SBP_BlotterSetup
+
+
+@{
+    ViewBag.Title = "Details";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.15/api/sum().js"></script>
+
+</head>
+
+<body>
+
+
+    <h2>Details</h2>
+
+    <div>
+        <h4>BlotterSetup</h4>
+        <b>S.No        :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.SNo)" readonly><br>
+        <b>Description :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.Description)" readonly><br>
+        <b>Status      :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.status)" readonly><br>
+</div>
+    <br /><br />
+
+    <p>
+        @Html.ActionLink("Edit", "EditSetupt", new { id = Model.SNo }) |
+        @Html.ActionLink("Back to List", "GetAllSetupItems")
+    </p>
+    </body>
+</html>

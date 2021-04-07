@@ -1,0 +1,34 @@
+﻿
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>FX BLOTTER SPA</title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                BLOTTER
+                @*<small><span data-bind="text: genre"></span></small>*@
+            </h1>
+        </div>
+        <div class="row">
+            <div class="span2">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <li><a href="http://localhost:25202/blotter/GetAllBlotter" >Blotter</a></li>
+                        <li><a href="#" data-bind="click: $parent.getByGenre"><span data-bind="  text: $data">Input Data</span></a></li>
+                        <li><a href="#" data-bind="click: $parent.getByGenre"><span data-bind="  text: $data">Setup</span></a></li>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script src="Scripts/jquery-2.0.3.js"></script>
+    <script src="Scripts/knockout-2.3.0.debug.js"></script>
+    <script src="Scripts/app.service.js"></script>
+    <script src="Scripts/app.js"></script>
+</body>
+</html>

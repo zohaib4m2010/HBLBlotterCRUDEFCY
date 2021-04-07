@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-fixed-top navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+                @Html.ActionLink("SBP Blotter", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    @if (Session["Pages"].ToString().Contains(','))
+                    {
+                        foreach (var item in Session["Pages"].ToString().Split(','))
+                        {
+                            var val = item.Split('~');
+                            <li class="nav-item">@Html.ActionLink(val[0], val[1], val[2], new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                    }
+                    else
+                    {
+                        var val = Session["Pages"].ToString().Split('~');
+                        <li class="nav-item">@Html.ActionLink(val[0], val[1], val[2], new { area = "" }, new { @class = "nav-link" })</li>
+
+                    }
+
+                </ul>
+
+                @*@using (Html.BeginForm())
+                {
+                    <div class="btn-group d-inline  my-2 my-lg-0" role="group">
+                        <select name="selectCurrency" class="form-control" onchange="this.form.submit()" formaction=@Url.Action("Testing") formmethod="post">
+                            @if (Session["Currencies"].ToString().Contains(','))
+                            {
+                                foreach (var item in Session["Currencies"].ToString().Split(','))
+                                {
+                                    var val = item.Split('~');
+                                    <option value="@val[0]">@val[1]</option>
+                                }
+                            }
+                            else
+                            {
+                                var val = Session["Currencies"].ToString().Split('~');
+                                <option value="@val[0]">@val[1]</option>
+
+                            }
+                        </select>
+                    </div>
+                }*@
+
+                @Html.ActionLink("Logout", "Logout", "BlotterLogin", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        @RenderSection("SPAViews", required: false)
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Powered By HBL Global Market</p>
+        </footer>
+    </div>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

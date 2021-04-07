@@ -1,0 +1,121 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetLatestBreakup_Result>
+
+@{
+    /**/
+
+    ViewBag.Title = "Blotter Breakups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="container">
+
+    @if (ViewData["DataStatus"] == "Data Not Availavle")
+    {
+        <br />
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <br />
+        <h2>Report Not Updated For Today</h2>
+        <br />
+        <br />
+    }
+    @foreach (var item in Model)
+    {
+        if ((bool)ViewData["isEditable"])
+        {
+            <br />
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = item.SNo })
+            </p>
+        }
+        if ((bool)ViewData["IsDeletable"])
+        {
+            <br />
+            <p>
+                @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
+            </p>
+        }
+        <br />
+        <h2>Daily SBP BLOTTER REPORTING </h2>
+        <h4>As On @Html.DisplayFor(model => item.BreakupDate)</h4>
+        <h4>HBL  @Html.DisplayFor(model => item.BranchName) Branch</h4>
+        <br />
+        <br />
+        <div class="container"><h4>Opening Balance (Actual) <span class="font-weight-normal">@Html.DisplayFor(model => item.OpeningBalActual)</span></h4></div>
+        <br />
+        <table align="center" style="width:50%" id="TB01">
+
+
+            <tr>
+                <td><span>Breakup of today's inflow</span></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span>Food Payment</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.FoodPayment_inFlow)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Remittance From HOK (TT)</span></td>
+                <td><span>@Html.DisplayFor(model => item.HOKRemittance_inFlow)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">ERF</span></td>
+                <td><span>@Html.DisplayFor(model => item.ERF_inflow)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">SBP Cheque Deposite</span></td>
+                <td><span>@Html.DisplayFor(model => item.SBPChequeDeposite_inflow)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Miscellaneous</span></td>
+                <td><span>@Html.DisplayFor(model => item.Miscellaneous_inflow)</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span>Breakup of today's outflow</span></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span>Cash Withdrawal by SBP Cheques</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.CashWithdrawbySBPCheques_outFlow)</span></td>
+            </tr>
+            <tr>
+                <td><span>ERF</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.ERF_outflow)</span></td>
+            </tr>
+            <tr>
+                <td><span>DSC/SSC</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.DSC_outFlow)</span></td>
+            </tr>
+            <tr>
+                <td><span>Remittance to HOK (RSF)</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.RemitanceToHOK_outFlow)</span></td>
+            </tr>
+            <tr>
+                <td><span>SBP Cheque Given to other bank</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.SBPCheqGivenToOtherBank_outFlow)</span></td>
+            </tr>
+            <tr>
+                <td><span>Miscellaneous</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.Miscellaneous_outflow)</span></td>
+            </tr>
+
+        </table>
+        <br />
+        <div class="container">
+            <h4>Estimated Closing Balance <span class="font-weight-normal">@Html.DisplayFor(model => item.EstimatedCLossingBal)</span></h4>
+        </div>
+
+    }
+</div>

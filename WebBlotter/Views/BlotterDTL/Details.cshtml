@@ -1,0 +1,42 @@
+﻿@*@model IEnumerable<WebBlotter.Models>*@
+@model WebBlotter.Models.SBP_BlotterDTL
+
+
+@{
+    ViewBag.Title = "Details";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.15/api/sum().js"></script>
+
+</head>
+
+<body>
+
+
+    <h2>Details</h2>
+
+    <div>
+        <h4>Blotter DTL Detail</h4>
+        <b>S.No        :</b> <input type="text" name="SNo"          value="@Html.DisplayFor(model => model.SNo)" readonly><br>
+        <b>Description :</b> <input type="text" name="DTL Code"     value="@Html.DisplayFor(model => model.DTL_Code)" readonly><br>
+        <b>Deal Date   :</b> <input type="text" name="DTL Date"     value="@Html.DisplayFor(model => model.DTL_Date)" readonly><br>
+        <b>Description :</b> <input type="text" name="No of Days"   value="@Html.DisplayFor(model => model.NO_OF_Days)" readonly><br>
+        <b>Description :</b> <input type="text" name="DTL Amount"   value="@Html.DisplayFor(model => model.DTL_Amount)" readonly><br>
+      
+</div>
+    <br /><br />
+
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.SNo }) |
+        @Html.ActionLink("Back to List", "GetAllDTLDeals")
+    </p>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebAppBlotterSPA.Models.SP_SBPBlotter_Result>
+
+@{
+    ViewBag.Title = "Get All Blotter Data";
+}
+
+<h2>Get All Blotter Data</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DealNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DealDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vdate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Currency)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DrAmt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CrAmt)
+        </th>
+     
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Currency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrAmt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CrAmt)
+            </td>
+
+            @*<td>
+                @Html.ActionLink("Edit", "EditProduct", new { id = item.ProductId, name = item.ProductName, quantity = item.Quantity, prod = item }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+            </td>*@
+        </tr>
+    }
+
+</table> 
+

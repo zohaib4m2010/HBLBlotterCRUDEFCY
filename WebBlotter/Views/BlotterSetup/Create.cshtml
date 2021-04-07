@@ -1,0 +1,50 @@
+﻿@model WebBlotter.Models.SBP_BlotterSetup
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Create</legend>
+
+        @*<div class="editor-label">
+            @Html.LabelFor(model => model.SNo)
+        </div>*@
+        @*<div class="editor-field">
+            @Html.LabelFor(model => model.Description)
+            @Html.EditorFor(model => model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description)              
+                @Html.ValidationMessageFor(model => model.Description, "Testing ", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="editor-label">
+            @*@Html.LabelFor(model => model.status)*@
+            @Html.HiddenFor(m => m.status, new { @Value = "A" })
+        </div>
+        @*<div class="editor-field">
+            @Html.EditorFor(model => model.status)
+            @Html.ValidationMessageFor(model => model.status)
+        </div>*@
+
+    
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "GetAllSetupItems")
+</div>

@@ -1,0 +1,91 @@
+﻿@model WebBlotter.Models.SBP_BlotterManualDeals
+
+
+@{
+    ViewBag.Title = "EditBlotterMualDeal";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm("Update", "BlotterManualDeals", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Blotter Manual Deals @ViewData["SysCurrentDt"]</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.SNo)
+        <div class="form-group">
+            @Html.LabelFor(model => model.SNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.SNo, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })*@
+            </div>
+        </div>    
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>*@    
+        <div class="form-group">
+            @Html.LabelFor(x => Model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.DropDownListFor(x => Model.Description,
+                        new SelectList(Model.DescriptionDD, "Desc", "Desc"),
+                        htmlAttributes: new { @class = "form-control", id = "DescriptionDD" })
+                @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DealDate, htmlAttributes: new { @class = "control-label col-md-2"})
+            <div class="col-md-10 ">      
+                @Html.EditorFor(model => model.DealDate, new { htmlAttributes = new { @Value = @Model.DealDate} })   
+                @Html.ValidationMessageFor(model => model.DealDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+      
+      
+        <div class="form-group">
+            @Html.LabelFor(model => model.InFlow, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.InFlow, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.InFlow, "", new { @class = "text-danger" })
+            </div>
+        </div>  
+        <div class="form-group">
+            @Html.LabelFor(model => model.OutFlow, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OutFlow, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OutFlow, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(m => m.br, new { @Value = @ViewData["BrCode"] })            
+        </div>
+        <div class="form-group">
+            @Html.HiddenFor(m => m.CurrentDate, new { @Value = @ViewData["SysCurrentDt"] })
+      
+        </div>  
+        <div class="form-group">
+            @Html.HiddenFor(m => m.DealStatus, new { @Value = "D" })
+           
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "GetAllManualDeals")
+</div>  

@@ -1,0 +1,139 @@
+﻿@model WebBlotter.Models.SBP_BlotterBreakups
+
+@{
+    /**/
+
+    ViewBag.Title = "Blotter Breakups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <br />
+    <h2>Daily SBP BLOTTER REPORTING </h2>
+    <h4>As On @ViewData["SysCurrentDt"]</h4>
+    <h4>HBL  @ViewData["BranchName"] Branch</h4>
+    <br />
+    <br />
+    @using (Html.BeginForm("Update", "BlotterBreakups", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.SNo)
+
+        <h4>Opening Balance (Actual) @Html.EditorFor(model => model.OpeningBalActual, new { htmlAttributes = new { @class = "form-control" } })</h4>
+        @Html.ValidationMessageFor(model => model.OpeningBalActual, "", new { @class = "text-danger" })
+        <br />
+        <table align="center" style="width:50%" id="TB01">
+
+            <tr>
+                <td><span>Breakup of today's inflow</span></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span>Food Payment</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.FoodPayment_inFlow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.FoodPayment_inFlow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Remittance From HOK (TT)</span></td>
+                <td>
+                    <span>@Html.EditorFor(model => model.HOKRemittance_inFlow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.HOKRemittance_inFlow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span class="Bold">ERF</span></td>
+                <td>
+                    <span>@Html.EditorFor(model => model.ERF_inflow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.ERF_inflow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span class="Bold">SBP Cheque Deposite</span></td>
+                <td>
+                    <span>@Html.EditorFor(model => model.SBPChequeDeposite_inflow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.SBPChequeDeposite_inflow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Miscellaneous</span></td>
+                <td>
+                    <span>@Html.EditorFor(model => model.Miscellaneous_inflow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.Miscellaneous_inflow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span>Breakup of today's outflow</span></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span>Cash Withdrawal by SBP Cheques</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.CashWithdrawbySBPCheques_outFlow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.CashWithdrawbySBPCheques_outFlow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span>ERF</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.ERF_outflow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.ERF_outflow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span>DSC/SSC</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.DSC_outFlow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.DSC_outFlow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span>Remittance to HOK (RSF)</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.RemitanceToHOK_outFlow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.RemitanceToHOK_outFlow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span>SBP Cheque Given to other bank</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.SBPCheqGivenToOtherBank_outFlow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.SBPCheqGivenToOtherBank_outFlow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td><span>Miscellaneous</span></td>
+                <td>
+                    <span class="Bold">@Html.EditorFor(model => model.Miscellaneous_outflow, new { htmlAttributes = new { @class = "form-control" } })</span>
+                    @Html.ValidationMessageFor(model => model.Miscellaneous_outflow, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+
+        </table>
+        <br />
+        <h4>Estimated Closing Balance @Html.EditorFor(model => model.EstimatedCLossingBal, new { htmlAttributes = new { @class = "form-control" } })</h4>
+        @Html.ValidationMessageFor(model => model.EstimatedCLossingBal, "", new { @class = "text-danger" })
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" />
+            </div>
+        </div>
+    }
+</div>
+
+
+

@@ -1,0 +1,39 @@
+﻿@model WebBlotter.Models.SBP_BlotterOpening
+
+
+@{
+    ViewBag.Title = "Details";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.15/api/sum().js"></script>
+
+</head>
+
+<body>
+
+
+    <h2>Details</h2>
+
+    <div>
+        <h4>Blotter Opening Amount @ViewData["SysCurrentDt"]</h4>
+        <b>S.No           :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.SNo)" readonly><br>
+        <b>Opening Amount :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.TodayAmount)" readonly><br>
+        <b>Date           :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.CurrentDate)" readonly><br>
+        <b>Branch Code    :</b> <input type="text" name="status" value="  @Html.DisplayFor(model => model.br)" readonly><br>
+</div>
+    <br /><br />
+
+    <p>
+        @Html.ActionLink("Edit", "EditSetupt", new { id = Model.SNo }) |
+        @Html.ActionLink("Back to List", "GetAllOpeningAmt")
+    </p>
+    </body>
+</html>

@@ -1,0 +1,116 @@
+﻿@model WebBlotter.Models.SP_SBPOpicsSystemDate_Result 
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>FX BLOTTER SPA</title>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="../Scripts/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <div class="page-header">
+            <h1>
+                Welcome @Session["UserName"].ToString()
+                <hr />
+                BLOTTER @ViewData["SysCurrentDt"]
+
+                @*<small><span data-bind="text: genre"></span></small>*@
+            </h1>
+
+        </div>
+        <div class="row">
+            <div class="span2">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <li><a href="http://localhost:1392/blotter/GetAllBlotter">Blotter</a></li>
+                        <li><a href="http://localhost:1392/BlotterManualDeals/GetAllManualDeals">Blotter Manual Deals</a></li>
+                        <li><a href="http://localhost:1392/blottersetup/GetAllSetupItems">Blotter SetUp</a></li>
+                        <li><a href="http://localhost:1392/BlotterOpening/GetAllOpeningAmt">Blotter Opening Position</a></li>
+                        <li><a href="http://localhost:1392/BlotterDTL/GetAllDTLDeals">Blotter DTL Amount</a></li>
+                        <li><a href="http://localhost:1392/BlotterDTLDB/GetBlotterDTLDB">Blotter DTL DashBoard</a></li>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="BlotterDTLReportDayWise" class="table table-striped table-bordered table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Date </th>
+                            <th>Week Day</th>
+                            <th>Karachi</th>
+                            <th>Pakistan</th>
+                            @*<th>CRR 3% Requirement</th>
+        <th>CRR 4% Requirement</th>*@
+                            <th>CRR 5% Requirement</th>
+                            <th>Balance Maintained in 5%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.SBP_BlotterCRRReportDaysWiseBal != null)
+                        {
+                            foreach (var item in ViewBag.SBP_BlotterCRRReportDaysWiseBal)
+                            {
+                        <tr>
+                            <td align="left" width="8%">@item.ReportDate</td>
+                            <td align="left" width="8%">@item.WeekDays</td>
+                            <td align="left" width="8%" class="KHISum">@item.KarachiTotal</td>
+                            <td align="left" width="8%" class="PKSum">@item.PakistanToTal</td>
+                            @*<td align="left" width="8%">@item.CRR3Pcr</td>
+        <td align="left" width="8%">@item.CRR4Pcr</td>*@
+                            <td align="left" width="8%">@item.CRR5Pcr</td>
+                            <td align="left" width="8%">@item.BalMaintain</td>
+                        </tr>
+                            }
+                        }
+                                <tr>
+                                    <td align="left" width="8%"></td>
+                                    <td align="left" width="8%"></td>
+                                    <td align="left" width="8%">
+                                        <script>
+
+                                            var sumval = 0;
+                                            var sumBal = 0;
+                                            $('#BlotterDTLReportDayWise .KHISum').each(function () {
+                                                sumval = this.innerText;
+                                                sumval = sumval.replace(/\,/g, '');
+                                                sumBal += parseFloat(sumval) //+OpeningB1;
+                                            });
+                                            document.write(sumBal.toLocaleString('en-CA'));
+                                        </script>
+                                    </td>
+                                    <td align="left" width="8%">
+                                        <script>
+                                            sumval = 0;
+                                            sumBal = 0;
+                                            $('#BlotterDTLReportDayWise .PKSum').each(function () {
+                                                sumval = this.innerText;
+                                                sumval = sumval.replace(/\,/g, '');
+                                                sumBal += parseFloat(sumval) //+OpeningB1;
+                                            });
+                                            document.write(sumBal.toLocaleString('en-CA'));
+                                        </script>
+                                    </td>
+                                    <td align="left" width="8%"></td>
+                                    <td align="left" width="8%"></td>
+                                    @*<td align="left" width="8%"></td>
+                                    <td align="left" width="8%"></td>*@
+                                </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script src="~/Scripts/knockout-3.5.0.debug.js"></script>
+        <script src="Scripts/app.service.js"></script>
+        <script src="js/app.js"></script>
+</body>
+</html>

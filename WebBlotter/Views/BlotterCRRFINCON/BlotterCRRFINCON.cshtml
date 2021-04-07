@@ -1,0 +1,84 @@
+﻿@model IEnumerable<WebBlotter.Models.SBP_BlotterCRRFINCON>
+
+@{
+    /**/
+
+    ViewBag.Title = "BlotterClearing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="container">
+    @if (ViewData["DataStatus"] == "Data Not Availavle")
+    {
+        <br />
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <br />
+        <h2>Data Not Exists!</h2>
+        <br />
+        <br />
+    }
+    @foreach (var item in Model)
+    {
+        if ((bool)ViewData["isEditable"])
+        {
+            <br />
+            <p>
+                @Html.ActionLink("Edit", "Edit", new { id = item.SNo })
+            </p>
+        }
+        if ((bool)ViewData["IsDeletable"])
+        {
+            <br />
+            <p>
+                @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
+            </p>
+        }
+        <h2>SBP Blotter Reporting</h2>
+        <h4>Reporting of Demand & Time Liablity -LCY</h4>
+        <h4>Position for the period @Html.DisplayFor(model => item.StartDate) - @Html.DisplayFor(model => item.EndDate) -  Total Days @(((Convert.ToDateTime(item.StartDate).Date - Convert.ToDateTime(item.EndDate).AddDays(1).Date).TotalDays).ToString())  - Remaining Days @(((Convert.ToDateTime(item.EndDate).Date - DateTime.Now.Date).TotalDays).ToString()) </h4>
+        <br />
+        <br />
+        <h4>Local currency (LCY) Deposit</h4>
+        <br />
+        <table align="center" style="width:50%" id="TB01">
+
+
+            <tr>
+                <td></td>
+                <td><span>Amount In Millions</span></td>
+            </tr>
+            <tr>
+                <td><span>Total Demand & Time Liabilties (LCY)</span></td>
+                <td><span class="Bold">@Html.DisplayFor(model => item.DemandTimeLiablities)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Less: Time Liabilies Over One Year</span></td>
+                <td><span>@Html.DisplayFor(model => item.TimeLiablitiesOverOneYear)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Total Demand & Time Liabilities</span></td>
+                <td><span>@Html.DisplayFor(model => item.DemandTimeLiablitiesTotal)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Pre-mature Deposit</span></td>
+                <td><span>@Html.DisplayFor(model => item.DepositEligibleFor)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Other Amounts</span></td>
+                <td><span>@Html.DisplayFor(model => item.OtherAmounts)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Deposit Eligible For CRR</span></td>
+                <td><span>@Html.DisplayFor(model => item.TotalEligibleForCRR)</span></td>
+            </tr>
+
+
+        </table>
+    }
+</div>
+

@@ -1,0 +1,44 @@
+﻿@*@model IEnumerable<WebBlotter.Models.SBP_BlotterSetup>*@
+@model WebBlotter.Models.SBP_BlotterManualDeals
+
+
+@{
+    ViewBag.Title = "Details";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.15/api/sum().js"></script>
+
+</head>
+
+<body>
+
+
+    <h2>Details</h2>
+
+  
+    <div>
+        <h4>Blotter Manual Deals @ViewData["SysCurrentDt"]</h4>
+        <b>S.No        :</b> <input type="text" name="SNo"          value="@Html.DisplayFor(model => model.SNo)" readonly><br>
+        <b>Description :</b> <input type="text" name="Description"  value="@Html.DisplayFor(model => model.Description)" readonly><br>
+        <b>Deal Date   :</b> <input type="text"   name="DealDate"     value="@Html.DisplayFor(model => model.DealDate)" readonly><br>
+        <b>Description :</b> <input type="text" name="InFlow"       value="@Html.DisplayFor(model => model.InFlow)" readonly><br>
+        <b>Description :</b> <input type="text" name="OutFlow"      value="@Html.DisplayFor(model => model.OutFlow)" readonly><br>
+        <b>Description :</b> <input type="text" name="Branch Code" value="@Html.DisplayFor(model => model.br)" readonly><br>
+       
+</div>
+    <br /><br />
+
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.SNo }) |
+        @Html.ActionLink("Back to List", "GetAllManualDeals")
+    </p>
+    </body>
+</html>
