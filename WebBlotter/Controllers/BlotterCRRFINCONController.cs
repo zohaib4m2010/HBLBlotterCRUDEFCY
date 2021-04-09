@@ -62,8 +62,6 @@ namespace WebBlotter.Controllers
                     BlotterCRRFINCON.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterCRRFINCON.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterCRRFINCON.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
-                    BlotterCRRFINCON.DemandTimeLiablitiesTotal = (BlotterCRRFINCON.DemandTimeLiablities - BlotterCRRFINCON.TimeLiablitiesOverOneYear);
-                    BlotterCRRFINCON.TotalEligibleForCRR = BlotterCRRFINCON.DemandTimeLiablitiesTotal + BlotterCRRFINCON.DepositEligibleFor + BlotterCRRFINCON.OtherAmounts;
                     BlotterCRRFINCON.CreateDate = DateTime.Now;
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterCRRFINCON/InsertCRRFINCON", BlotterCRRFINCON);
@@ -93,8 +91,6 @@ namespace WebBlotter.Controllers
             BlotterCRRFINCON.BID = Convert.ToInt16(Session["BranchID"].ToString());
             BlotterCRRFINCON.BR = Convert.ToInt16(Session["BR"].ToString());
             BlotterCRRFINCON.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
-            BlotterCRRFINCON.DemandTimeLiablitiesTotal = (BlotterCRRFINCON.DemandTimeLiablities - BlotterCRRFINCON.TimeLiablitiesOverOneYear);
-            BlotterCRRFINCON.TotalEligibleForCRR = BlotterCRRFINCON.DemandTimeLiablitiesTotal + BlotterCRRFINCON.DepositEligibleFor + BlotterCRRFINCON.OtherAmounts;
             BlotterCRRFINCON.UpdateDate = DateTime.Now;
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterCRRFINCON/UpdateCRRFINCON", BlotterCRRFINCON);

@@ -50,7 +50,7 @@
 
             <tr>
                 <td></td>
-                <td><span>Amount In Millions</span></td>
+                <td><span style="font-weight: bold;">Amount In Millions</span></td>
             </tr>
             <tr>
                 <td><span>Total Demand & Time Liabilties (LCY)</span></td>
@@ -66,15 +66,42 @@
             </tr>
             <tr>
                 <td><span class="Bold">Pre-mature Deposit</span></td>
-                <td><span>@Html.DisplayFor(model => item.DepositEligibleFor)</span></td>
+                <td><span>@Html.DisplayFor(model => item.PreMatureDeposit)</span></td>
             </tr>
             <tr>
-                <td><span class="Bold">Other Amounts</span></td>
-                <td><span>@Html.DisplayFor(model => item.OtherAmounts)</span></td>
+                `
+                <td><span class="Bold">Total Demand & Time Liabilities For CRR</span></td>
+                <td><span>@Html.DisplayFor(model => item.DemandTimeLiablitiesTotalForCRR)</span></td>
             </tr>
             <tr>
-                <td><span class="Bold">Deposit Eligible For CRR</span></td>
-                <td><span>@Html.DisplayFor(model => item.TotalEligibleForCRR)</span></td>
+                <td><span style="font-weight: bold;">Housing Finance </span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Add: Failed to Meet the target (Penalty)</span></td>
+                <td><span>@Html.DisplayFor(model => item.Penalty)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Less: Meet the Target (Extra Benefit)</span></td>
+                <td><span>@Html.DisplayFor(model => item.ExtraBenefits)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">5% Requirement</span></td>
+                <td><span>@Html.DisplayFor(model => item.CRR2Requirement)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">3% Requirement</span></td>
+                <td><span>@Html.DisplayFor(model => item.CRR1Requirement)</span></td>
+            </tr>
+            <tr>
+                <td><span  style="font-weight: bold;">Calculation</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">5% Requirement Including House Finance Penalty</span></td>
+                <td><span>@Html.DisplayFor(model => item.RequirementPenalty)</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">5% Requirement Including House Finance Extra Benefits</span></td>
+                <td><span>@Html.DisplayFor(model => item.RequirementExtBenefit)</span></td>
             </tr>
 
 

@@ -47,10 +47,10 @@
                             <th>Week Day</th>
                             <th>Karachi</th>
                             <th>Pakistan</th>
-                            @*<th>CRR 3% Requirement</th>
-        <th>CRR 4% Requirement</th>*@
+                            <th>CRR 3% Requirement</th>
                             <th>CRR 5% Requirement</th>
-                            <th>Balance Maintained in 5%</th>
+                            <th>Balance Maintained against 5% Forthnightly including Penalty</th>
+                            <th>Balance Maintained against 5% Forthnightly with Benefit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -59,50 +59,50 @@
                             foreach (var item in ViewBag.SBP_BlotterCRRReportDaysWiseBal)
                             {
                         <tr>
-                            <td align="left" width="8%">@item.ReportDate</td>
+                            <td align="left" width="8%">@item.ReportDate.ToString("MM/dd/yyyy")</td>
                             <td align="left" width="8%">@item.WeekDays</td>
                             <td align="left" width="8%" class="KHISum">@item.KarachiTotal</td>
                             <td align="left" width="8%" class="PKSum">@item.PakistanToTal</td>
-                            @*<td align="left" width="8%">@item.CRR3Pcr</td>
-        <td align="left" width="8%">@item.CRR4Pcr</td>*@
-                            <td align="left" width="8%">@item.CRR5Pcr</td>
-                            <td align="left" width="8%">@item.BalMaintain</td>
+                            <td align="left" width="8%">@item.CRR3PcrReq</td>
+                            <td align="left" width="8%">@item.CRR5PcrReq</td>
+                            <td align="left" width="8%">@item.BalMaintAgainstPenalty</td>
+                            <td align="left" width="8%">@item.BalMaintAgainstExtBenft</td>
                         </tr>
                             }
                         }
-                                <tr>
-                                    <td align="left" width="8%"></td>
-                                    <td align="left" width="8%"></td>
-                                    <td align="left" width="8%">
-                                        <script>
+                        <tr>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%">
+                                <script>
 
-                                            var sumval = 0;
-                                            var sumBal = 0;
-                                            $('#BlotterDTLReportDayWise .KHISum').each(function () {
-                                                sumval = this.innerText;
-                                                sumval = sumval.replace(/\,/g, '');
-                                                sumBal += parseFloat(sumval) //+OpeningB1;
-                                            });
-                                            document.write(sumBal.toLocaleString('en-CA'));
-                                        </script>
-                                    </td>
-                                    <td align="left" width="8%">
-                                        <script>
-                                            sumval = 0;
-                                            sumBal = 0;
-                                            $('#BlotterDTLReportDayWise .PKSum').each(function () {
-                                                sumval = this.innerText;
-                                                sumval = sumval.replace(/\,/g, '');
-                                                sumBal += parseFloat(sumval) //+OpeningB1;
-                                            });
-                                            document.write(sumBal.toLocaleString('en-CA'));
-                                        </script>
-                                    </td>
-                                    <td align="left" width="8%"></td>
-                                    <td align="left" width="8%"></td>
-                                    @*<td align="left" width="8%"></td>
-                                    <td align="left" width="8%"></td>*@
-                                </tr>
+                                    var sumval = 0;
+                                    var sumBal = 0;
+                                    $('#BlotterDTLReportDayWise .KHISum').each(function () {
+                                        sumval = this.innerText;
+                                        sumval = sumval.replace(/\,/g, '');
+                                        sumBal += parseFloat(sumval) //+OpeningB1;
+                                    });
+                                    document.write(sumBal.toLocaleString('en-CA'));
+                                </script>
+                            </td>
+                            <td align="left" width="8%">
+                                <script>
+                                    sumval = 0;
+                                    sumBal = 0;
+                                    $('#BlotterDTLReportDayWise .PKSum').each(function () {
+                                        sumval = this.innerText;
+                                        sumval = sumval.replace(/\,/g, '');
+                                        sumBal += parseFloat(sumval) //+OpeningB1;
+                                    });
+                                    document.write(sumBal.toLocaleString('en-CA'));
+                                </script>
+                            </td>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
+                        </tr>
                     </tbody>
                     </table>
             </div>
