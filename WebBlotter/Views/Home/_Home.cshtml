@@ -47,10 +47,12 @@
                             <th>Week Day</th>
                             <th>Karachi</th>
                             <th>Pakistan</th>
-                            <th>CRR 3% Requirement</th>
                             <th>CRR 5% Requirement</th>
-                            <th>Balance Maintained against 5% Forthnightly including Penalty</th>
-                            <th>Balance Maintained against 5% Forthnightly with Benefit</th>
+                            <th>CRR 3% Requirement</th>
+                            <th>Balance Maintained in 5%</th>
+                            <th>Balance Maintained in 3%</th>
+                            <th>Long/(short) in 5% amount</th>
+                            <th>Long/(short) in 3% amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,10 +65,12 @@
                             <td align="left" width="8%">@item.WeekDays</td>
                             <td align="left" width="8%" class="KHISum">@item.KarachiTotal</td>
                             <td align="left" width="8%" class="PKSum">@item.PakistanToTal</td>
-                            <td align="left" width="8%">@item.CRR3PcrReq</td>
                             <td align="left" width="8%">@item.CRR5PcrReq</td>
-                            <td align="left" width="8%">@item.BalMaintAgainstPenalty</td>
-                            <td align="left" width="8%">@item.BalMaintAgainstExtBenft</td>
+                            <td align="left" width="8%">@item.CRR3PcrReq</td>
+                            <td align="left" width="8%">@item.BalMaintain5Pcr</td>
+                            <td align="left" width="8%">@item.BalMaintain3Pcr</td>
+                            <td align="left" width="8%">@(Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq))</td>
+                            <td align="left" width="8%">@(Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq))</td>
                         </tr>
                             }
                         }
@@ -98,6 +102,8 @@
                                     document.write(sumBal.toLocaleString('en-CA'));
                                 </script>
                             </td>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>

@@ -9,7 +9,7 @@ namespace WebBlotter.Models
     public class SBP_BlotterBreakups
     {
         public long SNo { get; set; }
-        [Required]
+        //[Required]
         [Display(Name = "Opening Balance Actual")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> OpeningBalActual { get; set; }
@@ -57,7 +57,7 @@ namespace WebBlotter.Models
         [Display(Name = "Miscellaneous")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> Miscellaneous_outflow { get; set; }
-        [Required]
+        //[Required]
         [Display(Name = "Estimated Clossing Balance")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> EstimatedCLossingBal { get; set; }

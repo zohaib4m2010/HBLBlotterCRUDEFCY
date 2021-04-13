@@ -31,8 +31,8 @@ namespace WebBlotter.Models
         public Nullable<decimal> PakistanToTal { get; set; }
         public double CRR3PcrReq { get; set; }
         public double CRR5PcrReq { get; set; }
-        public double BalMaintAgainstPenalty { get; set; }
-        public double BalMaintAgainstExtBenft { get; set; }
+        public decimal BalMaintain3Pcr { get; set; }
+        public decimal BalMaintain5Pcr { get; set; }
         public Nullable<decimal> Penalty { get; set; }
         public string Remarks { get; set; }
         public Nullable<int> BR { get; set; }

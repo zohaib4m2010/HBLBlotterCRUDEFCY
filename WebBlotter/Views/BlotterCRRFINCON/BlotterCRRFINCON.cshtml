@@ -74,7 +74,12 @@
                 <td><span>@Html.DisplayFor(model => item.DemandTimeLiablitiesTotalForCRR)</span></td>
             </tr>
             <tr>
+                <td><br /></td>
+                <td></td>
+            </tr>
+            <tr>
                 <td><span style="font-weight: bold;">Housing Finance </span></td>
+                <td></td>
             </tr>
             <tr>
                 <td><span class="Bold">Add: Failed to Meet the target (Penalty)</span></td>
@@ -93,7 +98,12 @@
                 <td><span>@Html.DisplayFor(model => item.CRR1Requirement)</span></td>
             </tr>
             <tr>
-                <td><span  style="font-weight: bold;">Calculation</span></td>
+                <td><br /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span style="font-weight: bold;">Calculation</span></td>
+                <td></td>
             </tr>
             <tr>
                 <td><span class="Bold">5% Requirement Including House Finance Penalty</span></td>
@@ -102,6 +112,18 @@
             <tr>
                 <td><span class="Bold">5% Requirement Including House Finance Extra Benefits</span></td>
                 <td><span>@Html.DisplayFor(model => item.RequirementExtBenefit)</span></td>
+            </tr>
+            <tr>
+                <td><br /></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Balance Maintained against 5% Forthnightly including Penalty</span></td>
+                <td><span>@Html.DisplayFor(model => item.BalMaintAgainstPenalty)%</span></td>
+            </tr>
+            <tr>
+                <td><span class="Bold">Balance Maintained against 5% Forthnightly with Benefit</span></td>
+                <td><span>@Html.DisplayFor(model => item.BalMaintAgainstExtBenft)%</span></td>
             </tr>
 
 

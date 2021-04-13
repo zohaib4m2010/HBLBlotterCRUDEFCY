@@ -56,36 +56,41 @@ namespace WebBlotter.Models
         public Nullable<System.DateTime> EndDate { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> DemandTimeLiablities { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> TimeLiablitiesOverOneYear { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> DemandTimeLiablitiesTotal { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> PreMatureDeposit { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> DemandTimeLiablitiesTotalForCRR { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> Penalty { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> ExtraBenefits { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> CRR1Requirement { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> CRR2Requirement { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> RequirementPenalty { get; set; }
-        [DisplayFormat(DataFormatString = "{0:N2}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public Nullable<decimal> RequirementExtBenefit { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N4}")]
+        public Nullable<decimal> BalMaintAgainstPenalty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:N4}")]
+        public Nullable<decimal> BalMaintAgainstExtBenft { get; set; }
         public int UserID { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
