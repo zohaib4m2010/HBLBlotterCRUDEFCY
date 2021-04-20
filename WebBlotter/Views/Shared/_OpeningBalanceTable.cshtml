@@ -1,0 +1,81 @@
+﻿@model WebBlotter.Models.BreakupOpeningBalance
+@{
+    ViewBag.Title = "_OpeningBalanceTable";
+}
+
+
+<style>
+    #customers {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        border-collapse: collapse;
+        width: 90%;
+        min-width: 800px;
+        max-width: 1500px;
+    }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 2px;
+            font-size: 10.5px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+</style>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    /*th  {
+    border: 1px solid black;
+    color:red;
+    width: 55px
+    }*/
+
+</style>
+
+@if (Model != null)
+{
+    if (Model.SNo != 0)
+    {
+        <script>
+            $('#CreateOpngBal').hide();
+        </script>
+        <table id="BreakupsOpeningBalanceTable" class="table table-striped table-bordered table-hover ">
+            <thead>
+                <tr>
+                    <th>Branch Name </th>
+                    <th>OpeningBalance</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> @Model.BranchName</td>
+                    <td class="BreakupsOpengBal">@Model.OpeningBalActual</td>
+                    <td>@Html.ActionLink("Edit", "EditOpeningBalance", new { id = Model.SNo })</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <script>
+            $('#CreateOpngBal').show();
+        </script>
+    }
+}

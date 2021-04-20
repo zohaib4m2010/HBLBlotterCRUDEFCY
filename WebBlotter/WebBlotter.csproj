@@ -167,6 +167,7 @@
     </Compile>
     <Compile Include="Models\BlottterEmails.cs" />
     <Compile Include="Models\Branches.cs" />
+    <Compile Include="Models\BreakupOpeningBalance.cs" />
     <Compile Include="Models\NostroBank.cs" />
     <Compile Include="Models\SBP_BlotterBreakups.cs" />
     <Compile Include="Models\SBP_BlotterClearing.cs" />
@@ -1217,7 +1218,7 @@
     <Content Include="Views\NostroBanks\Edit.cshtml" />
     <Content Include="Views\Shared\_BlankLayout.cshtml" />
     <Content Include="Views\BlotterBreakups\BlotterBreakups.cshtml" />
-    <Content Include="Views\BlotterBreakups\Create.cshtml" />
+    <Content Include="Views\BlotterBreakups\AddOpeningBalance.cshtml" />
     <Content Include="Views\BlotterBreakups\Edit.cshtml" />
     <Content Include="Views\BlotterCRRFINCON\Edit.cshtml" />
     <Content Include="Views\UserProfile\UserProfile.cshtml" />
@@ -1234,6 +1235,8 @@
     <Content Include="Views\Branches\Branches.cshtml" />
     <Content Include="Views\Branches\Edit.cshtml" />
     <Content Include="Views\Branches\Create.cshtml" />
+    <Content Include="Views\Shared\_OpeningBalanceTable.cshtml" />
+    <Content Include="Views\BlotterBreakups\EditOpeningBalance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

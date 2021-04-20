@@ -48,11 +48,14 @@
                             <th>Karachi</th>
                             <th>Pakistan</th>
                             <th>CRR 5% Requirement</th>
-                            <th>CRR 3% Requirement</th>
                             <th>Balance Maintained in 5%</th>
-                            <th>Balance Maintained in 3%</th>
+                            @*<th>Balance Maintained in 3%</th>*@
                             <th>Long/(short) in 5% amount</th>
+                            <th>CRR 3% Requirement</th>
                             <th>Long/(short) in 3% amount</th>
+                            <th>Remarks</th>
+                            <th>Shortfall 3%</th>
+                            <th>Penalty</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,18 +63,39 @@
                         {
                             foreach (var item in ViewBag.SBP_BlotterCRRReportDaysWiseBal)
                             {
-                        <tr>
-                            <td align="left" width="8%">@item.ReportDate.ToString("MM/dd/yyyy")</td>
-                            <td align="left" width="8%">@item.WeekDays</td>
-                            <td align="left" width="8%" class="KHISum">@item.KarachiTotal</td>
-                            <td align="left" width="8%" class="PKSum">@item.PakistanToTal</td>
-                            <td align="left" width="8%">@item.CRR5PcrReq</td>
-                            <td align="left" width="8%">@item.CRR3PcrReq</td>
-                            <td align="left" width="8%">@item.BalMaintain5Pcr</td>
-                            <td align="left" width="8%">@item.BalMaintain3Pcr</td>
-                            <td align="left" width="8%">@(Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq))</td>
-                            <td align="left" width="8%">@(Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq))</td>
-                        </tr>
+                                <tr>
+                                    <td align="left" width="8%">@item.ReportDate.ToString("MM/dd/yyyy")</td>
+                                    <td align="left" width="8%">@item.WeekDays</td>
+                                    <td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0")</td>
+                                    <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0")</td>
+                                    <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0")</td>
+                                    <td align="left" width="8%">@item.BalMaintain5Pcr.ToString("#0.####0")</td>
+                                    @*<td align="left" width="8%">@item.BalMaintain3Pcr</td>*@
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0"))</td>
+                                    <td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0")</td>
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0"))</td>
+                                    @if (item.Remarks == "Warning")
+                                    {
+                                        <td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">@item.Remarks</td>
+                                    }
+                                    else if (item.Remarks == "OK")
+                                    {
+                                        <td align="left" width="8%" style="background-color: #73ff71bf;   color: #1ec141;  font-weight: bold;">@item.Remarks</td>
+                                    }
+                                    else
+                                    {
+                                        <td align="left" width="8%">@item.Remarks</td>
+                                    }
+                                    @if ((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)) < 0)
+                                    {
+                                        <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0"))</td>
+                                    }
+                                    else
+                                    {
+                                        <td align="left" width="8%">0</td>
+                                    }
+                                    <td align="left" width="8%">@item.Penalty.ToString("#,##0")</td>
+                                </tr>
                             }
                         }
                         <tr>
@@ -90,7 +114,7 @@
                                     document.write(sumBal.toLocaleString('en-CA'));
                                 </script>
                             </td>
-                            <td align="left" width="8%">
+                            <td align="left" width="8%" class="PKSumVal">
                                 <script>
                                     sumval = 0;
                                     sumBal = 0;
@@ -108,9 +132,62 @@
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
+                            <td align="left" width="8%"></td>
                         </tr>
                     </tbody>
                     </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="BlotterDTLReportShort" class="table table-striped table-bordered table-hover ">
+                    <tbody>
+                        <tr>
+                            <td>Fortnightly Balance Req 5% </td>
+                            <td class="FBR5">
+                                <script>
+                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA'));
+                                </script>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Average Balance  Held</td>
+                            <td class="AvgBH">
+                                <script>
+                                    var val1 = $('#BlotterDTLReportDayWise .PKSumVal')[0].innerText;
+                                    document.write(val1);
+                                </script>
+
+                            </td>
+                            <td>
+                                <script>
+                                    document.write((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))).toFixed(4) + '%')
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="AvgBHHeading">
+                                <script>
+                                    if (parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) > 0) {
+                                        document.write('Fortnightly Long');
+                                    } else {
+                                        document.write('Fortnightly Short');
+                                    }
+                                </script>
+                            </td>
+                            <td class="AvgBH">
+                                <script>
+                                    var val1 = parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''));
+                                    document.write(val1.toLocaleString('en-CA'));
+                                </script>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

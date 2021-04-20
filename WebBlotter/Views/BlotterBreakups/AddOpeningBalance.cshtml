@@ -1,0 +1,72 @@
+﻿@model WebBlotter.Models.BreakupOpeningBalance
+
+@{
+    /**/
+
+    ViewBag.Title = "Blotter Breakups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="../Scripts/jquery-3.4.1.min.js"></script>
+
+@using (Html.BeginForm("CreateOpnBal", "BlotterBreakups", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+    <Fieldset>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Branch</label>
+                <div class="col-md-10">
+                    @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                    <select name="BID" id="BID" class="form-control">
+                        <option value="0">Select Branch</option>
+                        @if (ViewBag.AllBranchNames != null)
+                        {
+                            foreach (var item in ViewBag.AllBranchNames)
+                            {
+                                <option value="@item.BID">@item.BranchName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.OpeningBalActual, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.EditorFor(model => model.OpeningBalActual, new { htmlAttributes = new { @class = "form-control datepicker" } })
+
+                    @Html.ValidationMessageFor(model => model.OpeningBalActual, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+
+                    <input type="submit" value="Create" id="CreateOpngBal"/>
+                </div>
+            </div>
+
+        </div>
+    </Fieldset>
+}
+
+<div id="OpeningBalanceTable">
+</div>
+
+
+
+
+
+<script>
+
+    $("#BID").change(function () {
+        var val = this.value;
+        $("#OpeningBalanceTable").load("/BlotterBreakups/AddOpeningBalanceByBID/?BID=" + val);
+
+        
+    });
+</script>

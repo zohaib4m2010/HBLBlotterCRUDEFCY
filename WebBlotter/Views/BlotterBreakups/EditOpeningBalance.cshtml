@@ -1,0 +1,39 @@
+﻿@model WebBlotter.Models.BreakupOpeningBalance
+
+@{
+    /**/
+
+    ViewBag.Title = "Blotter Breakups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("UpdateOpeningBalance", "BlotterBreakups", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.SNo)
+    <Fieldset>
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.OpeningBalActual, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.EditorFor(model => model.OpeningBalActual, new { htmlAttributes = new { @class = "form-control datepicker" } })
+
+                    @Html.ValidationMessageFor(model => model.OpeningBalActual, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+
+                    <input type="submit" value="Update" />
+                </div>
+            </div>
+
+        </div>
+    </Fieldset>
+}
+
+

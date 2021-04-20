@@ -7,6 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="../../Scripts/jquery-3.4.1.min.js"></script>
 
 <div class="container">
     <br />
@@ -20,9 +21,11 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.SNo)
+        @Html.HiddenFor(model => model.OpeningBalActual)
+        @Html.HiddenFor(model => model.EstimatedCLossingBal)
 
-        <h4>Opening Balance (Actual) @Html.EditorFor(model => model.OpeningBalActual, new { htmlAttributes = new { @class = "form-control" } })</h4>
-        @Html.ValidationMessageFor(model => model.OpeningBalActual, "", new { @class = "text-danger" })
+        <h4>Opening Balance (Actual) @Html.DisplayFor(model => model.OpeningBalActual)</h4>
+        @*@Html.ValidationMessageFor(model => model.OpeningBalActual, "", new { @class = "text-danger" })*@
         <br />
         <table align="center" style="width:50%" id="TB01">
 
@@ -122,8 +125,8 @@
 
         </table>
         <br />
-        <h4>Estimated Closing Balance @Html.EditorFor(model => model.EstimatedCLossingBal, new { htmlAttributes = new { @class = "form-control" } })</h4>
-        @Html.ValidationMessageFor(model => model.EstimatedCLossingBal, "", new { @class = "text-danger" })
+        <h4>Estimated Closing Balance <span id="EstimatedCLossingBalDSP">@Html.DisplayFor(model => model.EstimatedCLossingBal, new { htmlAttributes = new { @class = "form-control" } })</span></h4>
+        @*@Html.ValidationMessageFor(model => model.EstimatedCLossingBal, "", new { @class = "text-danger" })*@
 
 
 
@@ -133,6 +136,241 @@
             </div>
         </div>
     }
+
+
+    <script>
+        $('#FoodPayment_inFlow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#HOKRemittance_inFlow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#ERF_inflow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#SBPChequeDeposite_inflow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#Miscellaneous_inflow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#CashWithdrawbySBPCheques_outFlow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#ERF_outflow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#DSC_outFlow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#RemitanceToHOK_outFlow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#SBPCheqGivenToOtherBank_outFlow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+        $('#Miscellaneous_outflow').on('input', function () {
+            var OpeningBalActual = parseFloat($('#OpeningBalActual').val());
+            var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
+            var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
+            var ERF_inflow = parseFloat($('#ERF_inflow').val());
+            var SBPChequeDeposite_inflow = parseFloat($('#SBPChequeDeposite_inflow').val());
+            var Miscellaneous_inflow = parseFloat($('#Miscellaneous_inflow').val());
+            var CashWithdrawbySBPCheques_outFlow = parseFloat($('#CashWithdrawbySBPCheques_outFlow').val());
+            var ERF_outflow = parseFloat($('#ERF_outflow').val());
+            var DSC_outFlow = parseFloat($('#DSC_outFlow').val());
+            var RemitanceToHOK_outFlow = parseFloat($('#RemitanceToHOK_outFlow').val());
+            var SBPCheqGivenToOtherBank_outFlow = parseFloat($('#SBPCheqGivenToOtherBank_outFlow').val());
+            var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
+
+
+            var SumAllVal = OpeningBalActual + (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+
+            $('#EstimatedCLossingBalDSP').text(SumAllVal);
+            $('#EstimatedCLossingBal').val(SumAllVal);
+
+        });
+    </script>
 </div>
 
 
