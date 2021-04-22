@@ -81,6 +81,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    BlotterTrade.Trade_Date = DateTime.Now;
                     BlotterTrade.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterTrade.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterTrade.BR = Convert.ToInt16(Session["BR"].ToString());

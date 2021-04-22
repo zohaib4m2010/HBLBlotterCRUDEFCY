@@ -82,6 +82,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    BlotterTBO.TBO_Date = DateTime.Now;
                     BlotterTBO.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterTBO.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterTBO.BID = Convert.ToInt16(Session["BranchID"].ToString());

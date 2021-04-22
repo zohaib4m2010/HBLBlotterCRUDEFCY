@@ -83,6 +83,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    BlotterClearing.Clearing_Date = DateTime.Now;
                     BlotterClearing.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterClearing.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterClearing.BR = Convert.ToInt16(Session["BR"].ToString());

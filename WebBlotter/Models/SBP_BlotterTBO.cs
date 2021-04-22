@@ -10,7 +10,7 @@ namespace WebBlotter.Models
     {
         public long SNo { get; set; }
         public int TTID { get; set; }
-        [Required]
+        //[Required]
         [Display(Name = "Date")]
         [DataType(DataType.Date, ErrorMessage = "Date only")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
@@ -20,10 +20,12 @@ namespace WebBlotter.Models
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Display(Name = "InFlow")]
         public Nullable<decimal> TBO_InFlow { get; set; }
+        public Nullable<decimal> AdjTBO_InFlow { get; set; }
         [Required]
         [Display(Name = "OutFlow")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> TBO_OutFLow { get; set; }
+        public Nullable<decimal> AdjTBO_OutFLow { get; set; }
         public string Note { get; set; }
         public int UserID { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
@@ -32,5 +34,7 @@ namespace WebBlotter.Models
         public int BID { get; set; }
         public int CurID { get; set; }
         public string Flag { get; set; }
+
+   
     }
 }

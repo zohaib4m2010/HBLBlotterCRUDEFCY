@@ -66,14 +66,14 @@
                                 <tr>
                                     <td align="left" width="8%">@item.ReportDate.ToString("MM/dd/yyyy")</td>
                                     <td align="left" width="8%">@item.WeekDays</td>
-                                    <td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0")</td>
-                                    <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0")</td>
-                                    <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0")</td>
+                                    <td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0,,M")</td>
+                                    <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0,,M")</td>
+                                    <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0,,M")</td>
                                     <td align="left" width="8%">@item.BalMaintain5Pcr.ToString("#0.####0")</td>
                                     @*<td align="left" width="8%">@item.BalMaintain3Pcr</td>*@
-                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0"))</td>
-                                    <td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0")</td>
-                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0"))</td>
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0,,M"))</td>
+                                    <td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0,,M")</td>
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,M"))</td>
                                     @if (item.Remarks == "Warning")
                                     {
                                         <td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">@item.Remarks</td>
@@ -88,13 +88,13 @@
                                     }
                                     @if ((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)) < 0)
                                     {
-                                        <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0"))</td>
+                                        <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,M"))</td>
                                     }
                                     else
                                     {
                                         <td align="left" width="8%">0</td>
                                     }
-                                    <td align="left" width="8%">@item.Penalty.ToString("#,##0")</td>
+                                    <td align="left" width="8%">@item.Penalty.ToString("#,##0,,M")</td>
                                 </tr>
                             }
                         }
@@ -111,7 +111,7 @@
                                         sumval = sumval.replace(/\,/g, '');
                                         sumBal += parseFloat(sumval) //+OpeningB1;
                                     });
-                                    document.write(sumBal.toLocaleString('en-CA'));
+                                    document.write(sumBal.toLocaleString('en-CA')+'M');
                                 </script>
                             </td>
                             <td align="left" width="8%" class="PKSumVal">
@@ -123,7 +123,7 @@
                                         sumval = sumval.replace(/\,/g, '');
                                         sumBal += parseFloat(sumval) //+OpeningB1;
                                     });
-                                    document.write(sumBal.toLocaleString('en-CA'));
+                                    document.write(sumBal.toLocaleString('en-CA')+'M');
                                 </script>
                             </td>
                             <td align="left" width="8%"></td>
@@ -148,7 +148,7 @@
                             <td>Fortnightly Balance Req 5% </td>
                             <td class="FBR5">
                                 <script>
-                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA'));
+                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA')+'M');
                                 </script>
 
                             </td>
@@ -181,7 +181,7 @@
                             <td class="AvgBH">
                                 <script>
                                     var val1 = parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''));
-                                    document.write(val1.toLocaleString('en-CA'));
+                                    document.write(val1.toLocaleString('en-CA')+'M');
                                 </script>
 
                             </td>
