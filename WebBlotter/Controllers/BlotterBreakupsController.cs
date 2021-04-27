@@ -109,7 +109,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterBreakups/InsertBlotterBreakups", BlotterBreakups);
                     response.EnsureSuccessStatusCode();
-                    return RedirectToAction("BlotterBreakups");
+                    return RedirectToAction("AddOpeningBalance");
                 }
             }
             catch (Exception ex) { }

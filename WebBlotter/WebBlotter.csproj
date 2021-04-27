@@ -189,6 +189,7 @@
     <Compile Include="Models\SP_GetAll_SBPBlotterTBO_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterTrade_Result.cs" />
     <Compile Include="Models\SP_GetLatestBreakup_Result.cs" />
+    <Compile Include="Models\SP_GetOPICSManualData_Result.cs" />
     <Compile Include="Models\SP_SBPBlotterRunningBal.cs" />
     <Compile Include="Models\SP_SBPGetLoginInfo_Result.cs" />
     <Compile Include="Models\SP_SBPOpicsSystemDate_Result.cs" />
@@ -1237,6 +1238,7 @@
     <Content Include="Views\Branches\Create.cshtml" />
     <Content Include="Views\Shared\_OpeningBalanceTable.cshtml" />
     <Content Include="Views\BlotterBreakups\EditOpeningBalance.cshtml" />
+    <Content Include="Views\Shared\_FillManualData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

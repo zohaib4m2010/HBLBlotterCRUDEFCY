@@ -1,0 +1,26 @@
+﻿@model  IEnumerable<WebBlotter.Models.SP_GetOPICSManualData_Result>
+
+@if (Model != null)
+{
+        <table id="BreakupsOpeningBalanceTable" class="table table-striped table-bordered table-hover ">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>InFlow</th>
+                    <th>OutFlow</th>
+                    <th>NetBalance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td> @item.DataType</td>
+                        <td class="BreakupsOpengBal">@item.Inflow</td>
+                        <td class="BreakupsOpengBal">@item.OutFlow</td>
+                        <td class="BreakupsOpengBal">@item.NetBalance</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+}

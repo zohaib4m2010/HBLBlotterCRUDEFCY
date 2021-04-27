@@ -111,7 +111,7 @@
                                         sumval = sumval.replace(/\,/g, '');
                                         sumBal += parseFloat(sumval) //+OpeningB1;
                                     });
-                                    document.write(sumBal.toLocaleString('en-CA')+'M');
+                                    document.write(sumBal.toLocaleString('en-CA') + 'M');
                                 </script>
                             </td>
                             <td align="left" width="8%" class="PKSumVal">
@@ -123,7 +123,7 @@
                                         sumval = sumval.replace(/\,/g, '');
                                         sumBal += parseFloat(sumval) //+OpeningB1;
                                     });
-                                    document.write(sumBal.toLocaleString('en-CA')+'M');
+                                    document.write(sumBal.toLocaleString('en-CA') + 'M');
                                 </script>
                             </td>
                             <td align="left" width="8%"></td>
@@ -136,7 +136,7 @@
                             <td align="left" width="8%"></td>
                         </tr>
                     </tbody>
-                    </table>
+                </table>
             </div>
         </div>
 
@@ -148,7 +148,7 @@
                             <td>Fortnightly Balance Req 5% </td>
                             <td class="FBR5">
                                 <script>
-                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA')+'M');
+                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA') + 'M');
                                 </script>
 
                             </td>
@@ -181,7 +181,7 @@
                             <td class="AvgBH">
                                 <script>
                                     var val1 = parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''));
-                                    document.write(val1.toLocaleString('en-CA')+'M');
+                                    document.write(val1.toLocaleString('en-CA') + 'M');
                                 </script>
 
                             </td>
@@ -190,10 +190,34 @@
                 </table>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label class="control-label col-md-4" for="Clearing_Date">Select Date</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control datepicker text-box single-line" data-val="true" data-val-date="The field Date must be a date." id="FillOPICSManual_Date" name="Clearing_Date" type="date">
+                    </div>
+                </div>
+                <div id="FillManualData">
+                </div>
+            </div>
+        </div>
     </div>
-        <script src="~/Scripts/jquery-3.4.1.js"></script>
-        <script src="~/Scripts/knockout-3.5.0.debug.js"></script>
-        <script src="Scripts/app.service.js"></script>
-        <script src="js/app.js"></script>
+    <script>
+
+        $("#FillOPICSManual_Date").change(function () {
+            var val = this.value;
+            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + val);
+
+
+        });
+    </script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/knockout-3.5.0.debug.js"></script>
+    <script src="Scripts/app.service.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

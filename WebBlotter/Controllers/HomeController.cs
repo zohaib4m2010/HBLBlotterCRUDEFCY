@@ -35,8 +35,18 @@ namespace WebBlotter.Controllers
 
             return View();
         }
-        
-       
+
+        public ActionResult FillBlotterManualData(string Date )
+        {
+            ServiceRepository serviceObj = new ServiceRepository();
+            HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetOPICSManualData?BR=" + Session["BR"].ToString()+"&Date="+Date);
+            response.EnsureSuccessStatusCode();
+            List<Models.SP_GetOPICSManualData_Result> OPICSManualData = response.Content.ReadAsAsync<List<Models.SP_GetOPICSManualData_Result>>().Result;
+
+            
+            return PartialView("_FillManualData", OPICSManualData);
+
+        }
 
 
         public ActionResult About()
