@@ -52,6 +52,21 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-md-2">Select Branch</label>
+                <div class="col-md-10">
+                    <select name="BlotterType" class="form-control">
+                        @if (Model.BlotterType == "FCY")
+                        {
+                            <option value="FCY">FCY</option>
+                        }
+                        else
+                        {
+                            <option value="LCY">LCY</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
 

@@ -26,5 +26,6 @@ namespace WebBlotter.Models
         public bool isislamic { get; set; }
         public Nullable<int> URID { get; set; }
         public string DefaultPage { get; set; }
+        public string BlotterType { get; set; }
     }
 }

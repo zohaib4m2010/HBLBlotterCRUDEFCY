@@ -50,6 +50,7 @@ namespace WebBlotter.Controllers
                             Session["BranchID"] = item.BranchID;
                             Session["BranchName"] = item.BranchName;
                             Session["Currencies"] = item.Currencies;
+                            Session["BlotterType"] = item.BlotterType;
                             Session["BR"] = (item.isConventional)?"01":(item.isislamic)?"02":"00";
                             Session["Pages"] = item.Pages;
                             Session["ActiveController"] = "Login";
