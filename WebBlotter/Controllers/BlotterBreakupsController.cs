@@ -13,6 +13,8 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class BlotterBreakupsController : Controller
     {
+
+        UtilityClass UC = new UtilityClass();
         // GET: BlotterBreakups
         public ActionResult BlotterBreakups()
         {
@@ -98,7 +100,7 @@ namespace WebBlotter.Controllers
                     BlotterBreakups.DSC_outFlow = 0;
                     BlotterBreakups.RemitanceToHOK_outFlow = 0;
                     BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = 0;
-                    BlotterBreakups.Miscellaneous_outflow = 0; ;
+                    BlotterBreakups.Miscellaneous_outflow = 0;
                     BlotterBreakups.EstimatedCLossingBal = 0;
                     BlotterBreakups.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterBreakups.BR = Convert.ToInt16(Session["BR"].ToString());
@@ -124,7 +126,12 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
+                    BlotterBreakups.CashWithdrawbySBPCheques_outFlow = UC.CheckNegativeValue(BlotterBreakups.CashWithdrawbySBPCheques_outFlow);
+                    BlotterBreakups.ERF_outflow = UC.CheckNegativeValue(BlotterBreakups.ERF_outflow);
+                    BlotterBreakups.DSC_outFlow = UC.CheckNegativeValue(BlotterBreakups.DSC_outFlow);
+                    BlotterBreakups.RemitanceToHOK_outFlow = UC.CheckNegativeValue(BlotterBreakups.RemitanceToHOK_outFlow);
+                    BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = UC.CheckNegativeValue(BlotterBreakups.SBPCheqGivenToOtherBank_outFlow);
+                    BlotterBreakups.Miscellaneous_outflow = UC.CheckNegativeValue(BlotterBreakups.Miscellaneous_outflow);
                     BlotterBreakups.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterBreakups.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterBreakups.BID = Convert.ToInt16(Session["BranchID"].ToString());
@@ -180,6 +187,12 @@ namespace WebBlotter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(SBP_BlotterBreakups BlotterBreakups)
         {
+            BlotterBreakups.CashWithdrawbySBPCheques_outFlow = UC.CheckNegativeValue(BlotterBreakups.CashWithdrawbySBPCheques_outFlow);
+            BlotterBreakups.ERF_outflow = UC.CheckNegativeValue(BlotterBreakups.ERF_outflow);
+            BlotterBreakups.DSC_outFlow = UC.CheckNegativeValue(BlotterBreakups.DSC_outFlow);
+            BlotterBreakups.RemitanceToHOK_outFlow = UC.CheckNegativeValue(BlotterBreakups.RemitanceToHOK_outFlow);
+            BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = UC.CheckNegativeValue(BlotterBreakups.SBPCheqGivenToOtherBank_outFlow);
+            BlotterBreakups.Miscellaneous_outflow = UC.CheckNegativeValue(BlotterBreakups.Miscellaneous_outflow);
             BlotterBreakups.UpdateDate = DateTime.Now;
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterBreakups/UpdateBlotterBreakups", BlotterBreakups);
@@ -194,5 +207,8 @@ namespace WebBlotter.Controllers
             response.EnsureSuccessStatusCode();
             return RedirectToAction("BlotterBreakups");
         }
+
+
+       
     }
 }

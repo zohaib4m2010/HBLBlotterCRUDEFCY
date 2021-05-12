@@ -13,6 +13,7 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class BlotterClearingController : Controller
     {
+        UtilityClass UC = new UtilityClass();
         // GET: BlotterClearing
         private List<Models.SP_GETAllTransactionTitles_Result> GetAllClearingTransactionTitles()
         {
@@ -83,7 +84,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    BlotterClearing.Clearing_Date = DateTime.Now;
+                    BlotterClearing.Clearing_InFlow = UC.CheckNegativeValue(BlotterClearing.Clearing_InFlow);
                     BlotterClearing.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterClearing.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterClearing.BR = Convert.ToInt16(Session["BR"].ToString());
@@ -122,6 +123,7 @@ namespace WebBlotter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(Models.SBP_BlotterClearing BlotterClearing)
         {
+            BlotterClearing.Clearing_InFlow = UC.CheckNegativeValue(BlotterClearing.Clearing_InFlow);
             BlotterClearing.UpdateDate = DateTime.Now;
             if (BlotterClearing.Clearing_Date == null)
                 BlotterClearing.Clearing_Date = DateTime.Now;

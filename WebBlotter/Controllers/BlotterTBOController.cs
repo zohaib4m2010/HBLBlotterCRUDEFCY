@@ -13,6 +13,7 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class BlotterTBOController : Controller
     {
+        UtilityClass UC = new UtilityClass();
         // GET: BlotterTBO
 
         private List<Models.SP_GETAllTransactionTitles_Result> GetAllTBOTransactionTitles()
@@ -82,7 +83,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    BlotterTBO.TBO_Date = DateTime.Now;
+                    BlotterTBO.TBO_OutFLow = UC.CheckNegativeValue(BlotterTBO.TBO_OutFLow);
                     BlotterTBO.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterTBO.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterTBO.BID = Convert.ToInt16(Session["BranchID"].ToString());
@@ -121,6 +122,7 @@ namespace WebBlotter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(Models.SBP_BlotterTBO BlotterTBO)
         {
+            BlotterTBO.TBO_OutFLow = UC.CheckNegativeValue(BlotterTBO.TBO_OutFLow);
             if (BlotterTBO.TBO_Date == null)
                 BlotterTBO.TBO_Date = DateTime.Now;
             BlotterTBO.UpdateDate = DateTime.Now;

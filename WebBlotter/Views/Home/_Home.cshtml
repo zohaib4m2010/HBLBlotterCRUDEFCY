@@ -23,23 +23,24 @@
             </h1>
 
         </div>
-        <div class="row">
-            <div class="span2">
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <li><a href="http://localhost:1392/blotter/GetAllBlotter">Blotter</a></li>
-                        <li><a href="http://localhost:1392/BlotterManualDeals/GetAllManualDeals">Blotter Manual Deals</a></li>
-                        <li><a href="http://localhost:1392/blottersetup/GetAllSetupItems">Blotter SetUp</a></li>
-                        <li><a href="http://localhost:1392/BlotterOpening/GetAllOpeningAmt">Blotter Opening Position</a></li>
-                        <li><a href="http://localhost:1392/BlotterDTL/GetAllDTLDeals">Blotter DTL Amount</a></li>
-                        <li><a href="http://localhost:1392/BlotterDTLDB/GetBlotterDTLDB">Blotter DTL DashBoard</a></li>
-                    </div>
+        <!--<div class="row">
+        <div class="span2">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <li><a href="http://localhost:1392/blotter/GetAllBlotter">Blotter</a></li>
+                    <li><a href="http://localhost:1392/BlotterManualDeals/GetAllManualDeals">Blotter Manual Deals</a></li>
+                    <li><a href="http://localhost:1392/blottersetup/GetAllSetupItems">Blotter SetUp</a></li>
+                    <li><a href="http://localhost:1392/BlotterOpening/GetAllOpeningAmt">Blotter Opening Position</a></li>
+                    <li><a href="http://localhost:1392/BlotterDTL/GetAllDTLDeals">Blotter DTL Amount</a></li>
+                    <li><a href="http://localhost:1392/BlotterDTLDB/GetBlotterDTLDB">Blotter DTL DashBoard</a></li>
                 </div>
             </div>
         </div>
+    </div>-->
 
         <div class="row">
             <div class="col-md-12">
+                <h3>Amount in Million</h3>
                 <table id="BlotterDTLReportDayWise" class="table table-striped table-bordered table-hover ">
                     <thead>
                         <tr>
@@ -54,8 +55,7 @@
                             <th>CRR 3% Requirement</th>
                             <th>Long/(short) in 3% amount</th>
                             <th>Remarks</th>
-                            <th>Shortfall 3%</th>
-                            <th>Penalty</th>
+                            @*<th>Penalty</th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -66,14 +66,14 @@
                                 <tr>
                                     <td align="left" width="8%">@item.ReportDate.ToString("MM/dd/yyyy")</td>
                                     <td align="left" width="8%">@item.WeekDays</td>
-                                    <td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0,,M")</td>
-                                    <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0,,M")</td>
-                                    <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0,,M")</td>
-                                    <td align="left" width="8%">@item.BalMaintain5Pcr.ToString("#0.####0")</td>
+                                    <td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0,,")</td>
+                                    <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0,,")</td>
+                                    <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0,,")</td>
+                                    <td align="left" width="8%">@((item.BalMaintain5Pcr).ToString("#0.##0%"))</td>
                                     @*<td align="left" width="8%">@item.BalMaintain3Pcr</td>*@
-                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0,,M"))</td>
-                                    <td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0,,M")</td>
-                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,M"))</td>
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0,,"))</td>
+                                    <td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0,,")</td>
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,"))</td>
                                     @if (item.Remarks == "Warning")
                                     {
                                         <td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">@item.Remarks</td>
@@ -86,15 +86,8 @@
                                     {
                                         <td align="left" width="8%">@item.Remarks</td>
                                     }
-                                    @if ((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)) < 0)
-                                    {
-                                        <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,M"))</td>
-                                    }
-                                    else
-                                    {
-                                        <td align="left" width="8%">0</td>
-                                    }
-                                    <td align="left" width="8%">@item.Penalty.ToString("#,##0,,M")</td>
+
+                                    @*<td align="left" width="8%">@item.Penalty.ToString("#,##0,,M")</td>*@
                                 </tr>
                             }
                         }
@@ -111,7 +104,7 @@
                                         sumval = sumval.replace(/\,/g, '');
                                         sumBal += parseFloat(sumval) //+OpeningB1;
                                     });
-                                    document.write(sumBal.toLocaleString('en-CA') + 'M');
+                                    document.write(sumBal.toLocaleString('en-CA'));
                                 </script>
                             </td>
                             <td align="left" width="8%" class="PKSumVal">
@@ -123,7 +116,7 @@
                                         sumval = sumval.replace(/\,/g, '');
                                         sumBal += parseFloat(sumval) //+OpeningB1;
                                     });
-                                    document.write(sumBal.toLocaleString('en-CA') + 'M');
+                                    document.write(sumBal.toLocaleString('en-CA'));
                                 </script>
                             </td>
                             <td align="left" width="8%"></td>
@@ -132,8 +125,7 @@
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
-                            <td align="left" width="8%"></td>
-                            <td align="left" width="8%"></td>
+                            @*<td align="left" width="8%"></td>*@
                         </tr>
                     </tbody>
                 </table>
@@ -148,7 +140,7 @@
                             <td>Fortnightly Balance Req 5% </td>
                             <td class="FBR5">
                                 <script>
-                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA') + 'M');
+                                    document.write((parseFloat(($('#BlotterDTLReportDayWise .CRR5PcrReq')[0].innerText).replace(/\,/g, '')) * 14).toLocaleString('en-CA'));
                                 </script>
 
                             </td>
@@ -164,7 +156,7 @@
                             </td>
                             <td>
                                 <script>
-                                    document.write((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))).toFixed(4) + '%')
+                                    document.write(((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '%')
                                 </script>
                             </td>
                         </tr>
@@ -181,7 +173,7 @@
                             <td class="AvgBH">
                                 <script>
                                     var val1 = parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''));
-                                    document.write(val1.toLocaleString('en-CA') + 'M');
+                                    document.write(val1.toLocaleString('en-CA'));
                                 </script>
 
                             </td>

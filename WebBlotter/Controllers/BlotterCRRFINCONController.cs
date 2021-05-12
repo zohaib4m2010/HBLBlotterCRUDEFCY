@@ -14,7 +14,8 @@ namespace WebBlotter.Controllers
     public class BlotterCRRFINCONController : Controller
     {
         // GET: BlotterCRRFINCON
-        
+
+        UtilityClass UC = new UtilityClass();
 
         public ActionResult BlotterCRRFINCON()
         {
@@ -58,6 +59,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
                     BlotterCRRFINCON.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterCRRFINCON.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterCRRFINCON.BR = Convert.ToInt16(Session["BR"].ToString());

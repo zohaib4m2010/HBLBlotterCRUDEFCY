@@ -13,6 +13,8 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class BlotterTradeController : Controller
     {
+
+        UtilityClass UC = new UtilityClass();
         // GET: BlotterTrade
         private List<Models.SP_GETAllTransactionTitles_Result> GetAllTradeTransactionTitles()
         {
@@ -81,7 +83,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    BlotterTrade.Trade_Date = DateTime.Now;
+                    BlotterTrade.Trade_OutFLow = UC.CheckNegativeValue(BlotterTrade.Trade_OutFLow);
                     BlotterTrade.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterTrade.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterTrade.BR = Convert.ToInt16(Session["BR"].ToString());
@@ -123,6 +125,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    BlotterTrade.Trade_OutFLow = UC.CheckNegativeValue(BlotterTrade.Trade_OutFLow);
                     if (BlotterTrade.Trade_Date == null)
                         BlotterTrade.Trade_Date = DateTime.Now;
                     BlotterTrade.UpdateDate = DateTime.Now;
