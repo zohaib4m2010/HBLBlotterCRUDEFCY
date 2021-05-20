@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -42,6 +43,7 @@ namespace WebBlotter.Controllers
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_GetAll_SBPBlotterTrade_Result> blotterTrade = response.Content.ReadAsAsync<List<Models.SP_GetAll_SBPBlotterTrade_Result>>().Result;
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(blotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
@@ -59,6 +61,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterTrade model = new SBP_BlotterTrade();
             try
             {
@@ -92,6 +95,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterTrade/InsertTrade", BlotterTrade);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("BlotterTrade");
                 }
                 else
@@ -105,11 +109,12 @@ namespace WebBlotter.Controllers
         }
 
         public ActionResult Edit(int id)
-        { 
+        {
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTrade/GetBlotterTrade?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_BlotterTrade BlotterTrade = response.Content.ReadAsAsync<Models.SBP_BlotterTrade>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
             ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
@@ -129,6 +134,7 @@ namespace WebBlotter.Controllers
                     if (BlotterTrade.Trade_Date == null)
                         BlotterTrade.Trade_Date = DateTime.Now;
                     BlotterTrade.UpdateDate = DateTime.Now;
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PutResponse("api/BlotterTrade/UpdateTrade", BlotterTrade);
                     response.EnsureSuccessStatusCode();
@@ -150,6 +156,7 @@ namespace WebBlotter.Controllers
         {
             try
             {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterTrade/DeleteTrade?id=" + id.ToString());
                 response.EnsureSuccessStatusCode();

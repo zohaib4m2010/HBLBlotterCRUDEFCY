@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
+using Newtonsoft.Json;
 
 namespace WebBlotter.Controllers
 {
@@ -22,7 +23,8 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UsersProfile/GetAllUsers");
                 response.EnsureSuccessStatusCode();
                 List<Models.sp_GetAllUsers_Result> UsersProfile = response.Content.ReadAsAsync<List<Models.sp_GetAllUsers_Result>>().Result;
-                
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UsersProfile), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
                 return View(UsersProfile);
             }
             catch (Exception ex)
@@ -34,6 +36,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.AllBranchNames = GetBranchesNames();
             ViewBag.UserRoles = GetUserRoles();
             return View();
@@ -52,6 +55,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/UsersProfile/InsertUser", SBP_LoginInfo);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(SBP_LoginInfo), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("UserProfile");
                 }
             }
@@ -66,6 +70,7 @@ namespace WebBlotter.Controllers
             response.EnsureSuccessStatusCode();
             Models.SBP_LoginInfo SBP_LoginInfo = response.Content.ReadAsAsync<Models.SBP_LoginInfo>().Result;
             SBP_LoginInfo.Password = Utilities.DecryptPassword(SBP_LoginInfo.Password);
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(SBP_LoginInfo), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.AllBranchNames = GetBranchesNames();
             ViewBag.UserRoles = GetUserRoles();
             return View(SBP_LoginInfo);
@@ -85,6 +90,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PutResponse("api/UsersProfile/UpdateUser", SBP_LoginInfo);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(SBP_LoginInfo), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("UserProfile");
                 }
             }
@@ -94,6 +100,7 @@ namespace WebBlotter.Controllers
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/UsersProfile/DeleteUser?id=" + id.ToString());
             response.EnsureSuccessStatusCode();

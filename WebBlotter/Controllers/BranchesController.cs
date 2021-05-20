@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
+using Newtonsoft.Json;
+
 namespace WebBlotter.Controllers
 {
     [AuthAccess]
@@ -21,7 +23,8 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/Branches/GetAllBranches");
                 response.EnsureSuccessStatusCode();
                 List<Models.Branches> Branches = response.Content.ReadAsAsync<List<Models.Branches>>().Result;
-                
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(Branches), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
                 return View(Branches);
             }
             catch (Exception ex)
@@ -34,6 +37,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View();
 
         }
@@ -50,6 +54,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/Branches/InsertBranches", Branches);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(Branches), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("Branches");
                 }
             }
@@ -63,6 +68,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/Branches/GetBranches?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.Branches Branches = response.Content.ReadAsAsync<Models.Branches>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(Branches), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View(Branches);
 
         }
@@ -75,11 +81,13 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/Branches/UpdateBranches", Branches);
             response.EnsureSuccessStatusCode();
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(Branches), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("Branches");
         }
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/Branches/DeleteBranches?id=" + id.ToString());
             response.EnsureSuccessStatusCode();

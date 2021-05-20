@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
-
+using Newtonsoft.Json;
 
 namespace WebBlotter.Controllers
 {
@@ -23,6 +23,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/WebPages/GetAllWebPage");
                 response.EnsureSuccessStatusCode();
                 List<Models.WebPages> WebPages = response.Content.ReadAsAsync<List<Models.WebPages>>().Result;
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewBag.Title = "User Role";
                 return View(WebPages);
@@ -37,6 +38,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View();
 
         }
@@ -53,6 +55,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/WebPages/InsertWebPage", WebPages);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("WebPages");
                 }
             }
@@ -66,6 +69,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/WebPages/GetWebPage?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.WebPages WebPages = response.Content.ReadAsAsync<Models.WebPages>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View(WebPages);
 
         }
@@ -82,6 +86,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PutResponse("api/WebPages/UpdateWebPage", WebPages);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("WebPages");
                 }
             }
@@ -91,6 +96,7 @@ namespace WebBlotter.Controllers
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/WebPages/DeleteWebPage?id=" + id.ToString());
             response.EnsureSuccessStatusCode();

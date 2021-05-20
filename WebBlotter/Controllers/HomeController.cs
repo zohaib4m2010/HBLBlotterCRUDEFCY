@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -19,16 +20,24 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class HomeController : Controller
     {
-        string BrCode = ConfigurationManager.AppSettings["BranchCode"].ToString();
+
         public ActionResult index()
         {
             //var currentDT = GetCurrentDT();
             //ViewData["SysCurrentDt"] = currentDT.ToString("dd-MMM-yyyy"); 
 
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetLatestBlotterDTLReportDayWise?&BR=" + Session["BR"].ToString());
             response.EnsureSuccessStatusCode();
             List<Models.SBP_BlotterCRRReportDaysWiseBal> BlotterCRRReportsDayWiseBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterCRRReportDaysWiseBal>>().Result;
+
+            
+            HttpResponseMessage response1 = serviceObj.GetResponse("/api/Blotter/GetLatestBlotterDTLReportForToday?&BR=" + Session["BR"].ToString());
+            response.EnsureSuccessStatusCode();
+            Models.SBP_BlotterCRRReportDaysWiseBal BlotterCRRReportForTodayBal = response.Content.ReadAsAsync<Models.SBP_BlotterCRRReportDaysWiseBal>().Result;
+
+            ViewBag.SBP_BlotterCRRReportForTodayBal = BlotterCRRReportForTodayBal;
 
             ViewBag.SBP_BlotterCRRReportDaysWiseBal = BlotterCRRReportsDayWiseBal;
 
@@ -43,8 +52,11 @@ namespace WebBlotter.Controllers
             response.EnsureSuccessStatusCode();
             List<Models.SP_GetOPICSManualData_Result> OPICSManualData = response.Content.ReadAsAsync<List<Models.SP_GetOPICSManualData_Result>>().Result;
 
-            
-            return PartialView("_FillManualData", OPICSManualData);
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(OPICSManualData), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+            ViewBag.FillBlotterManualData = OPICSManualData;
+
+
+            return PartialView("_FillManualData");
 
         }
 
@@ -68,7 +80,7 @@ namespace WebBlotter.Controllers
             try
             {
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterDT/GetBlotterSysDT?brcode=" + BrCode);
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterDT/GetBlotterSysDT?brcode=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_SBPOpicsSystemDate_Result> blotterDT = response.Content.ReadAsAsync<List<Models.SP_SBPOpicsSystemDate_Result>>().Result;
                

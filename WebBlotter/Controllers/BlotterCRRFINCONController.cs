@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -27,6 +28,7 @@ namespace WebBlotter.Controllers
                 ViewData["DataStatus"] = "Data Not Availavle";
             ViewBag.Title = "All Blotter Setup";
             var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(blotterCRRFINCON), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
             ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
             ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
@@ -38,6 +40,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterCRRFINCON model = new SBP_BlotterCRRFINCON();
             try
             {
@@ -65,6 +68,7 @@ namespace WebBlotter.Controllers
                     BlotterCRRFINCON.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterCRRFINCON.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterCRRFINCON.CreateDate = DateTime.Now;
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRRFINCON), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterCRRFINCON/InsertCRRFINCON", BlotterCRRFINCON);
                     response.EnsureSuccessStatusCode();
@@ -81,6 +85,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCRRFINCON/GetBlotterCRRFINCON?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_BlotterCRRFINCON BlotterCRRFINCON = response.Content.ReadAsAsync<Models.SBP_BlotterCRRFINCON>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRRFINCON), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View(BlotterCRRFINCON);
 
         }
@@ -99,11 +104,13 @@ namespace WebBlotter.Controllers
             response.EnsureSuccessStatusCode();
             //ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
             //ViewData["BrCode"] = BrCode;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRRFINCON), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterCRRFINCON");
         }
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterCRRFINCON/DeleteCRRFINCON?id=" + id.ToString());
             response.EnsureSuccessStatusCode();

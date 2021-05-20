@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
+using Newtonsoft.Json;
 
 namespace WebBlotter.Controllers
 {
@@ -41,6 +42,7 @@ namespace WebBlotter.Controllers
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_GetAll_SBPBlotterClearing_Result> blotterClearing = response.Content.ReadAsAsync<List<Models.SP_GetAll_SBPBlotterClearing_Result>>().Result;
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(blotterClearing), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
@@ -58,6 +60,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterClearing model = new SBP_BlotterClearing();
             try
             {
@@ -84,7 +87,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    BlotterClearing.Clearing_InFlow = UC.CheckNegativeValue(BlotterClearing.Clearing_InFlow);
+                    BlotterClearing.Clearing_OutFLow = UC.CheckNegativeValue(BlotterClearing.Clearing_OutFLow);
                     BlotterClearing.UserID = Convert.ToInt16(Session["UserID"].ToString());
                     BlotterClearing.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterClearing.BR = Convert.ToInt16(Session["BR"].ToString());
@@ -93,6 +96,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterClearing/InsertClearing", BlotterClearing);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterClearing), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("BlotterClearing");
                 }
                 else
@@ -112,6 +116,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterClearing/GetBlotterClearing?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_BlotterClearing BlotterClearing = response.Content.ReadAsAsync<Models.SBP_BlotterClearing>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterClearing), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.ClearingTransactionTitles = GetAllClearingTransactionTitles();
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
@@ -123,13 +128,14 @@ namespace WebBlotter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(Models.SBP_BlotterClearing BlotterClearing)
         {
-            BlotterClearing.Clearing_InFlow = UC.CheckNegativeValue(BlotterClearing.Clearing_InFlow);
+            BlotterClearing.Clearing_OutFLow = UC.CheckNegativeValue(BlotterClearing.Clearing_OutFLow);
             BlotterClearing.UpdateDate = DateTime.Now;
             if (BlotterClearing.Clearing_Date == null)
                 BlotterClearing.Clearing_Date = DateTime.Now;
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterClearing/UpdateClearing", BlotterClearing);
             response.EnsureSuccessStatusCode();
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterClearing), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterClearing");
         }
 
@@ -138,6 +144,7 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterClearing/DeleteClearing?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterClearing");
         }
     }

@@ -61,7 +61,7 @@ namespace WebBlotter.Classes
                             httpContext.Session["UserRole"] = item.RoleName;
                             httpContext.Session["BranchID"] = item.BranchID;
                             httpContext.Session["BranchName"] = item.BranchName;
-                            httpContext.Session["Currencies"] = item.Currencies;
+                            httpContext.Session["SelectedCurrency"] = item.CurrencyID;
                             httpContext.Session["Pages"] = item.Pages;
                             httpContext.Session["ActiveController"] = controllerName;
                             List<UserPageAccess> UPA = new List<UserPageAccess>();
@@ -78,10 +78,6 @@ namespace WebBlotter.Classes
                                 UPA.Add(upaobj);
                             }
                             httpContext.Session["PagesAccess"] = UPA;
-                            if (item.Currencies.Contains(','))
-                                httpContext.Session["SelectedCurrency"] = (item.Currencies.Split(',')[0]).Split('~')[0];
-                            else
-                                httpContext.Session["SelectedCurrency"] = item.Currencies.Split('~')[0];
                         }
                     }
                 }
@@ -96,15 +92,15 @@ namespace WebBlotter.Classes
                         break;
                     }
                 }
-                foreach (var item in permissionList)
+                if (actionName == "Edit" || actionName == "Create" || actionName == "Update" || actionName == "Delete" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation")
                 {
-                    if (item.PageName != actionName) {
-                        authorize = true;
-                        break;
-                    }
-                }
 
-                //authorize = permissionList.Any(item => item.FormsName == actionName);
+                    authorize = true;
+                }
+                else
+                {
+                    authorize = permissionList.Any(item => item.PageName == actionName);
+                }
             }
             else
             {
@@ -135,30 +131,32 @@ namespace WebBlotter.Classes
                 });
             }
         }
-        
 
 
-        //public void SetSessionStart(int UserID, string SessionID, string IP, string LoginGUID, DateTime LoginTime, DateTime Expires)
-        //{
-        //    List<ParameterInfo> parameters = new List<ParameterInfo>();
 
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pSessionID", ParameterValue = SessionID });
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pUserID", ParameterValue = UserID });
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pIP", ParameterValue = IP });
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pLoginGUID", ParameterValue = LoginGUID });
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pLoginTime", ParameterValue = LoginTime });
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pExpires", ParameterValue = Expires });
+        public void SetSessionStart(int UserID, string SessionID, string IP, string LoginGUID, DateTime LoginTime, DateTime Expires)
+        {
+            SP_ADD_SessionStart SS = new SP_ADD_SessionStart();
+            SS.pUserID = UserID;
+            SS.pSessionID = SessionID;
+            SS.pIP = IP;
+            SS.pLoginGUID = LoginGUID;
+            SS.pLoginTime = LoginTime;
+            SS.pExpires = Expires;
+            ServiceRepository serviceObj = new ServiceRepository();
+            HttpResponseMessage response = serviceObj.PostResponse("api/BlotterLogin/SessionStart", SS);
+            response.EnsureSuccessStatusCode();
+        }
 
-        //    int success = SqlHelper.ExecuteQuery("SP_ADD_SessionStart", parameters);
-        //}
+        public void SetSessionStop(int UserID, string SessionID)
+        {
+            SP_ADD_SessionStart SS = new SP_ADD_SessionStart();
+            SS.pUserID = UserID;
+            SS.pSessionID = SessionID;
+            ServiceRepository serviceObj = new ServiceRepository();
+            HttpResponseMessage response = serviceObj.PostResponse("api/BlotterLogin/SessionStop", SS);
+            response.EnsureSuccessStatusCode();
+        }
 
-        //public void SetSessionStop(int UserID, string SessionID)
-        //{
-        //    List<ParameterInfo> parameters = new List<ParameterInfo>();
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pUserID", ParameterValue = UserID });
-        //    parameters.Add(new ParameterInfo() { ParameterName = "pSessionID", ParameterValue = SessionID });
-
-        //    int success = SqlHelper.ExecuteQuery("SP_SessionStop", parameters);
-        //}
     }
 }

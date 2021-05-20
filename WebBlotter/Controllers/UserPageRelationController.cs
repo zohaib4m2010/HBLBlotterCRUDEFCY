@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
+using Newtonsoft.Json;
 
 namespace WebBlotter.Controllers
 {
@@ -19,6 +20,7 @@ namespace WebBlotter.Controllers
         {
             try
             {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 ViewBag.UserRoles = GetActiveUserRoles();
                 return View();
             }
@@ -56,6 +58,7 @@ namespace WebBlotter.Controllers
                             ServiceRepository serviceObj = new ServiceRepository();
                             HttpResponseMessage response = serviceObj.PostResponse("api/UserPageRelation/InsertUserPageRelation", UPR);
                             response.EnsureSuccessStatusCode();
+                            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UPR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                             ViewBag.UserRoles = GetActiveUserRoles();
                             ViewBag.WebPages = GetActiveWebPages(URID);
                             ViewBag.SelectedURID = URID;
@@ -81,6 +84,7 @@ namespace WebBlotter.Controllers
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.PutResponse("api/UserPageRelation/UpdateUserPageRelation", UPR);
                 response.EnsureSuccessStatusCode();
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UPR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 return RedirectToAction("UserPageRelation");
             }
             catch (Exception ex) { }
@@ -96,6 +100,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UserPageRelation/GetUserPageRaltion?UPRID=" + Id);
                 response.EnsureSuccessStatusCode();
                 Models.SP_GetAllUserPageRelations_Result UserPageRaltion = response.Content.ReadAsAsync<Models.SP_GetAllUserPageRelations_Result>().Result;
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UserPageRaltion), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 ViewBag.UserRoles = GetActiveUserRoles();
                 ViewBag.SelectedURID = UserPageRaltion.URID;
                 ViewBag.WebPages = GetWebPageByID(UserPageRaltion.WPID);
@@ -111,6 +116,7 @@ namespace WebBlotter.Controllers
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/UserPageRelation/DeleteUserPageRelation?UPRID=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -124,6 +130,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UserPageRelation/GetUserPageRaltions?URID=" + URID);
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_GetAllUserPageRelations_Result> UserPageRaltions = response.Content.ReadAsAsync<List<Models.SP_GetAllUserPageRelations_Result>>().Result;
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UserPageRaltions), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 return UserPageRaltions;
             }
             catch (Exception ex)
@@ -142,6 +149,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UserPageRelation/GetWebPageById?WPID=" + WPID);
                 response.EnsureSuccessStatusCode();
                 Models.WebPages WebPages = response.Content.ReadAsAsync<Models.WebPages>().Result;
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 return WebPages;
             }
             catch (Exception ex)
@@ -157,6 +165,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UserPageRelation/GetActiveWebPages?URID=" + URID);
                 response.EnsureSuccessStatusCode();
                 List<Models.WebPages> WebPages = response.Content.ReadAsAsync<List<Models.WebPages>>().Result;
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 return WebPages;
             }
             catch (Exception ex)

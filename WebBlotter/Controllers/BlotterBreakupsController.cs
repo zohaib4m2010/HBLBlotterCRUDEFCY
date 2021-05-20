@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
+using Newtonsoft.Json;
 
 namespace WebBlotter.Controllers
 {
@@ -27,6 +28,7 @@ namespace WebBlotter.Controllers
                 if(BlotterBreakups == null)
                     ViewData["DataStatus"] = "Data Not Available";
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
@@ -43,6 +45,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult AddOpeningBalance()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/Branches/GetAllBranches");
             response.EnsureSuccessStatusCode();
@@ -77,6 +80,9 @@ namespace WebBlotter.Controllers
             ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
             ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
             ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
+
+
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BOB), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return PartialView("_OpeningBalanceTable", BOB);
 
         }
@@ -108,6 +114,7 @@ namespace WebBlotter.Controllers
                     BlotterBreakups.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterBreakups.BreakupDate = DateTime.Now;
                     BlotterBreakups.CreateDate = DateTime.Now;
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterBreakups/InsertBlotterBreakups", BlotterBreakups);
                     response.EnsureSuccessStatusCode();
@@ -138,6 +145,7 @@ namespace WebBlotter.Controllers
                     BlotterBreakups.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterBreakups.BreakupDate = DateTime.Now;
                     BlotterBreakups.CreateDate = DateTime.Now;
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterBreakups/InsertBlotterBreakups", BlotterBreakups);
                     response.EnsureSuccessStatusCode();
@@ -158,6 +166,7 @@ namespace WebBlotter.Controllers
             BreakupOpnBal.SNo = BlotterBreakups.SNo;
             BreakupOpnBal.OpeningBalActual = BlotterBreakups.OpeningBalActual;
             BreakupOpnBal.BID = BlotterBreakups.BID;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BreakupOpnBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
             return View(BreakupOpnBal);
 
@@ -167,6 +176,7 @@ namespace WebBlotter.Controllers
         public ActionResult UpdateOpeningBalance(SBP_BlotterBreakups BlotterBreakups)
         {
             BlotterBreakups.UpdateDate = DateTime.Now;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterBreakups/UpdateBreakupsOpngBal", BlotterBreakups);
             response.EnsureSuccessStatusCode();
@@ -179,6 +189,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetBlotterBreakups?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_BlotterBreakups BlotterBreakups = response.Content.ReadAsAsync<Models.SBP_BlotterBreakups>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View(BlotterBreakups);
 
         }
@@ -194,6 +205,7 @@ namespace WebBlotter.Controllers
             BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = UC.CheckNegativeValue(BlotterBreakups.SBPCheqGivenToOtherBank_outFlow);
             BlotterBreakups.Miscellaneous_outflow = UC.CheckNegativeValue(BlotterBreakups.Miscellaneous_outflow);
             BlotterBreakups.UpdateDate = DateTime.Now;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterBreakups/UpdateBlotterBreakups", BlotterBreakups);
             response.EnsureSuccessStatusCode();
@@ -202,6 +214,7 @@ namespace WebBlotter.Controllers
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterBreakups/DeleteBlotterBreakups?id=" + id.ToString());
             response.EnsureSuccessStatusCode();

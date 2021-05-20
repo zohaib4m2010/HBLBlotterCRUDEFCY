@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
+using Newtonsoft.Json;
 
 namespace WebBlotter.Controllers
 {
@@ -22,6 +23,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UserRole/GetAllUserRole");
                 response.EnsureSuccessStatusCode();
                 List<Models.UserRole> UserRole = response.Content.ReadAsAsync<List<Models.UserRole>>().Result;
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UserRole), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewBag.Title = "User Role";
                 return View(UserRole);
@@ -36,6 +38,7 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View();
 
         }
@@ -52,6 +55,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/UserRole/InsertUserRole", UserRole);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UserRole), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("UserRole");
                 }
             }
@@ -65,6 +69,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/UserRole/GetUserRole?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.UserRole UserRole = response.Content.ReadAsAsync<Models.UserRole>().Result;
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UserRole), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return View(UserRole);
 
         }
@@ -81,6 +86,7 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PutResponse("api/UserRole/UpdateUserRole", UserRole);
                     response.EnsureSuccessStatusCode();
+                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UserRole), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("UserRole");
                 }
             }
@@ -90,6 +96,7 @@ namespace WebBlotter.Controllers
 
         public ActionResult Delete(int id)
         {
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/UserRole/DeleteUserRole?id=" + id.ToString());
             response.EnsureSuccessStatusCode();

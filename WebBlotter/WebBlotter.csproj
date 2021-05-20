@@ -181,6 +181,7 @@
     <Compile Include="Models\SBP_BlotterTBO.cs" />
     <Compile Include="Models\SBP_BlotterTrade.cs" />
     <Compile Include="Models\SBP_LoginInfo.cs" />
+    <Compile Include="Models\SP_ADD_SessionStart.cs" />
     <Compile Include="Models\SP_FXBlotter_Result.cs" />
     <Compile Include="Models\SP_GETAllTransactionTitles_Result.cs" />
     <Compile Include="Models\SP_GetAllUserPageRelations_Result.cs" />

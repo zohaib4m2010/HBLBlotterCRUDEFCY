@@ -8,14 +8,13 @@ using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
 using System.Web.Routing;
+using System.Web.Security;
 
 namespace WebBlotter.Controllers
 {
     public class BlotterLoginController : Controller
     {
-        string BrCode = System.Configuration.ConfigurationManager.AppSettings["BranchCode"].ToString();
-
-
+        
 
         public ActionResult Login()
         {
@@ -49,8 +48,8 @@ namespace WebBlotter.Controllers
                             Session["UserRole"] = item.RoleName;
                             Session["BranchID"] = item.BranchID;
                             Session["BranchName"] = item.BranchName;
-                            Session["Currencies"] = item.Currencies;
                             Session["BlotterType"] = item.BlotterType;
+                            Session["SelectedCurrency"] = item.CurrencyID;
                             Session["BR"] = (item.isConventional)?"01":(item.isislamic)?"02":"00";
                             Session["Pages"] = item.Pages;
                             Session["ActiveController"] = "Login";
@@ -68,12 +67,16 @@ namespace WebBlotter.Controllers
                                 UPA.Add(upaobj);
                             }
                             Session["PagesAccess"] = UPA;
-                                if (item.Currencies.Contains(','))
-                                Session["SelectedCurrency"] = (item.Currencies.Split(',')[0]).Split('~')[0];
-                            else
-                                Session["SelectedCurrency"] = item.Currencies.Split('~')[0];
 
-                            //(new AuthAccessAttribute()).SetSessionStart(oUser.UserID, Session.SessionID, Request.UserHostAddress, new Guid().ToString(), u.LoginTime, cookie.Expires);
+                            int timeout = 525600; //objLogin.RememberMe ? 525600 : 525600; // 525600 min = 1 year
+                            var ticket = new FormsAuthenticationTicket(item.UserName, true, timeout);
+                            string encrypted = FormsAuthentication.Encrypt(ticket);
+                            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
+                            cookie.Expires = DateTime.Now.AddMinutes(timeout);
+                            cookie.HttpOnly = true;
+                            Response.Cookies.Add(cookie);
+
+                            (new AuthAccessAttribute()).SetSessionStart(item.ID, Session.SessionID, Request.UserHostAddress, new Guid().ToString(), DateTime.Now, cookie.Expires);
 
                             HttpContext.Cache["_LoginUsersID" + item.ID] = Session.SessionID;
                             Response.Redirect(new Uri(Request.Url, Url.Action("Index", "Home")).ToString(), false);
@@ -105,10 +108,10 @@ namespace WebBlotter.Controllers
 
             try
             {
-                //if (Session["UserID"] != null)
-                //{
-                //    (new AuthAccessAttribute()).SetSessionStop((int)(Session["UserID"]), Session.SessionID);
-                //}
+                if (Session["UserID"] != null)
+                {
+                    (new AuthAccessAttribute()).SetSessionStop((int)(Session["UserID"]), Session.SessionID);
+                }
 
                 //SignInManager.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 Session.Abandon();
@@ -134,7 +137,7 @@ namespace WebBlotter.Controllers
             try
             {
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterDT/GetBlotterSysDT?BrCode=" + BrCode);
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterDT/GetBlotterSysDT?BrCode=" + Session["BranchID"].ToString());
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_SBPOpicsSystemDate_Result> blotterDT = response.Content.ReadAsAsync<List<Models.SP_SBPOpicsSystemDate_Result>>().Result;
 
