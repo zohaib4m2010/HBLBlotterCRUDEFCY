@@ -249,6 +249,8 @@
                     </div>
                     <div class="col-md-8">
                         <input class="form-control datepicker text-box single-line" data-val="true" data-val-date="The field Date must be a date." id="FillOPICSManual_Date" name="Clearing_Date" type="date">
+
+                        <input type="button" id="ReconManualData" value="Recon" class="btn btn-default" />
                     </div>
                 </div>
                 <div id="FillManualData">
@@ -260,9 +262,13 @@
 
         $("#FillOPICSManual_Date").change(function () {
             var val = this.value;
-            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + val);
+            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + val+"&Recon=0");
 
 
+        });
+
+        $("#ReconManualData").click(function () {
+            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + $("#FillOPICSManual_Date").val() + "&Recon=1");
         });
     </script>
     <script src="~/Scripts/jquery-3.4.1.js"></script>

@@ -168,6 +168,7 @@
     <Compile Include="Models\BlottterEmails.cs" />
     <Compile Include="Models\Branches.cs" />
     <Compile Include="Models\BreakupOpeningBalance.cs" />
+    <Compile Include="Models\GetBlotterMnualDataParam.cs" />
     <Compile Include="Models\NostroBank.cs" />
     <Compile Include="Models\SBP_BlotterBreakups.cs" />
     <Compile Include="Models\SBP_BlotterClearing.cs" />

@@ -45,10 +45,14 @@ namespace WebBlotter.Controllers
             return View();
         }
 
-        public ActionResult FillBlotterManualData(string Date )
+        public ActionResult FillBlotterManualData(string Date,int Recon)
         {
+            Models.GetBlotterMnualDataParam BMDP = new Models.GetBlotterMnualDataParam();
+            BMDP.Recon = (Recon == 1) ? true : false;
+            BMDP.DateFor = Convert.ToDateTime(Date);
+            BMDP.BR = Convert.ToInt32(Session["BR"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetOPICSManualData?BR=" + Session["BR"].ToString()+"&Date="+Date);
+            HttpResponseMessage response = serviceObj.PostResponse("/api/Blotter/GetOPICSManualData",BMDP);
             response.EnsureSuccessStatusCode();
             List<Models.SP_GetOPICSManualData_Result> OPICSManualData = response.Content.ReadAsAsync<List<Models.SP_GetOPICSManualData_Result>>().Result;
 
