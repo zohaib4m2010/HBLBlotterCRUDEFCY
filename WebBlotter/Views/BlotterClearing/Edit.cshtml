@@ -42,7 +42,14 @@
                     @Html.LabelFor(model => model.Clearing_Date, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
 
-                        @Html.EditorFor(model => model.Clearing_Date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                        @Html.EditorFor(model => model.Clearing_Date, new
+                   {
+                       htmlAttributes = new
+                       {
+                           @class = "form-control datepicker",
+                           @Value = Model.Clearing_Date.Value.Date.ToString("yyyy-MM-dd")
+                       }
+                   })
 
                         @Html.ValidationMessageFor(model => model.Clearing_Date, "", new { @class = "text-danger" })
                     </div>

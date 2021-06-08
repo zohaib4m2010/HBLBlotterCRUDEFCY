@@ -31,6 +31,7 @@ namespace WebBlotter.Controllers
             {
                 throw;
             }
+
         }
 
         public ActionResult BlotterClearing()

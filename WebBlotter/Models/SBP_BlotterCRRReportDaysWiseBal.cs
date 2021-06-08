@@ -34,6 +34,9 @@ namespace WebBlotter.Models
         public decimal BalMaintain3Pcr { get; set; }
         public decimal BalMaintain5Pcr { get; set; }
         public Nullable<decimal> Penalty { get; set; }
+        public decimal AvgForRemDays { get; set; }
+        public decimal ReserveSurplus { get; set; }
+        public double Reserve { get; set; }
         public string Remarks { get; set; }
         public Nullable<int> BR { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }

@@ -16,12 +16,11 @@
     <h4>HBL  @ViewData["BranchName"] Branch</h4>
     <br />
     <br />
-    @using (Html.BeginForm("Update", "BlotterBreakups", FormMethod.Post))
+    @using (Html.BeginForm("Create", "BlotterBreakups", FormMethod.Post))
     {
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.SNo)
-        
+        @*@Html.ValidationMessageFor(model => model.OpeningBalActual, "", new { @class = "text-danger" })*@
         <br />
         <table align="center" style="width:50%" id="TB01">
 
@@ -121,14 +120,14 @@
 
         </table>
         <br />
-        <h4>Estimated Closing Balance <span id="NetBalDSP">@(Model.FoodPayment_inFlow + Model.HOKRemittance_inFlow + Model.ERF_inflow + Model.SBPChequeDeposite_inflow + Model.Miscellaneous_inflow + Model.CashWithdrawbySBPCheques_outFlow + Model.ERF_outflow + Model.DSC_outFlow + Model.RemitanceToHOK_outFlow + Model.SBPCheqGivenToOtherBank_outFlow + Model.Miscellaneous_outflow )</span></h4>
+        <h4>Net Balance <span id="NetBalDsp">0</span></h4>
         @*@Html.ValidationMessageFor(model => model.EstimatedCLossingBal, "", new { @class = "text-danger" })*@
 
 
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" />
+                <input type="submit" value="Create" />
             </div>
         </div>
     }
@@ -136,7 +135,6 @@
 
     <script>
         $('#FoodPayment_inFlow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -153,11 +151,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#HOKRemittance_inFlow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -174,11 +170,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#ERF_inflow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -195,11 +189,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#SBPChequeDeposite_inflow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -213,14 +205,12 @@
             var Miscellaneous_outflow = parseFloat($('#Miscellaneous_outflow').val());
 
 
-            var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
+            var SumAllVal =(FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#Miscellaneous_inflow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -237,11 +227,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#CashWithdrawbySBPCheques_outFlow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -258,11 +246,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#ERF_outflow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -279,11 +265,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#DSC_outFlow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -300,11 +284,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#RemitanceToHOK_outFlow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -321,11 +303,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#SBPCheqGivenToOtherBank_outFlow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -342,11 +322,9 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
         $('#Miscellaneous_outflow').on('input', function () {
-            
             var FoodPayment_inFlow = parseFloat($('#FoodPayment_inFlow').val());
             var HOKRemittance_inFlow = parseFloat($('#HOKRemittance_inFlow').val());
             var ERF_inflow = parseFloat($('#ERF_inflow').val());
@@ -363,7 +341,6 @@
             var SumAllVal = (FoodPayment_inFlow + HOKRemittance_inFlow + ERF_inflow + SBPChequeDeposite_inflow + Miscellaneous_inflow) - (CashWithdrawbySBPCheques_outFlow + ERF_outflow + DSC_outFlow + RemitanceToHOK_outFlow + SBPCheqGivenToOtherBank_outFlow + Miscellaneous_outflow);
 
             $('#NetBalDsp').text(SumAllVal);
-            
 
         });
     </script>

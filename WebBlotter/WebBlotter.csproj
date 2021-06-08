@@ -151,7 +151,9 @@
     <Compile Include="Controllers\BlotterDTLDBController.cs" />
     <Compile Include="Controllers\BlotterLoginController.cs" />
     <Compile Include="Controllers\BlotterManualDealsController.cs" />
+    <Compile Include="Controllers\BlotterOpenBalController.cs" />
     <Compile Include="Controllers\BlotterOpeningController.cs" />
+    <Compile Include="Controllers\BlotterRTGSController.cs" />
     <Compile Include="Controllers\BlotterSetupController.cs" />
     <Compile Include="Controllers\BlotterTBOController.cs" />
     <Compile Include="Controllers\BlotterTradeController.cs" />
@@ -165,6 +167,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SBP_BlotterOpeningBalance.cs" />
+    <Compile Include="Models\SBP_BlotterRTGS.cs" />
     <Compile Include="Models\BlottterEmails.cs" />
     <Compile Include="Models\Branches.cs" />
     <Compile Include="Models\BreakupOpeningBalance.cs" />
@@ -188,6 +192,7 @@
     <Compile Include="Models\SP_GetAllUserPageRelations_Result.cs" />
     <Compile Include="Models\sp_GetAllUsers_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterClearing_Result.cs" />
+    <Compile Include="Models\SP_GetAll_SBPBlotterRTGS_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterTBO_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterTrade_Result.cs" />
     <Compile Include="Models\SP_GetLatestBreakup_Result.cs" />
@@ -1222,7 +1227,6 @@
     <Content Include="Views\NostroBanks\Edit.cshtml" />
     <Content Include="Views\Shared\_BlankLayout.cshtml" />
     <Content Include="Views\BlotterBreakups\BlotterBreakups.cshtml" />
-    <Content Include="Views\BlotterBreakups\AddOpeningBalance.cshtml" />
     <Content Include="Views\BlotterBreakups\Edit.cshtml" />
     <Content Include="Views\BlotterCRRFINCON\Edit.cshtml" />
     <Content Include="Views\UserProfile\UserProfile.cshtml" />
@@ -1240,8 +1244,15 @@
     <Content Include="Views\Branches\Edit.cshtml" />
     <Content Include="Views\Branches\Create.cshtml" />
     <Content Include="Views\Shared\_OpeningBalanceTable.cshtml" />
-    <Content Include="Views\BlotterBreakups\EditOpeningBalance.cshtml" />
+    <Content Include="Views\BlotterBreakups\Create.cshtml" />
     <Content Include="Views\Shared\_FillManualData.cshtml" />
+    <Content Include="Views\BlotterRTGS\BlotterRTGS.cshtml" />
+    <Content Include="Views\BlotterRTGS\Create.cshtml" />
+    <Content Include="Views\BlotterRTGS\Edit.cshtml" />
+    <Content Include="Views\BlotterOpenBal\OpeningBalance.cshtml" />
+    <Content Include="Views\BlotterOpenBal\Create.cshtml" />
+    <Content Include="Views\BlotterOpenBal\Edit.cshtml" />
+    <Content Include="Views\Blotter\GetAllBlotterInternal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,4 +1,4 @@
-﻿@model WebBlotter.Models.SBP_BlotterTBO
+﻿@model WebBlotter.Models.SBP_BlotterRTGS
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,15 +6,15 @@
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-<h2>Update Blotter TBO</h2>
+<h2>Update Blotter RTGS</h2>
 
 
-@using (Html.BeginForm("Update", "BlotterTBO", FormMethod.Post))
+@using (Html.BeginForm("Update", "BlotterRTGS", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <Fieldset>
         <div class="form-horizontal">
-            <h2>Blotter TBO As On @ViewData["SysCurrentDt"]</h2>
+            <h2>Blotter RTGS As On @ViewData["SysCurrentDt"]</h2>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.SNo)
@@ -22,7 +22,7 @@
                 <label class="control-label col-md-2">Select Type</label>
                 <div class="col-md-10">
                     <select name="TTID" class="form-control">
-                        @foreach (var item in ViewBag.TBOTransactionTitles)
+                        @foreach (var item in ViewBag.RTGSTransactionTitles)
                         {
                             if (Model.TTID == item.TTID)
                             {
@@ -39,34 +39,34 @@
             @if ((bool)ViewData["isDateChangable"])
             {
                 <div class="form-group">
-                    @Html.LabelFor(model => model.TBO_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.RTGS_Date, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
 
-                        @Html.EditorFor(model => model.TBO_Date, new
+                        @Html.EditorFor(model => model.RTGS_Date, new
                    {
                        htmlAttributes = new
                        {
                            @class = "form-control datepicker",
-                           @Value = Model.TBO_Date.Value.Date.ToString("yyyy-MM-dd")
+                           @Value = Model.RTGS_Date.Value.Date.ToString("yyyy-MM-dd")
                        }
                    })
 
-                        @Html.ValidationMessageFor(model => model.TBO_Date, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.RTGS_Date, "", new { @class = "text-danger" })
                     </div>
                 </div>
             }
                 <div class="form-group">
-                    @Html.LabelFor(model => model.TBO_InFlow, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.RTGS_InFlow, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.TBO_InFlow, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.TBO_InFlow, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.RTGS_InFlow, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RTGS_InFlow, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.TBO_OutFLow, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.RTGS_OutFLow, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.TBO_OutFLow, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.TBO_OutFLow, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.RTGS_OutFLow, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RTGS_OutFLow, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">

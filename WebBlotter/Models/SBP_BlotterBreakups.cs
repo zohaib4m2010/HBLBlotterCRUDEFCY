@@ -9,11 +9,6 @@ namespace WebBlotter.Models
     public class SBP_BlotterBreakups
     {
         public long SNo { get; set; }
-        //[Required]
-        [Display(Name = "Opening Balance Actual")]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
-        public Nullable<decimal> OpeningBalActual { get; set; }
-        public Nullable<decimal> AdjOpeningBalActual { get; set; }
         [Required]
         [Display(Name = "Food Payment")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
@@ -69,11 +64,9 @@ namespace WebBlotter.Models
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> Miscellaneous_outflow { get; set; }
         public Nullable<decimal> AdjMiscellaneous_outflow { get; set; }
-        //[Required]
-        [Display(Name = "Estimated Clossing Balance")]
-        [DisplayFormat(DataFormatString = "{0:N2}")]
-        public Nullable<decimal> EstimatedCLossingBal { get; set; }
-        public Nullable<decimal> AdjEstimatedCLossingBal { get; set; }
+        [Display(Name = "Date")]
+        [DataType(DataType.Date, ErrorMessage = "Date only")]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> BreakupDate { get; set; }
         public Nullable<System.DateTime> AdjDate { get; set; }
         public int UserID { get; set; }

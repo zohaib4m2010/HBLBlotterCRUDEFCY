@@ -14,12 +14,12 @@
 
     @if (ViewData["DataStatus"] == "Data Not Available")
     {
-        @*<br />
+        <br />
         <p>
             @Html.ActionLink("Create New", "Create")
         </p>
-        <br />*@
-        <h2>Report Not Updated For Today</h2>
+        <br />
+        <h2>Data Not Updated For Today</h2>
         <br />
         <br />
     }
@@ -46,8 +46,6 @@
         <h4>As On @Html.DisplayFor(model => model.BreakupDate)</h4>
         <h4>HBL  @Html.DisplayFor(model => model.BranchName) Branch</h4>
         <br />
-        <br />
-        <div class="container"><h4>Opening Balance (Actual) <span class="font-weight-normal">@Html.DisplayFor(model => model.OpeningBalActual)</span></h4></div>
         <br />
         <table align="center" style="width:50%" id="TB01">
 
@@ -116,7 +114,7 @@
         </table>
         <br />
         <div class="container">
-            <h4>Estimated Closing Balance <span class="font-weight-normal">@Html.DisplayFor(model => model.EstimatedCLossingBal)</span></h4>
+            <h4>Net Balance <span class="font-weight-normal">@(Model.FoodPayment_inFlow + Model.HOKRemittance_inFlow + Model.ERF_inflow + Model.SBPChequeDeposite_inflow + Model.Miscellaneous_inflow + Model.CashWithdrawbySBPCheques_outFlow + Model.ERF_outflow + Model.DSC_outFlow + Model.RemitanceToHOK_outFlow + Model.SBPCheqGivenToOtherBank_outFlow + Model.Miscellaneous_outflow )</span></h4>
         </div>
     }
     @* } *@

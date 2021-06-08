@@ -26,13 +26,35 @@ namespace WebBlotter.Controllers
             {
                 BlotterMultiModel blotterMulit = new BlotterMultiModel();
                 ServiceRepositoryBlotter  serviceObj = new ServiceRepositoryBlotter();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString()+"&DataType=SBP");
 
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 blotterMulit.GetAllBlotter01 = blotter;
                 ViewBag.Title = "All Blotter";                
+                ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
+                return View(blotterMulit);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public ActionResult GetAllBlotterInternal()
+        {
+            try
+            {
+                BlotterMultiModel blotterMulit = new BlotterMultiModel();
+                ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
+                HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=HBLC");
+
+                response.EnsureSuccessStatusCode();
+                List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                blotterMulit.GetAllBlotter01 = blotter;
+                ViewBag.Title = "All Blotter Internal";
                 ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
                 return View(blotterMulit);
             }

@@ -43,86 +43,21 @@ namespace WebBlotter.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddOpeningBalance()
+        public ActionResult Create()
         {
-            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/Branches/GetAllBranches");
-            response.EnsureSuccessStatusCode();
-            List<Models.Branches> Branches = response.Content.ReadAsAsync<List<Models.Branches>>().Result;
-
-            ViewBag.AllBranchNames = Branches;
-
-            
-
-            ViewData["SysCurrentDt"] = DateTime.Now.ToString("dd-MMM-yyyy");
-            ViewData["BranchName"] = Session["BranchName"];
-            return View();
-
-        }
-
-        public ActionResult AddOpeningBalanceByBID(int BID)
-        {
-            ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetAllBlotterBreakups?UserID=0&BranchID="+BID+"&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
-            response.EnsureSuccessStatusCode();
-            Models.SP_GetLatestBreakup_Result BlotterBreakups = response.Content.ReadAsAsync<Models.SP_GetLatestBreakup_Result>().Result;
-
-            BreakupOpeningBalance BOB = new BreakupOpeningBalance();
-            if (BlotterBreakups != null)
-            {
-                BOB.BranchName = BlotterBreakups.BranchName;
-                BOB.SNo = BlotterBreakups.SNo;
-                BOB.OpeningBalActual = BlotterBreakups.OpeningBalActual;
-            }
-            var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
-
-            ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
-            ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
-            ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
-
-
-            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BOB), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return PartialView("_OpeningBalanceTable", BOB);
-
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateOpnBal(BreakupOpeningBalance BreakupOpnBal)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    SBP_BlotterBreakups BlotterBreakups = new SBP_BlotterBreakups();
-                    BlotterBreakups.OpeningBalActual = BreakupOpnBal.OpeningBalActual;
-                    BlotterBreakups.FoodPayment_inFlow = 0;
-                    BlotterBreakups.HOKRemittance_inFlow = 0;
-                    BlotterBreakups.ERF_inflow = 0;
-                    BlotterBreakups.SBPChequeDeposite_inflow = 0;
-                    BlotterBreakups.Miscellaneous_inflow = 0;
-                    BlotterBreakups.CashWithdrawbySBPCheques_outFlow = 0;
-                    BlotterBreakups.ERF_outflow = 0;
-                    BlotterBreakups.DSC_outFlow = 0;
-                    BlotterBreakups.RemitanceToHOK_outFlow = 0;
-                    BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = 0;
-                    BlotterBreakups.Miscellaneous_outflow = 0;
-                    BlotterBreakups.EstimatedCLossingBal = 0;
-                    BlotterBreakups.UserID = Convert.ToInt16(Session["UserID"].ToString());
-                    BlotterBreakups.BR = Convert.ToInt16(Session["BR"].ToString());
-                    BlotterBreakups.BID = BreakupOpnBal.BID;
-                    BlotterBreakups.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
-                    BlotterBreakups.BreakupDate = DateTime.Now;
-                    BlotterBreakups.CreateDate = DateTime.Now;
-                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-                    ServiceRepository serviceObj = new ServiceRepository();
-                    HttpResponseMessage response = serviceObj.PostResponse("api/BlotterBreakups/InsertBlotterBreakups", BlotterBreakups);
-                    response.EnsureSuccessStatusCode();
-                    return RedirectToAction("AddOpeningBalance");
-                }
-            }
-            catch (Exception ex) { }
-            return View(BreakupOpnBal);
+            SBP_BlotterBreakups BlotterBreakups = new SBP_BlotterBreakups();
+            BlotterBreakups.FoodPayment_inFlow = 0;
+            BlotterBreakups.HOKRemittance_inFlow = 0;
+            BlotterBreakups.Miscellaneous_inflow = 0;
+            BlotterBreakups.SBPChequeDeposite_inflow = 0;
+            BlotterBreakups.ERF_inflow = 0;
+            BlotterBreakups.CashWithdrawbySBPCheques_outFlow = 0;
+            BlotterBreakups.DSC_outFlow = 0;
+            BlotterBreakups.ERF_outflow = 0;
+            BlotterBreakups.Miscellaneous_outflow = 0;
+            BlotterBreakups.RemitanceToHOK_outFlow = 0;
+            BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = 0;
+            return View(BlotterBreakups);
         }
 
         [HttpPost]
@@ -149,38 +84,11 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterBreakups/InsertBlotterBreakups", BlotterBreakups);
                     response.EnsureSuccessStatusCode();
-                    return RedirectToAction("AddOpeningBalance");
+                    return RedirectToAction("BlotterBreakups");
                 }
             }
             catch (Exception ex) { }
             return View(BlotterBreakups);
-        }
-        public ActionResult EditOpeningBalance(int id)
-        {
-            ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetBlotterBreakups?id=" + id.ToString());
-            response.EnsureSuccessStatusCode();
-            Models.SBP_BlotterBreakups BlotterBreakups = response.Content.ReadAsAsync<Models.SBP_BlotterBreakups>().Result;
-
-            BreakupOpeningBalance BreakupOpnBal = new BreakupOpeningBalance();
-            BreakupOpnBal.SNo = BlotterBreakups.SNo;
-            BreakupOpnBal.OpeningBalActual = BlotterBreakups.OpeningBalActual;
-            BreakupOpnBal.BID = BlotterBreakups.BID;
-            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BreakupOpnBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-
-            return View(BreakupOpnBal);
-
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateOpeningBalance(SBP_BlotterBreakups BlotterBreakups)
-        {
-            BlotterBreakups.UpdateDate = DateTime.Now;
-            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.PutResponse("api/BlotterBreakups/UpdateBreakupsOpngBal", BlotterBreakups);
-            response.EnsureSuccessStatusCode();
-            return RedirectToAction("AddOpeningBalance");
         }
 
         public ActionResult Edit(int id)
@@ -221,7 +129,8 @@ namespace WebBlotter.Controllers
             return RedirectToAction("BlotterBreakups");
         }
 
+        
 
-       
+
     }
 }
