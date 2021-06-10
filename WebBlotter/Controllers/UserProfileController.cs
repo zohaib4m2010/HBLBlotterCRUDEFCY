@@ -15,17 +15,27 @@ namespace WebBlotter.Controllers
     public class UserProfileController : Controller
     {
         // GET: UsersProfile
-        public ActionResult UserProfile()
+        public ActionResult UserProfile(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UsersProfile/GetAllUsers");
                 response.EnsureSuccessStatusCode();
                 List<Models.sp_GetAllUsers_Result> UsersProfile = response.Content.ReadAsAsync<List<Models.sp_GetAllUsers_Result>>().Result;
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UsersProfile), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
-                return View(UsersProfile);
+                return PartialView("_UserProfile", UsersProfile);
             }
             catch (Exception ex)
             {
@@ -36,18 +46,59 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.AllBranchNames = GetBranchesNames();
             ViewBag.UserRoles = GetUserRoles();
-            return View();
+            return PartialView("_Create");
+        }
+        public ActionResult Create(FormCollection form)
+        {
+            try
+            {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                ViewBag.AllBranchNames = GetBranchesNames();
+                ViewBag.UserRoles = GetUserRoles();
+                return PartialView();
+            }
+            catch (Exception ex) { }
+
+            return PartialView("_Create");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_LoginInfo SBP_LoginInfo)
+        public ActionResult _Create(SBP_LoginInfo SBP_LoginInfo, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     SBP_LoginInfo.Password = Utilities.EncryptPassword(SBP_LoginInfo.Password);
@@ -60,11 +111,21 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(SBP_LoginInfo);
+            return PartialView("_Create", SBP_LoginInfo);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/UsersProfile/GetUser?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -73,7 +134,7 @@ namespace WebBlotter.Controllers
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(SBP_LoginInfo), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.AllBranchNames = GetBranchesNames();
             ViewBag.UserRoles = GetUserRoles();
-            return View(SBP_LoginInfo);
+            return PartialView("_Edit", SBP_LoginInfo);
 
         }
 
@@ -95,7 +156,7 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(SBP_LoginInfo);
+            return PartialView("UserProfile", SBP_LoginInfo);
         }
 
         public ActionResult Delete(int id)

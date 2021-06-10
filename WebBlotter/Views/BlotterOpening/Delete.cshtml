@@ -21,7 +21,7 @@
     </div>
     
     <div class="form-group">
-        @Html.HiddenFor(m => m.CurrentDate, new { @Value = DateTime.Now })
+        @Html.HiddenFor(m => m.CurrentDate, new { @Value = DateTime.Now.ToString("yyyy-MM-dd") })
     </div>
 </fieldset>
 @using (Html.BeginForm("Delete", "BlotterSetup", FormMethod.Post))

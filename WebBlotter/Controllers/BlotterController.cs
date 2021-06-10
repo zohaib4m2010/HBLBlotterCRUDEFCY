@@ -20,21 +20,40 @@ namespace WebBlotter.Controllers
         // GET: Product  
         Boolean SendE = false;
         //string BrCode = ConfigurationManager.AppSettings["BranchCode"].ToString();
-        public ActionResult GetAllBlotter()
+        public ActionResult GetAllBlotter(FormCollection form)
         {
             try
             {
-                BlotterMultiModel blotterMulit = new BlotterMultiModel();
-                ServiceRepositoryBlotter  serviceObj = new ServiceRepositoryBlotter();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString()+"&DataType=SBP");
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
-                response.EnsureSuccessStatusCode();
-                List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
-                // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
-                blotterMulit.GetAllBlotter01 = blotter;
-                ViewBag.Title = "All Blotter";                
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
+                BlotterMultiModel blotterMulit = new BlotterMultiModel();
+                ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
+                if (Convert.ToInt32(selectCurrency) == 1)
+                {
+                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=SBP");
+                    response.EnsureSuccessStatusCode();
+                    List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                    // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                    blotterMulit.GetAllBlotter01 = blotter;
+                }
+                else
+                {
+                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterFCYList?brcode=" + Session["BR"].ToString() + "&CurrId=" + selectCurrency + "");
+                    response.EnsureSuccessStatusCode();
+                    List<Models.SP_SBPBlotter_FCY_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_FCY_Result>>().Result;
+                    blotterMulit.GetAllBlotterFCY01 = blotter;
+                }
+                ViewBag.Title = "All Blotter";
                 ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
-                return View(blotterMulit);
+                return PartialView("_GetAllBlotter", blotterMulit);
             }
             catch (Exception)
             {
@@ -42,21 +61,29 @@ namespace WebBlotter.Controllers
             }
         }
 
-        public ActionResult GetAllBlotterInternal()
+        public ActionResult GetAllBlotterInternal(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
                 BlotterMultiModel blotterMulit = new BlotterMultiModel();
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=HBLC");
-
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 blotterMulit.GetAllBlotter01 = blotter;
                 ViewBag.Title = "All Blotter Internal";
                 ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
-                return View(blotterMulit);
+                return PartialView("_GetAllBlotterInternal", blotterMulit);
             }
             catch (Exception)
             {
@@ -69,7 +96,7 @@ namespace WebBlotter.Controllers
             try
             {
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterDT/GetBlotterSysDT?BrCode="+ Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterDT/GetBlotterSysDT?BrCode=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_SBPOpicsSystemDate_Result> blotterDT = response.Content.ReadAsAsync<List<Models.SP_SBPOpicsSystemDate_Result>>().Result;
 
@@ -115,7 +142,7 @@ namespace WebBlotter.Controllers
                     if (currentDT >= DTLSartDate && DTLSartDate <= DatCount1)
                     {
                         var upd = 0;
-                        if (DatCount == 0 ) //&& String.IsNullOrEmpty(blotter.Friday_01.ToString()))
+                        if (DatCount == 0) //&& String.IsNullOrEmpty(blotter.Friday_01.ToString()))
                         {
 
                             blotter.Friday_01 = TotalSum.Balance * 1000000;
@@ -134,7 +161,7 @@ namespace WebBlotter.Controllers
 
                         }
                         else
-                        if (DatCount == 4 ) //&& String.IsNullOrEmpty(blotter.Tuesday_05.ToString()))
+                        if (DatCount == 4) //&& String.IsNullOrEmpty(blotter.Tuesday_05.ToString()))
                         {
                             blotter.Tuesday_05 = TotalSum.Balance * 1000000;
                             SendE = true;
@@ -149,7 +176,7 @@ namespace WebBlotter.Controllers
                             upd = Update(blotter);
                         }
                         else
-                        if (DatCount == 6 ) //&& String.IsNullOrEmpty(blotter.Thursday_07.ToString()))
+                        if (DatCount == 6) //&& String.IsNullOrEmpty(blotter.Thursday_07.ToString()))
                         {
                             blotter.Thursday_07 = TotalSum.Balance * 1000000;
                             SendE = true;
@@ -165,14 +192,14 @@ namespace WebBlotter.Controllers
                             upd = Update(blotter);
                         }
                         else
-                        if (DatCount == 10 ) //&& String.IsNullOrEmpty(blotter.Monday_11.ToString()))
+                        if (DatCount == 10) //&& String.IsNullOrEmpty(blotter.Monday_11.ToString()))
                         {
                             blotter.Monday_11 = TotalSum.Balance * 1000000;
                             SendE = true;
                             upd = Update(blotter);
                         }
                         else
-                        if (DatCount == 11 ) //&& String.IsNullOrEmpty(blotter.Tuesday_12.ToString()))
+                        if (DatCount == 11) //&& String.IsNullOrEmpty(blotter.Tuesday_12.ToString()))
                         {
                             blotter.Tuesday_12 = TotalSum.Balance * 1000000;
                             SendE = true;
@@ -234,7 +261,7 @@ namespace WebBlotter.Controllers
                 throw;
             }
 
-        
+
             return RedirectToAction("GetAllBlotter");
         }
         private Models.BlottterEmails BlotterSum()
@@ -334,7 +361,7 @@ namespace WebBlotter.Controllers
 
             catch (Exception ex)
             {
-                
+
                 return false;
             }
 

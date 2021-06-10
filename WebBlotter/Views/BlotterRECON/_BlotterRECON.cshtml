@@ -1,0 +1,95 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetSBPBlotterRECON_Result>
+
+@{
+    ViewBag.Title = "BlotterRECON";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #customers {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        border-collapse: collapse;
+        width: 90%;
+        min-width: 800px;
+        max-width: 1500px;
+    }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 2px;
+            font-size: 10.5px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+<h2>Blotter RECON</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@if (Model != null)
+{
+    <table id="customers" class="table table-striped table-bordered table-hover ">
+        <thead>
+            <tr>
+                <th>Nostro Bank</th>
+                <th>Last Statement date</th>
+                <th>Our Books</th>
+                <th>Their Books</th>
+                <th>Conversion Rate</th>
+                <th>Equivalent USD</th>
+                <th>Limit Available</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BankName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastStatementDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OurBooks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TheirBooks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConversionRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquivalentUSD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LimitAvailable)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </table>
+}

@@ -15,10 +15,20 @@ namespace WebBlotter.Controllers
     public class WebPagesController : Controller
     {
         // GET: WebPages
-        public ActionResult WebPages()
+        public ActionResult WebPages(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/WebPages/GetAllWebPage");
                 response.EnsureSuccessStatusCode();
@@ -26,7 +36,7 @@ namespace WebBlotter.Controllers
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewBag.Title = "User Role";
-                return View(WebPages);
+                return PartialView("_WebPages", WebPages);
             }
             catch (Exception ex)
             {
@@ -38,17 +48,48 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View();
+            return PartialView("_Create");
 
         }
+        public ActionResult Create(FormCollection form)
+        {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
+            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+            return PartialView("_Create");
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(WebPages WebPages)
+        public ActionResult _Create(WebPages WebPages, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     WebPages.CreateDate = DateTime.Now;
@@ -60,17 +101,27 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(WebPages);
+            return PartialView("_Create", WebPages);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/WebPages/GetWebPage?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.WebPages WebPages = response.Content.ReadAsAsync<Models.WebPages>().Result;
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(WebPages), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View(WebPages);
+            return PartialView("_Edit", WebPages);
 
         }
 
@@ -91,7 +142,8 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(WebPages);
+            return RedirectToAction("WebPages");
+
         }
 
         public ActionResult Delete(int id)

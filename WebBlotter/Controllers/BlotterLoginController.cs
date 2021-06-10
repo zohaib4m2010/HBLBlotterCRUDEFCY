@@ -49,7 +49,7 @@ namespace WebBlotter.Controllers
                             Session["BranchID"] = item.BranchID;
                             Session["BranchName"] = item.BranchName;
                             Session["BlotterType"] = item.BlotterType;
-                            Session["SelectedCurrency"] = item.CurrencyID;
+                            Session["Currencies"] = item.CurrencyID;
                             Session["BR"] = (item.isConventional)?"01":(item.isislamic)?"02":"00";
                             Session["Pages"] = item.Pages;
                             Session["ActiveController"] = "Login";
@@ -67,6 +67,16 @@ namespace WebBlotter.Controllers
                                 UPA.Add(upaobj);
                             }
                             Session["PagesAccess"] = UPA;
+                           
+                            #region Added By Shakir 
+                            if (Session["Currencies"] != null)
+                            {
+                                if (Session["Currencies"].ToString().Contains(','))
+                                    Session["SelectedCurrency"] = (Session["Currencies"].ToString().Split(',')[0]).Split('~')[0];
+                                else
+                                    Session["SelectedCurrency"] = Session["Currencies"].ToString().Split('~')[0];
+                            }
+                            #endregion
 
                             int timeout = 525600; //objLogin.RememberMe ? 525600 : 525600; // 525600 min = 1 year
                             var ticket = new FormsAuthenticationTicket(item.UserName, true, timeout);

@@ -33,10 +33,20 @@ namespace WebBlotter.Controllers
             }
         }
 
-        public ActionResult BlotterRTGS()
+        public ActionResult BlotterRTGS(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRTGS/GetAllBlotterRTGS?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
@@ -48,7 +58,7 @@ namespace WebBlotter.Controllers
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
                 ViewBag.Title = "All Blotter Setup";
-                return View(blotterRTGS);
+                return PartialView("_BlotterRTGS", blotterRTGS);
             }
             catch (Exception ex)
             {
@@ -60,6 +70,12 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterRTGS model = new SBP_BlotterRTGS();
             try
@@ -76,15 +92,56 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(model);
+            return PartialView("_Create", model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterRTGS BlotterRTGS)
+        public ActionResult Create(FormCollection form)
         {
             try
             {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
+                if (ModelState.IsValid)
+                {
+                    ViewBag.RTGSTransactionTitles = GetAllRTGSTransactionTitles();
+                }
+                else
+                {
+                    ViewBag.RTGSTransactionTitles = GetAllRTGSTransactionTitles();
+                }
+            }
+            catch (Exception ex) { }
+
+            return PartialView("_Create");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _Create(SBP_BlotterRTGS BlotterRTGS, FormCollection form)
+        {
+            try
+            {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
                 if (ModelState.IsValid)
                 {
                     BlotterRTGS.RTGS_OutFLow = UC.CheckNegativeValue(BlotterRTGS.RTGS_OutFLow);
@@ -106,12 +163,23 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterRTGS);
+            return PartialView("_Create", BlotterRTGS);
 
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRTGS/GetBlotterRTGS?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -120,7 +188,7 @@ namespace WebBlotter.Controllers
             ViewBag.RTGSTransactionTitles = GetAllRTGSTransactionTitles();
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
-            return View(BlotterRTGS);
+            return PartialView("_Edit", BlotterRTGS);
 
         }
 
@@ -132,6 +200,7 @@ namespace WebBlotter.Controllers
             BlotterRTGS.UpdateDate = DateTime.Now;
             if (BlotterRTGS.RTGS_Date == null)
                 BlotterRTGS.RTGS_Date = DateTime.Now;
+            BlotterRTGS.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterRTGS/UpdateRTGS", BlotterRTGS);
             response.EnsureSuccessStatusCode();

@@ -61,7 +61,7 @@ namespace WebBlotter.Classes
                             httpContext.Session["UserRole"] = item.RoleName;
                             httpContext.Session["BranchID"] = item.BranchID;
                             httpContext.Session["BranchName"] = item.BranchName;
-                            httpContext.Session["SelectedCurrency"] = item.CurrencyID;
+                            httpContext.Session["Currencies"] = item.CurrencyID;
                             httpContext.Session["Pages"] = item.Pages;
                             httpContext.Session["ActiveController"] = controllerName;
                             List<UserPageAccess> UPA = new List<UserPageAccess>();
@@ -78,6 +78,15 @@ namespace WebBlotter.Classes
                                 UPA.Add(upaobj);
                             }
                             httpContext.Session["PagesAccess"] = UPA;
+
+                            #region Added By Shakir
+                            if (httpContext.Session["Currencies"] != null)
+                            {
+                                Models.SP_GetAllBlotterCurrencyById_Result objc = new SP_GetAllBlotterCurrencyById_Result();
+                                objc = UtilityClass.GetCurrencies(Convert.ToInt32(httpContext.Session["UserID"]));
+                                httpContext.Session["Currencies"] = objc.Currencies;
+                            }
+                            #endregion
                         }
                     }
                 }
@@ -92,7 +101,7 @@ namespace WebBlotter.Classes
                         break;
                     }
                 }
-                if (actionName == "Edit" || actionName == "Create" || actionName == "Update" || actionName == "Delete" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation")
+                if (actionName == "Edit" || actionName == "Create" || actionName == "_Create" || actionName == "Update" || actionName == "Delete" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation")
                 {
 
                     authorize = true;

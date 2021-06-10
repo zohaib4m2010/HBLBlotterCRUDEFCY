@@ -34,10 +34,20 @@ namespace WebBlotter.Controllers
 
         }
 
-        public ActionResult BlotterClearing()
+        public ActionResult BlotterClearing(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterClearing/GetAllBlotterClearing?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
@@ -49,7 +59,7 @@ namespace WebBlotter.Controllers
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
                 ViewBag.Title = "All Blotter Setup";
-                return View(blotterClearing);
+                return PartialView("_BlotterClearing", blotterClearing);
             }
             catch (Exception ex)
             {
@@ -61,6 +71,11 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterClearing model = new SBP_BlotterClearing();
             try
@@ -77,15 +92,56 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(model);
+            return PartialView("_Create", model);
+        }
+        public ActionResult Create(FormCollection form)
+        {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
+            SBP_BlotterClearing model = new SBP_BlotterClearing();
+            try
+            {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                if (ModelState.IsValid)
+                {
+                    model.Clearing_Date = DateTime.Now.Date;
+                    ViewBag.ClearingTransactionTitles = GetAllClearingTransactionTitles();
+                }
+                else
+                {
+                    ViewBag.ClearingTransactionTitles = GetAllClearingTransactionTitles();
+                }
+            }
+            catch (Exception ex) { }
+
+            return PartialView("_Create", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterClearing BlotterClearing)
+        public ActionResult _Create(SBP_BlotterClearing BlotterClearing, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     BlotterClearing.Clearing_OutFLow = UC.CheckNegativeValue(BlotterClearing.Clearing_OutFLow);
@@ -107,12 +163,21 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterClearing);
-
+            return PartialView("_Create", BlotterClearing);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterClearing/GetBlotterClearing?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -121,7 +186,7 @@ namespace WebBlotter.Controllers
             ViewBag.ClearingTransactionTitles = GetAllClearingTransactionTitles();
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
-            return View(BlotterClearing);
+            return PartialView("_Edit", BlotterClearing);
 
         }
 
@@ -133,6 +198,7 @@ namespace WebBlotter.Controllers
             BlotterClearing.UpdateDate = DateTime.Now;
             if (BlotterClearing.Clearing_Date == null)
                 BlotterClearing.Clearing_Date = DateTime.Now;
+            BlotterClearing.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterClearing/UpdateClearing", BlotterClearing);
             response.EnsureSuccessStatusCode();

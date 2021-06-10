@@ -15,10 +15,20 @@ namespace WebBlotter.Controllers
         UtilityClass UC = new UtilityClass();
         // GET: BlotterOpenBal
 
-        public ActionResult OpeningBalance()
+        public ActionResult OpeningBalance(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterOpenBal/GetAllBlotterOpenBal?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
@@ -30,30 +40,74 @@ namespace WebBlotter.Controllers
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
                 ViewBag.Title = "All Blotter Setup";
-                return View(BlotterOpenBal);
+                return PartialView("_OpeningBalance", BlotterOpenBal);
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
-
-
+        
         [HttpGet]
         public ActionResult Create()
         {
+
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterOpeningBalance model = new SBP_BlotterOpeningBalance();
             
-            return View(model);
+            return PartialView("_Create", model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterOpeningBalance BlotterOpenBal)
+        public ActionResult Create(FormCollection form)
         {
             try
             {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
+
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                SBP_BlotterOpeningBalance model = new SBP_BlotterOpeningBalance();
+
+                return PartialView("_Create", model);
+            }
+            catch (Exception ex) { }
+
+            return PartialView("_Create");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _Create(SBP_BlotterOpeningBalance BlotterOpenBal, FormCollection form)
+        {
+            try
+            {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     BlotterOpenBal.BalDate = BlotterOpenBal.BalDate;
@@ -70,12 +124,22 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterOpenBal);
+            return PartialView("_Create", BlotterOpenBal);
 
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterOpenBal/GetBlotterOpenBalById?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -83,7 +147,7 @@ namespace WebBlotter.Controllers
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
-            return View(BlotterOpenBal);
+            return PartialView("_Edit", BlotterOpenBal);
 
         }
 
@@ -94,6 +158,7 @@ namespace WebBlotter.Controllers
             BlotterOpenBal.UpdateDate = DateTime.Now;
             if (BlotterOpenBal.BalDate == null)
                 BlotterOpenBal.BalDate = DateTime.Now;
+            BlotterOpenBal.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterOpenBal/UpdateOpenBal", BlotterOpenBal);
             response.EnsureSuccessStatusCode();

@@ -18,8 +18,19 @@ namespace WebBlotter.Controllers
 
         UtilityClass UC = new UtilityClass();
 
-        public ActionResult BlotterCRRFINCON()
+        public ActionResult BlotterCRRFINCON(FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCRRFINCON/GetAllBlotterCRRFINCON?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
             response.EnsureSuccessStatusCode();
@@ -33,13 +44,18 @@ namespace WebBlotter.Controllers
             ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
             ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
             ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
-            return View(blotterCRRFINCON);
+            return PartialView("_BlotterCRRFINCON", blotterCRRFINCON);
         }
 
 
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterCRRFINCON model = new SBP_BlotterCRRFINCON();
             try
@@ -50,16 +66,51 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(model);
+            return PartialView("_Create", model);
 
+        }
+        public ActionResult Create(FormCollection form)
+        {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
+            SBP_BlotterCRRFINCON model = new SBP_BlotterCRRFINCON();
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    model.CreateDate = DateTime.Now.Date;
+                }
+            }
+            catch (Exception ex) { }
+            return PartialView("_Create", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterCRRFINCON BlotterCRRFINCON)
+        public ActionResult _Create(SBP_BlotterCRRFINCON BlotterCRRFINCON, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
                 if (ModelState.IsValid)
                 {
 
@@ -76,17 +127,28 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterCRRFINCON);
+            return PartialView("_Create", BlotterCRRFINCON);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCRRFINCON/GetBlotterCRRFINCON?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_BlotterCRRFINCON BlotterCRRFINCON = response.Content.ReadAsAsync<Models.SBP_BlotterCRRFINCON>().Result;
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRRFINCON), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View(BlotterCRRFINCON);
+            return PartialView("_Edit", BlotterCRRFINCON);
 
         }
 

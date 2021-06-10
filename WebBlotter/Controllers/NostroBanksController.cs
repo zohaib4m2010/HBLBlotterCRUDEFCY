@@ -15,18 +15,46 @@ namespace WebBlotter.Controllers
     public class NostroBanksController : Controller
     {
         // GET: NostroBank
-        public ActionResult NostroBanks()
+        //public ActionResult NostroBanks()
+        //{
+        //    try
+        //    {
+        //        ServiceRepository serviceObj = new ServiceRepository();
+        //        HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank");
+        //        response.EnsureSuccessStatusCode();
+        //        List<Models.NostroBank> NostroBank = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
+        //        UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(NostroBank), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
+        //        ViewBag.Title = "Nostro Bank";
+        //        return View(NostroBank);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+        // GET: NostroBank
+        public ActionResult NostroBanks(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank");
+                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank?currId=" + selectCurrency);
                 response.EnsureSuccessStatusCode();
                 List<Models.NostroBank> NostroBank = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
-                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(NostroBank), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
                 ViewBag.Title = "Nostro Bank";
-                return View(NostroBank);
+                return PartialView("_NostroBanks", NostroBank);
             }
             catch (Exception ex)
             {
@@ -34,24 +62,66 @@ namespace WebBlotter.Controllers
             }
         }
 
-
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View();
+            return PartialView("_Create");
 
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(NostroBank NostroBank)
+        public ActionResult Create(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                return PartialView("_Create");
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+         
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult _Create(NostroBank NostroBank, FormCollection form)
+        {
+            try
+            {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     NostroBank.CreateDate = DateTime.Now;
+                    NostroBank.CurId = Convert.ToInt32(Session["SelectedCurrency"].ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/NostroBank/InsertNostroBank", NostroBank);
                     response.EnsureSuccessStatusCode();
@@ -60,17 +130,27 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(NostroBank);
+            return  RedirectToAction("NostroBanks");
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBank?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.NostroBank NostroBank = response.Content.ReadAsAsync<Models.NostroBank>().Result;
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(NostroBank), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View(NostroBank);
+            return PartialView("_Edit", NostroBank);
 
         }
 
@@ -79,6 +159,7 @@ namespace WebBlotter.Controllers
         public ActionResult Update(NostroBank NostroBank)
         {
             NostroBank.UpdateDate = DateTime.Now;
+            NostroBank.CurId = Convert.ToInt32(Session["SelectedCurrency"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/NostroBank/UpdateNostroBank", NostroBank);
             response.EnsureSuccessStatusCode();

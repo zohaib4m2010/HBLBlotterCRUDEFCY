@@ -34,12 +34,21 @@ namespace WebBlotter.Controllers
             }
         }
 
-        public ActionResult BlotterTrade()
+        public ActionResult BlotterTrade(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTrade/GetAllBlotterTrade?UserID="+ Session["UserID"].ToString()+"&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTrade/GetAllBlotterTrade?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_GetAll_SBPBlotterTrade_Result> blotterTrade = response.Content.ReadAsAsync<List<Models.SP_GetAll_SBPBlotterTrade_Result>>().Result;
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
@@ -49,7 +58,7 @@ namespace WebBlotter.Controllers
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
                 ViewBag.Title = "All Blotter Setup";
-                return View(blotterTrade);
+                return PartialView("_BlotterTrade", blotterTrade);
             }
             catch (Exception ex)
             {
@@ -61,6 +70,11 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterTrade model = new SBP_BlotterTrade();
             try
@@ -74,16 +88,54 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(model);
+            return PartialView("_Create", model);
 
+        }
+        public ActionResult Create(FormCollection form)
+        {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
+            SBP_BlotterTrade model = new SBP_BlotterTrade();
+            try
+            {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                if (ModelState.IsValid)
+                {
+                    model.Trade_Date = DateTime.Now.Date;
+                    ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
+                }
+            }
+            catch (Exception ex) { }
+
+            return PartialView("_Create", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterTrade BlotterTrade)
+        public ActionResult _Create(SBP_BlotterTrade BlotterTrade, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     BlotterTrade.Trade_OutFLow = UC.CheckNegativeValue(BlotterTrade.Trade_OutFLow);
@@ -105,11 +157,22 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterTrade);
+            return PartialView("_Create", BlotterTrade);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTrade/GetBlotterTrade?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -118,7 +181,7 @@ namespace WebBlotter.Controllers
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
             ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
-            return View(BlotterTrade);
+            return PartialView("_Edit", BlotterTrade);
 
         }
 
@@ -133,6 +196,7 @@ namespace WebBlotter.Controllers
                     BlotterTrade.Trade_OutFLow = UC.CheckNegativeValue(BlotterTrade.Trade_OutFLow);
                     if (BlotterTrade.Trade_Date == null)
                         BlotterTrade.Trade_Date = DateTime.Now;
+                    BlotterTrade.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterTrade.UpdateDate = DateTime.Now;
                     UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
@@ -144,12 +208,11 @@ namespace WebBlotter.Controllers
                 }
                 else
                 {
-
                     ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterTrade);
+            return PartialView("_Edit", BlotterTrade);
         }
 
         public ActionResult Delete(int id)

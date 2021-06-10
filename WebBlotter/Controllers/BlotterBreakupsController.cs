@@ -17,15 +17,26 @@ namespace WebBlotter.Controllers
 
         UtilityClass UC = new UtilityClass();
         // GET: BlotterBreakups
-        public ActionResult BlotterBreakups()
+        public ActionResult BlotterBreakups(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetAllBlotterBreakups?UserID="+ Session["UserID"].ToString() + "&BranchID="+ Session["BranchID"].ToString() + "&CurID="+ Session["SelectedCurrency"].ToString() + "&BR="+ Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetAllBlotterBreakups?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
                 Models.SP_GetLatestBreakup_Result BlotterBreakups = response.Content.ReadAsAsync<Models.SP_GetLatestBreakup_Result>().Result;
-                if(BlotterBreakups == null)
+                if (BlotterBreakups == null)
                     ViewData["DataStatus"] = "Data Not Available";
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
@@ -33,8 +44,8 @@ namespace WebBlotter.Controllers
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
-                return View(BlotterBreakups);
-               
+                return PartialView("_BlotterBreakups", BlotterBreakups);
+
             }
             catch (Exception ex)
             {
@@ -45,6 +56,11 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             SBP_BlotterBreakups BlotterBreakups = new SBP_BlotterBreakups();
             BlotterBreakups.FoodPayment_inFlow = 0;
             BlotterBreakups.HOKRemittance_inFlow = 0;
@@ -57,15 +73,54 @@ namespace WebBlotter.Controllers
             BlotterBreakups.Miscellaneous_outflow = 0;
             BlotterBreakups.RemitanceToHOK_outFlow = 0;
             BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = 0;
-            return View(BlotterBreakups);
+            return PartialView("_Create", BlotterBreakups);
+        }
+
+        public ActionResult Create(FormCollection form)
+        {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
+            SBP_BlotterBreakups BlotterBreakups = new SBP_BlotterBreakups();
+            BlotterBreakups.FoodPayment_inFlow = 0;
+            BlotterBreakups.HOKRemittance_inFlow = 0;
+            BlotterBreakups.Miscellaneous_inflow = 0;
+            BlotterBreakups.SBPChequeDeposite_inflow = 0;
+            BlotterBreakups.ERF_inflow = 0;
+            BlotterBreakups.CashWithdrawbySBPCheques_outFlow = 0;
+            BlotterBreakups.DSC_outFlow = 0;
+            BlotterBreakups.ERF_outflow = 0;
+            BlotterBreakups.Miscellaneous_outflow = 0;
+            BlotterBreakups.RemitanceToHOK_outFlow = 0;
+            BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = 0;
+            return PartialView("_Create", BlotterBreakups);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterBreakups BlotterBreakups)
+        public ActionResult _Create(SBP_BlotterBreakups BlotterBreakups, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     BlotterBreakups.CashWithdrawbySBPCheques_outFlow = UC.CheckNegativeValue(BlotterBreakups.CashWithdrawbySBPCheques_outFlow);
@@ -88,17 +143,29 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterBreakups);
+
+            return PartialView("_Create", BlotterBreakups);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetBlotterBreakups?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_BlotterBreakups BlotterBreakups = response.Content.ReadAsAsync<Models.SBP_BlotterBreakups>().Result;
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View(BlotterBreakups);
+            return PartialView("_Edit", BlotterBreakups);
 
         }
 
@@ -109,6 +176,7 @@ namespace WebBlotter.Controllers
             BlotterBreakups.CashWithdrawbySBPCheques_outFlow = UC.CheckNegativeValue(BlotterBreakups.CashWithdrawbySBPCheques_outFlow);
             BlotterBreakups.ERF_outflow = UC.CheckNegativeValue(BlotterBreakups.ERF_outflow);
             BlotterBreakups.DSC_outFlow = UC.CheckNegativeValue(BlotterBreakups.DSC_outFlow);
+            BlotterBreakups.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             BlotterBreakups.RemitanceToHOK_outFlow = UC.CheckNegativeValue(BlotterBreakups.RemitanceToHOK_outFlow);
             BlotterBreakups.SBPCheqGivenToOtherBank_outFlow = UC.CheckNegativeValue(BlotterBreakups.SBPCheqGivenToOtherBank_outFlow);
             BlotterBreakups.Miscellaneous_outflow = UC.CheckNegativeValue(BlotterBreakups.Miscellaneous_outflow);
@@ -129,7 +197,7 @@ namespace WebBlotter.Controllers
             return RedirectToAction("BlotterBreakups");
         }
 
-        
+
 
 
     }

@@ -34,5 +34,39 @@ namespace WebBlotter.Repository
             HttpResponseMessage response = serviceObj.PostResponse("api/BlotterLogin/ActivityMonitor", SS);
             response.EnsureSuccessStatusCode();
         }
+
+        public static Models.SP_GetAllBlotterCurrencyById_Result GetCurrencies(int userid)
+        {
+            try
+            {
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCurrency/GetAllCurrencies?userid=" + userid);
+                response.EnsureSuccessStatusCode();
+                Models.SP_GetAllBlotterCurrencyById_Result Currencies = response.Content.ReadAsAsync<Models.SP_GetAllBlotterCurrencyById_Result>().Result;
+                return Currencies;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public static void GetSelectedCurrecy(int curr)
+        {
+
+            var routeValues = HttpContext.Current.Request.RequestContext.RouteData.Values;
+            var ActiveAction = routeValues["action"].ToString();
+            var ActiveController = routeValues["controller"].ToString();
+            HttpContext.Current.Session["ActiveAction"] = ActiveController;
+            HttpContext.Current.Session["ActiveController"] = ActiveAction;
+
+            int selectCurrency = curr;
+            if (selectCurrency > 1)
+                HttpContext.Current.Session["SelectedCurrency"] = selectCurrency;
+            else
+                selectCurrency = Convert.ToInt32(HttpContext.Current.Session["SelectedCurrency"]);
+
+            //return selectCurrency;
+        }
     }
 }

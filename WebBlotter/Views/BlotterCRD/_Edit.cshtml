@@ -1,0 +1,76 @@
+﻿@model WebBlotter.Models.SBP_BlotterCRD
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm("Update", "BlotterCRD", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.SNo)
+        <div class="form-horizontal">
+            <h4>SBP_BlotterCRD</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Nostro Bank</label>
+                <div class="col-md-10">
+                    <select name="Nostro_AccountId" class="form-control">
+                        @if (ViewBag.CRDNostroBanks != null)
+                        {
+                            foreach (var item in ViewBag.CRDNostroBanks)
+                            {
+                                if (ViewBag.Nostro_Accountid != null && item.ID == ViewBag.Nostro_Accountid)
+                                {
+                                    <option value=@ViewBag.Nostro_Accountid selected>@item.BankName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.ID">@item.BankName</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ValueDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ValueDate, new { htmlAttributes = new { @class = "form-control", @Value = Model.ValueDate.Value.Date.ToString("yyyy-MM-dd") } })
+                    @Html.ValidationMessageFor(model => model.ValueDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CRD_InFlow, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CRD_InFlow, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CRD_InFlow, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CRD_OutFlow, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CRD_OutFlow, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CRD_OutFlow, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+
+

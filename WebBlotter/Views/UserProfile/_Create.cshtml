@@ -1,0 +1,118 @@
+﻿@model WebBlotter.Models.SBP_LoginInfo
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<h2>Create</h2>
+
+@using (Html.BeginForm("_Create", "UserProfile", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <Fieldset>
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Branch</label>
+                <div class="col-md-10">
+                    @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                    <select name="BranchId" class="form-control">
+                        @if (ViewBag.AllBranchNames != null)
+                        {
+                            foreach (var item in ViewBag.AllBranchNames)
+                            {
+                                <option value="@item.BID">@item.BranchName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Branch</label>
+                <div class="col-md-10">
+                    @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                    <select name="URID" class="form-control">
+                        @if (ViewBag.UserRoles != null)
+                        {
+                            foreach (var item in ViewBag.UserRoles)
+                            {
+                                <option value="@item.URID">@item.RoleName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Branch</label>
+                <div class="col-md-10">
+                    <select name="BlotterType" class="form-control">
+                        <option value="FCY">FCY</option>
+                        <option value="LCY">LCY</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control datepicker" } })
+
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContactNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ContactNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.Label("Conventional", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.CheckBoxFor(model => model.isConventional)
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.Label("Islamic", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.CheckBoxFor(model => model.isislamic)
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.CheckBoxFor(model => model.isActive)
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input class="form-control" type="submit" value="Create" />
+                </div>
+            </div>
+        </div>
+    </Fieldset>
+
+}

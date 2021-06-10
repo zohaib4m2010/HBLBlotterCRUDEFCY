@@ -1,0 +1,141 @@
+﻿@model  WebBlotter.Models.SP_GetAllUserPageRelations_Result
+@{
+    ViewBag.Title = "UserPageRelation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #customers {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        border-collapse: collapse;
+        width: 90%;
+        min-width: 800px;
+        max-width: 1500px;
+    }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 2px;
+            font-size: 10.5px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+</style>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    /*th  {
+    border: 1px solid black;
+    color:red;
+    width: 55px
+    }*/
+</style>
+<h2>UserPageRelation</h2>
+<div class="container">
+
+    <div class="col-md-12">
+        @using (Html.BeginForm("UpdateUserPageRelation", "UserPageRelation", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <Fieldset>
+                <div class="col-md-5">
+                    @Html.HiddenFor(model => model.UPRID)
+
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                            <select name="URID" class="form-control" onchange="this.form.submit()">
+                                @if (ViewBag.UserRoles != null)
+                                {
+                                    foreach (var item in ViewBag.UserRoles)
+                                    {
+                                        if (ViewBag.SelectedURID != null)
+                                        {
+                                            if (Convert.ToInt32(ViewBag.SelectedURID) == item.URID)
+                                            {
+                                                <option value="@item.URID" selected>@item.RoleName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.URID">@item.RoleName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                            <select name="WPID" class="form-control">
+                                @if (ViewBag.WebPages != null)
+                                {
+                                    //foreach (var item in ViewBag.WebPages)
+                                    //{
+                                    if (ViewBag.SelectedWPID != null)
+                                    {
+                                        if (Convert.ToInt32(ViewBag.SelectedWPID) == ViewBag.WebPages.WPID)
+                                        {
+                                            <option value="@ViewBag.WebPages.WPID" selected>@ViewBag.WebPages.DisplayName</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@ViewBag.WebPages.WPID">@ViewBag.WebPages.DisplayName</option>
+                                    }
+                                    //}
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Date Chnage Access</label>
+                        @Html.CheckBoxFor(model => model.DateChangeAccess, new { htmlAttributes = new { @class = "form-check-input" } })
+                    </div>
+                </div>
+
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Edit Access</label>
+                        @Html.CheckBoxFor(model => model.EditAccess, new { htmlAttributes = new { @class = "form-check-input" } })
+                    </div>
+                </div>
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Delete Access</label>
+                        @Html.CheckBoxFor(model => model.DeleteAccess, new { htmlAttributes = new { @class = "form-check-input" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input class="form-control" type="submit" name="EditPage" value="Update" />
+                    </div>
+                </div>
+            </Fieldset>
+        }
+    </div>
+
+</div>
+

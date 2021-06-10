@@ -14,8 +14,9 @@ namespace WebBlotter.ViewModel
        
         public BlottterEmails SendEmail01 { get; set; }
         public List<SP_SBPBlotter_Result> GetAllBlotter01 { get; set; }
-           
-     
+        public List<SP_SBPBlotter_FCY_Result> GetAllBlotterFCY01 { get; set; }
+    
+
     }
 }
 

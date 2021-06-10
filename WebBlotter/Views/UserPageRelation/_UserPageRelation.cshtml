@@ -1,0 +1,174 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetAllUserPageRelations_Result>
+@{
+    ViewBag.Title = "UserPageRelation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #customers {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        border-collapse: collapse;
+        width: 90%;
+        min-width: 800px;
+        max-width: 1500px;
+    }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 2px;
+            font-size: 10.5px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+</style>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    /*th  {
+    border: 1px solid black;
+    color:red;
+    width: 55px
+    }*/
+</style>
+<h2>UserPageRelation</h2>
+<div class="container">
+
+    <div class="col-md-12">
+        @using (Html.BeginForm("UserPageRelation", "UserPageRelation", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <Fieldset>
+                <div class="col-md-5">
+
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                            <select name="URID" class="form-control" onchange="this.form.submit()">
+                                <option value="0">Select Role</option>
+                                @if (ViewBag.UserRoles != null)
+                                {
+                                    foreach (var item in ViewBag.UserRoles)
+                                    {
+                                        if (ViewBag.SelectedURID != null)
+                                        {
+                                            if (Convert.ToInt32(ViewBag.SelectedURID) == item.URID)
+                                            {
+                                                <option value="@item.URID" selected>@item.RoleName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.URID">@item.RoleName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.URID">@item.RoleName</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
+                            <select name="WPID" class="form-control">
+                                <option value="0">Select Page</option>
+                                @if (ViewBag.WebPages != null)
+                                {
+                                    foreach (var item in ViewBag.WebPages)
+                                    {
+                                        <option value="@item.WPID">@item.DisplayName</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Date Chnage Access</label>
+                        <input data-val="true" data-val-required="The isActive field is required." id="DateChangeAcc" name="DateChangeAcc" type="checkbox" value="true">
+                    </div>
+                </div>
+
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Edit Access</label>
+                        <input data-val="true" data-val-required="The isActive field is required." id="EditAcc" name="EditAcc" type="checkbox" value="true">
+                    </div>
+                </div>
+                <div class="col-md-offset-2 col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Delete Access</label>
+                        <input data-val="true" data-val-required="The isActive field is required." id="DelAcc" name="DelAcc" type="checkbox" value="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input class="form-control" type="submit" name="AddPage" value="Add" />
+                    </div>
+                </div>
+            </Fieldset>
+        }
+    </div>
+    <table id="customers" class="table table-striped table-bordered table-hover ">
+        <thead>
+            <tr>
+                <th>S.No. </th>
+                <th>Display Name</th>
+                <th>Page Name</th>
+                <th>Date Changable Access</th>
+                <th>Edit Access</th>
+                <th>Delete Access</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td width="6%">@Html.DisplayFor(modelItem => item.UPRID)</td>
+                        <td id="DealDate" width="8%">
+                            @Html.DisplayFor(modelItem => item.DisplayName)
+                        </td>
+                        <td align="left" width="8%">@Html.DisplayFor(modelItem => item.PageName)</td>
+                        <td align="right" width="8%">@Html.DisplayFor(modelItem => item.DateChangeAccess)</td>
+                        <td align="right" width="10%">@Html.DisplayFor(modelItem => item.EditAccess)</td>
+                        <td align="right" width="10%">@Html.DisplayFor(modelItem => item.DeleteAccess)</td>
+
+
+                        <td width="18%" align="right">
+
+                            @Html.ActionLink("Edit", "Edit", new { id = item.UPRID }) | @Html.ActionLink("Delete", "Delete", new { id = item.UPRID })
+
+                        </td>
+                    </tr>
+
+                }
+            }
+
+    </table>
+
+</div>

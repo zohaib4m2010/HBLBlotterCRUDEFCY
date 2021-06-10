@@ -35,10 +35,20 @@ namespace WebBlotter.Controllers
             }
         }
 
-        public ActionResult BlotterTBO()
+        public ActionResult BlotterTBO(FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTBO/GetAllBlotterTBO?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
@@ -49,7 +59,7 @@ namespace WebBlotter.Controllers
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
                 ViewBag.Title = "All Blotter Setup";
-                return View(blotterTBO);
+                return PartialView("_BlotterTBO", blotterTBO);
             }
             catch (Exception ex)
             {
@@ -61,6 +71,11 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var ActiveAction = RouteData.Values["action"].ToString();
+            var ActiveController = RouteData.Values["controller"].ToString();
+            Session["ActiveAction"] = ActiveController;
+            Session["ActiveController"] = ActiveAction;
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterTBO model = new SBP_BlotterTBO();
             try
@@ -74,16 +89,58 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(model);
+            return PartialView("_Create", model);
 
         }
 
+
+        public ActionResult Create(FormCollection form)
+        {
+            SBP_BlotterTBO model = new SBP_BlotterTBO();
+
+            try
+            {
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+
+                #region Added by shakir (Currency parameter)
+
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                #endregion
+
+                if (ModelState.IsValid)
+                {
+                    model.TBO_Date = DateTime.Now.Date;
+                    ViewBag.TBOTransactionTitles = GetAllTBOTransactionTitles();
+                }
+            }
+            catch (Exception ex) { }
+
+            return PartialView("_Create", model);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SBP_BlotterTBO BlotterTBO)
+        public ActionResult _Create(SBP_BlotterTBO BlotterTBO, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 if (ModelState.IsValid)
                 {
                     BlotterTBO.TBO_OutFLow = UC.CheckNegativeValue(BlotterTBO.TBO_OutFLow);
@@ -106,11 +163,21 @@ namespace WebBlotter.Controllers
                 }
             }
             catch (Exception ex) { }
-            return View(BlotterTBO);
+            return PartialView("_Create", BlotterTBO);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, FormCollection form)
         {
+            #region Added by shakir (Currency parameter)
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTBO/GetBlotterTBO?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
@@ -119,7 +186,7 @@ namespace WebBlotter.Controllers
             ViewData["isDateChangable"] = isDateChangable;
             ViewBag.TBOTransactionTitles = GetAllTBOTransactionTitles();
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTBO), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            return View(BlotterTBO);
+            return PartialView("_Edit", BlotterTBO);
 
         }
 
@@ -131,6 +198,7 @@ namespace WebBlotter.Controllers
             if (BlotterTBO.TBO_Date == null)
                 BlotterTBO.TBO_Date = DateTime.Now;
             BlotterTBO.UpdateDate = DateTime.Now;
+            BlotterTBO.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTBO), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterTBO/UpdateTBO", BlotterTBO);

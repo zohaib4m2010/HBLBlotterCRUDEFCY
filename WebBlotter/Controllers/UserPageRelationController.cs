@@ -15,58 +15,44 @@ namespace WebBlotter.Controllers
     public class UserPageRelationController : Controller
     {
         // GET: UserPageRelation
-
+        [HttpGet]
         public ActionResult UserPageRelation()
         {
             try
             {
+                var ActiveAction = RouteData.Values["action"].ToString();
+                var ActiveController = RouteData.Values["controller"].ToString();
+                Session["ActiveAction"] = ActiveController;
+                Session["ActiveController"] = ActiveAction;
+
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 ViewBag.UserRoles = GetActiveUserRoles();
-                return View();
+                return PartialView("_UserPageRelation");
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
-        [HttpPost]
+
+
         public ActionResult UserPageRelation(FormCollection form)
         {
             try
             {
-                var URID = Convert.ToInt32(form["URID"].ToString());
-                var WPID = Convert.ToInt32(form["WPID"].ToString());
-                ViewBag.UserRoles = GetActiveUserRoles();
-                ViewBag.SelectedURID = URID;
-                ViewBag.WebPages = GetActiveWebPages(URID);
-                ViewBag.SelectedWPID = WPID;
-                
-                if (form.AllKeys.Contains("AddPage")) {
-                    if (URID != 0) {
-                        if (WPID != 0)
-                        {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
-                            var DateChAcc = Convert.ToBoolean((form.AllKeys.Contains("DateChangeAcc"))?form["DateChangeAcc"].ToString():"false");
-                            var EditAcc = Convert.ToBoolean((form.AllKeys.Contains("EditAcc")) ? form["EditAcc"].ToString() : "false");
-                            var DelAcc = Convert.ToBoolean((form.AllKeys.Contains("DelAcc")) ? form["DelAcc"].ToString() : "false");
-                            UserPageRelation UPR = new UserPageRelation();
-                            UPR.URID = URID;
-                            UPR.WPID = WPID;
-                            UPR.DateChangeAccess = DateChAcc;
-                            UPR.EditAccess = EditAcc;
-                            UPR.DeleteAccess = DelAcc;
-                            ServiceRepository serviceObj = new ServiceRepository();
-                            HttpResponseMessage response = serviceObj.PostResponse("api/UserPageRelation/InsertUserPageRelation", UPR);
-                            response.EnsureSuccessStatusCode();
-                            UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UPR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-                            ViewBag.UserRoles = GetActiveUserRoles();
-                            ViewBag.WebPages = GetActiveWebPages(URID);
-                            ViewBag.SelectedURID = URID;
-                            ViewBag.SelectedWPID = 0;
-                        }
-                    }
-                }
-                return View(GetUserPageRaltions(URID));
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                ViewBag.UserRoles = GetActiveUserRoles();
+                return PartialView("_UserPageRelation");
             }
             catch (Exception ex)
             {
@@ -75,9 +61,80 @@ namespace WebBlotter.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult UserPageRelation(FormCollection form, string a)
+        {
+            try
+            {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
+                    
+                if (form["URID"] != null || form["WPID"] != null)
+                {
+                    var URID = Convert.ToInt32(form["URID"].ToString());
+                    var WPID = Convert.ToInt32(form["WPID"].ToString());
+                    ViewBag.UserRoles = GetActiveUserRoles();
+                    ViewBag.SelectedURID = URID;
+                    ViewBag.WebPages = GetActiveWebPages(URID);
+                    ViewBag.SelectedWPID = WPID;
+
+                    if (form.AllKeys.Contains("AddPage"))
+                    {
+                        if (URID != 0)
+                        {
+                            if (WPID != 0)
+                            {
+
+                                var DateChAcc = Convert.ToBoolean((form.AllKeys.Contains("DateChangeAcc")) ? form["DateChangeAcc"].ToString() : "false");
+                                var EditAcc = Convert.ToBoolean((form.AllKeys.Contains("EditAcc")) ? form["EditAcc"].ToString() : "false");
+                                var DelAcc = Convert.ToBoolean((form.AllKeys.Contains("DelAcc")) ? form["DelAcc"].ToString() : "false");
+                                UserPageRelation UPR = new UserPageRelation();
+                                UPR.URID = URID;
+                                UPR.WPID = WPID;
+                                UPR.DateChangeAccess = DateChAcc;
+                                UPR.EditAccess = EditAcc;
+                                UPR.DeleteAccess = DelAcc;
+                                ServiceRepository serviceObj = new ServiceRepository();
+                                HttpResponseMessage response = serviceObj.PostResponse("api/UserPageRelation/InsertUserPageRelation", UPR);
+                                response.EnsureSuccessStatusCode();
+                                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(UPR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                                ViewBag.UserRoles = GetActiveUserRoles();
+                                ViewBag.WebPages = GetActiveWebPages(URID);
+                                ViewBag.SelectedURID = URID;
+                                ViewBag.SelectedWPID = 0;
+                                return PartialView("_UserPageRelation", GetUserPageRaltions(URID));
+                            }
+                        }
+                    }
+                    return PartialView("_UserPageRelation", GetUserPageRaltions(URID));
+                }
+                else
+                {
+                    ViewBag.UserRoles = GetActiveUserRoles();
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return RedirectToAction("UserPageRelation");
+        }
 
 
-        public ActionResult UpdateUserPageRelation(UserPageRelation UPR) {
+
+
+        public ActionResult UpdateUserPageRelation(UserPageRelation UPR)
+        {
 
             try
             {
@@ -89,13 +146,23 @@ namespace WebBlotter.Controllers
             }
             catch (Exception ex) { }
 
-            return View();
+            return PartialView("_UserPageRelation");
         }
 
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(int Id, FormCollection form)
         {
             try
             {
+                #region Added by shakir (Currency parameter)
+                var selectCurrency = (dynamic)null;
+                if (form["selectCurrency"] != null)
+                    selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+                else
+                    selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                UtilityClass.GetSelectedCurrecy(selectCurrency);
+                #endregion
+
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/UserPageRelation/GetUserPageRaltion?UPRID=" + Id);
                 response.EnsureSuccessStatusCode();
@@ -105,8 +172,7 @@ namespace WebBlotter.Controllers
                 ViewBag.SelectedURID = UserPageRaltion.URID;
                 ViewBag.WebPages = GetWebPageByID(UserPageRaltion.WPID);
                 ViewBag.SelectedWPID = UserPageRaltion.WPID;
-
-                return View(UserPageRaltion);
+                return PartialView("_Edit", UserPageRaltion);
             }
             catch (Exception ex)
             {
@@ -139,9 +205,9 @@ namespace WebBlotter.Controllers
             }
         }
 
-        
 
-            public Models.WebPages GetWebPageByID(int WPID)
+
+        public Models.WebPages GetWebPageByID(int WPID)
         {
             try
             {

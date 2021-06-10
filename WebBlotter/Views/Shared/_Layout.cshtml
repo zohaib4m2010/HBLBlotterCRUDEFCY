@@ -34,27 +34,41 @@
 
                 </ul>
 
-                @*@using (Html.BeginForm())
+                @if (Session["Currencies"] != null && Convert.ToInt32(Session["SelectedCurrency"]) > 1)
                 {
-                    <div class="btn-group d-inline  my-2 my-lg-0" role="group">
-                        <select name="selectCurrency" class="form-control" onchange="this.form.submit()" formaction=@Url.Action("Testing") formmethod="post">
-                            @if (Session["Currencies"].ToString().Contains(','))
-                            {
-                                foreach (var item in Session["Currencies"].ToString().Split(','))
-                                {
-                                    var val = item.Split('~');
-                                    <option value="@val[0]">@val[1]</option>
-                                }
-                            }
-                            else
-                            {
-                                var val = Session["Currencies"].ToString().Split('~');
-                                <option value="@val[0]">@val[1]</option>
-
-                            }
-                        </select>
-                    </div>
-                }*@
+                    if (Session["ActiveController"] != null && Session["ActiveAction"] != null)
+                    {
+                        using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken();
+                            <div class="btn-group d-inline  my-2 my-lg-0" role="group">
+                                @*<select name="selectCurrency" class="form-control" onchange="this.form.submit()" formaction=@Url.Action("Testing") formmethod="post">*@
+                                <select name="selectCurrency" class="form-control" onchange="this.form.submit()">
+                                    @if (Session["Currencies"].ToString().Contains(','))
+                                    {
+                                        foreach (var item in Session["Currencies"].ToString().Split(','))
+                                        {
+                                            var val = item.Split('~');
+                                            if (val[0] == Session["SelectedCurrency"].ToString())
+                                            {
+                                                <option value="@val[0]" selected>@val[1]</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@val[0]">@val[1]</option>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var val = Session["Currencies"].ToString().Split('~');
+                                        <option value="@val[0]">@val[1]</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    }
+                }
 
                 @Html.ActionLink("Logout", "Logout", "BlotterLogin", new { area = "" }, new { @class = "navbar-brand" })
             </div>

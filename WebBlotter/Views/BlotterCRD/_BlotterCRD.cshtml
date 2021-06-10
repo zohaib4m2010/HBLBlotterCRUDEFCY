@@ -1,0 +1,77 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetSBPBlotterCRD_Result>
+
+@{
+    ViewBag.Title = "BlotterCRD";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #customers {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        border-collapse: collapse;
+        width: 90%;
+        min-width: 800px;
+        max-width: 1500px;
+    }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 2px;
+            font-size: 10.5px;
+        }
+
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+
+<h2>Blotter CRD</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table id="customers" class="table table-striped table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th>Nostro Account</th>
+            <th>Value Date</th>
+            <th>In Flow</th>
+            <th>Out Flow</th>
+            <th></th>
+        </tr>
+    </thead>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td width="8%">@Html.DisplayFor(modelItem => item.BankName)</td>
+                <td width="8%">@Html.DisplayFor(modelItem => item.ValueDate)</td>
+                <td width="10%" align="right">@Html.DisplayFor(modelItem => item.CRD_InFlow)</td>
+                <td width="10%" align="right">@Html.DisplayFor(modelItem => item.CRD_OutFlow)</td>
+                <td width="18%">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.SNo }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
+                </td>
+            </tr>
+        }
+    }
+</table>
