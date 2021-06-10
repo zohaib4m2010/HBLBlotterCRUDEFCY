@@ -9,6 +9,8 @@ namespace WebBlotter.Models
     public class SBP_BlotterOpeningBalance
     {
         public long Id { get; set; }
+        public Nullable<decimal> EstimatedOpenBal { get; set; }
+
         [Display(Name = "Opening Balance Actual")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> OpenBalActual { get; set; }
