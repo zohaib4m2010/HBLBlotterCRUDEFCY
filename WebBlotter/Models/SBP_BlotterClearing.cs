@@ -31,6 +31,7 @@ namespace WebBlotter.Models
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> Clearing_OutFLow { get; set; }
         public Nullable<decimal> AdjClearing_OutFLow { get; set; }
+        [Display(Name = "Description")]
         public string Note { get; set; }
         public int UserID { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }

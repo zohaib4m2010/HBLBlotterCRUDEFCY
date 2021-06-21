@@ -23,6 +23,7 @@ namespace WebBlotter.Models
         public string UserExists { get; set; }
         public string DefaultPage { get; set; }
         public string BlotterType { get; set; }
+        public bool ChangePassword { get; set; }
         public int CurrencyID { get; set; }
         public string Pages { get; set; }
     }

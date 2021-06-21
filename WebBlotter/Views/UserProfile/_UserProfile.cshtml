@@ -63,6 +63,7 @@
                 <th>User Name</th>
                 <th>Contact No</th>
                 <th>Email</th>
+                <th>Department</th>
                 <th>Conventional</th>
                 <th>Islamic</th>
                 <th>Status</th>
@@ -75,25 +76,26 @@
             {
                 foreach (var item in Model)
                 {
-                    <tr>
-                        <td width="6%">@Html.DisplayFor(modelItem => item.Id)</td>
-                        <td align="left" width="8%">@Html.DisplayFor(modelItem => item.RoleName)</td>
-                        <td align="left" width="8%">@Html.DisplayFor(modelItem => item.BranchName)</td>
-                        <td align="right" width="8%">@Html.DisplayFor(modelItem => item.UserName)</td>
-                        <td align="right" width="8%">@Html.DisplayFor(modelItem => item.ContactNo)</td>
-                        <td align="right" width="8%">@Html.DisplayFor(modelItem => item.Email)</td>
-                        <td align="right" width="10%">@Html.DisplayFor(modelItem => item.isConventional)</td>
-                        <td align="right" width="10%">@Html.DisplayFor(modelItem => item.isislamic)</td>
-                        <td align="right" width="10%">@Html.DisplayFor(modelItem => item.isActive)</td>
-                        <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BlotterType)</td>
+            <tr>
+                <td width="6%">@Html.DisplayFor(modelItem => item.Id)</td>
+                <td align="left" width="8%">@Html.DisplayFor(modelItem => item.RoleName)</td>
+                <td align="left" width="8%">@Html.DisplayFor(modelItem => item.BranchName)</td>
+                <td align="right" width="8%">@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td align="right" width="8%">@Html.DisplayFor(modelItem => item.ContactNo)</td>
+                <td align="right" width="8%">@Html.DisplayFor(modelItem => item.Email)</td>
+                <td align="right" width="8%">@Html.DisplayFor(modelItem => item.Department)</td>
+                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.isConventional)</td>
+                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.isislamic)</td>
+                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.isActive)</td>
+                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BlotterType)</td>
 
 
-                        <td width="18%" align="right">
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                            @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                        </td>
-                    </tr>
+                <td width="18%" align="right">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
 
                 }
             }

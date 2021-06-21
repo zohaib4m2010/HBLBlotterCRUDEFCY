@@ -161,25 +161,30 @@
                                 </script>
 
                             </td>
-                            <td>
-                                <script>
-                                    document.write(((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '%')
-                                </script>
-                            </td>
+
+                            <script>
+                                if (((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100) >= 5) {
+                                    document.write('<td align="left" width="8%" style="background-color: #73ff71bf;   color: #1ec141;  font-weight: bold;">' + ((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '% </td>')
+                                }
+                                else {
+                                    document.write('<td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">' + ((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '% </td>')
+                                }
+                            </script>
+
                         </tr>
                         <tr>
                             <td class="AvgBHHeading">
                                 <script>
-                                    if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) > parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) ) {
-                                        document.write('Fortnightly Long');
-                                    } else if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) < parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')))  {
-                                        document.write('Fortnightly Short');
+                                    if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) > parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, ''))) {
+                                        document.write('Fortnightly Long Position');
+                                    } else if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) < parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, ''))) {
+                                        document.write('Fortnightly Short Position');
                                     }
                                 </script>
                             </td>
                             <td class="AvgBH">
                                 <script>
-                                    var val1 = parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''));
+                                    var val1 = parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) - parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, ''));
                                     document.write(val1.toLocaleString('en-CA'));
                                 </script>
 

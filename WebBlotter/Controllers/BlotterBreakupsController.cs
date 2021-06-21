@@ -40,7 +40,7 @@ namespace WebBlotter.Controllers
                     ViewData["DataStatus"] = "Data Not Available";
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-
+                ViewData["BranchName"] = Session["BranchName"].ToString();
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
@@ -60,7 +60,7 @@ namespace WebBlotter.Controllers
             var ActiveController = RouteData.Values["controller"].ToString();
             Session["ActiveAction"] = ActiveController;
             Session["ActiveController"] = ActiveAction;
-
+            ViewData["BranchName"] = Session["BranchName"].ToString();
             SBP_BlotterBreakups BlotterBreakups = new SBP_BlotterBreakups();
             BlotterBreakups.FoodPayment_inFlow = 0;
             BlotterBreakups.HOKRemittance_inFlow = 0;
@@ -88,7 +88,7 @@ namespace WebBlotter.Controllers
             UtilityClass.GetSelectedCurrecy(selectCurrency);
 
             #endregion
-
+            ViewData["BranchName"] = Session["BranchName"].ToString();
             SBP_BlotterBreakups BlotterBreakups = new SBP_BlotterBreakups();
             BlotterBreakups.FoodPayment_inFlow = 0;
             BlotterBreakups.HOKRemittance_inFlow = 0;

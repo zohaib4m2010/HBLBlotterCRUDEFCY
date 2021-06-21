@@ -32,7 +32,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    collection.Password = Utilities.EncryptPassword(collection.Password);
+                    
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("/api/BlotterLogin/GetAllBlotterLogin", collection);
                     response.EnsureSuccessStatusCode();

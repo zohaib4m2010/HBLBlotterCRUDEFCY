@@ -63,6 +63,7 @@
                 <th>S.No. </th>
                 <th>Date        </th>
                 <th>Transaction Type</th>
+                <th>Description</th>
                 <th>InFlow</th>
                 <th>OutFlow</th>
                 <th></th>
@@ -72,34 +73,35 @@
 
             @foreach (var item in Model)
             {
-                <tr>
-                    <td width="6%">@Html.DisplayFor(modelItem => item.SNo)</td>
-                    <td id="DealDate" width="8%">
-                        @Html.DisplayFor(modelItem => item.RTGS_Date)
-                        <script>
+            <tr>
+                <td width="6%">@Html.DisplayFor(modelItem => item.SNo)</td>
+                <td id="DealDate" width="8%">
+                    @Html.DisplayFor(modelItem => item.RTGS_Date)
+                    <script>
                                   var NowMoment = moment("@Html.DisplayFor(modelItem => item.RTGS_Date)");
                                     var eDisplayMoment = document.getElementById('DealDate');
                                  eDisplayMoment.innerHTML = NowMoment.format('DD-MMM-YYYY');
-                        </script>
-                    </td>
-                    <td align="left" width="8%">@Html.DisplayFor(modelItem => item.TransactionType)</td>
-                    <td align="right" width="8%">@Html.DisplayFor(modelItem => item.RTGS_InFlow)</td>
-                    <td align="right" width="10%">@Html.DisplayFor(modelItem => item.RTGS_OutFLow)</td>
+                    </script>
+                </td>
+                <td align="left" width="8%">@Html.DisplayFor(modelItem => item.TransactionType)</td>
+                <td align="left" width="8%">@Html.DisplayFor(modelItem => item.Note)</td>
+                <td align="right" width="8%">@Html.DisplayFor(modelItem => item.RTGS_InFlow)</td>
+                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.RTGS_OutFLow)</td>
 
 
-                    <td width="18%" align="right">
-                        @if ((bool)ViewData["isEditable"])
-                        {
-                            @Html.ActionLink("Edit", "Edit", new { id = item.SNo })
-                        }
-                        |
-                        @if ((bool)ViewData["IsDeletable"])
-                        {
-                            @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
-                            @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
-                        }
-                    </td>
-                </tr>
+                <td width="18%" align="right">
+                    @if ((bool)ViewData["isEditable"])
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.SNo })
+                    }
+                    |
+                    @if ((bool)ViewData["IsDeletable"])
+                    {
+                        @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
+                        @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
+                    }
+                </td>
+            </tr>
 
             }
 

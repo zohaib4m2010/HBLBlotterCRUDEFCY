@@ -101,7 +101,6 @@ namespace WebBlotter.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    SBP_LoginInfo.Password = Utilities.EncryptPassword(SBP_LoginInfo.Password);
                     SBP_LoginInfo.CreateDate = DateTime.Now;
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/UsersProfile/InsertUser", SBP_LoginInfo);
@@ -130,7 +129,7 @@ namespace WebBlotter.Controllers
             HttpResponseMessage response = serviceObj.GetResponse("/api/UsersProfile/GetUser?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
             Models.SBP_LoginInfo SBP_LoginInfo = response.Content.ReadAsAsync<Models.SBP_LoginInfo>().Result;
-            SBP_LoginInfo.Password = Utilities.DecryptPassword(SBP_LoginInfo.Password);
+            SBP_LoginInfo.Password = "";
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(SBP_LoginInfo), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.AllBranchNames = GetBranchesNames();
             ViewBag.UserRoles = GetUserRoles();
@@ -146,7 +145,7 @@ namespace WebBlotter.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    SBP_LoginInfo.Password = Utilities.EncryptPassword(SBP_LoginInfo.Password);
+                    //SBP_LoginInfo.Password = Utilities.ComputeStringToSha256Hash(SBP_LoginInfo.Password);
                     SBP_LoginInfo.UpdateDate = DateTime.Now;
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PutResponse("api/UsersProfile/UpdateUser", SBP_LoginInfo);

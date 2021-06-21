@@ -11,6 +11,7 @@ namespace WebBlotter.Models
         public string UserName { get; set; }
         public string ContactNo { get; set; }
         public string Email { get; set; }
+        public string Department { get; set; }
         public string RoleName { get; set; }
         public string BranchName { get; set; }
         public string BlotterType { get; set; }
