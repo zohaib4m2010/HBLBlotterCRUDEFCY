@@ -9,9 +9,10 @@ namespace WebBlotter.Models
     public class SP_GetAll_SBPBlotterClearing_Result
     {
         public long SNo { get; set; }
+        public string DataType { get; set; }
         public int TTID { get; set; }
         public string TransactionType { get; set; }
-        [DataType(DataType.Date, ErrorMessage = "Date only")]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date, ErrorMessage = "Date only")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> Clearing_Date { get; set; }
         public string ClearingCOde { get; set; }

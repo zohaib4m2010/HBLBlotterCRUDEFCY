@@ -25,11 +25,25 @@ namespace WebBlotter.Controllers
             try
             {
                 #region Added by shakir (Currency parameter)
+
                 var selectCurrency = (dynamic)null;
+                var BlotterCurrentDate = (dynamic)null;
+
                 if (form["selectCurrency"] != null)
                     selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
                 else
                     selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+                if (form["BlotterCurrentDate"] != null)
+                {
+                    BlotterCurrentDate = form["BlotterCurrentDate"].ToString();
+                    ViewBag.CurrentDt = BlotterCurrentDate;
+                }
+                else
+                {
+                    ViewBag.CurrentDt = DateTime.Now.ToString("yyyy-MM-dd");
+                    BlotterCurrentDate = ViewBag.CurrentDt;
+                }
 
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
                 #endregion
@@ -38,7 +52,7 @@ namespace WebBlotter.Controllers
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
                 if (Convert.ToInt32(selectCurrency) == 1)
                 {
-                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=SBP");
+                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=SBP" + "&CurrentDate=" + BlotterCurrentDate);
                     response.EnsureSuccessStatusCode();
                     List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                     // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
@@ -46,13 +60,13 @@ namespace WebBlotter.Controllers
                 }
                 else
                 {
-                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterFCYList?brcode=" + Session["BR"].ToString() + "&CurrId=" + selectCurrency + "");
+                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterFCYList?brcode=" + Session["BR"].ToString() + "&CurrId=" + selectCurrency + "&CurrentDate=" + BlotterCurrentDate);
                     response.EnsureSuccessStatusCode();
                     List<Models.SP_SBPBlotter_FCY_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_FCY_Result>>().Result;
                     blotterMulit.GetAllBlotterFCY01 = blotter;
                 }
                 ViewBag.Title = "All Blotter";
-                ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
+                ViewData["SysCurrentDt"] = BlotterCurrentDate;
                 return PartialView("_GetAllBlotter", blotterMulit);
             }
             catch (Exception)
@@ -67,22 +81,35 @@ namespace WebBlotter.Controllers
             {
                 #region Added by shakir (Currency parameter)
                 var selectCurrency = (dynamic)null;
+                var BlotterCurrentDate = (dynamic)null;
+
                 if (form["selectCurrency"] != null)
                     selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
                 else
                     selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
+                if (form["BlotterCurrentDate"] != null)
+                {
+                    BlotterCurrentDate = form["BlotterCurrentDate"].ToString();
+                    ViewBag.CurrentDt = BlotterCurrentDate;
+                }
+                else
+                {
+                    ViewBag.CurrentDt = DateTime.Now.ToString("yyyy-MM-dd");
+                    BlotterCurrentDate = ViewBag.CurrentDt;
+                }
+
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
                 #endregion
                 BlotterMultiModel blotterMulit = new BlotterMultiModel();
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=HBLC");
+                HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=HBLC" + "&CurrentDate=" + BlotterCurrentDate);
                 response.EnsureSuccessStatusCode();
                 List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 blotterMulit.GetAllBlotter01 = blotter;
                 ViewBag.Title = "All Blotter Internal";
-                ViewData["SysCurrentDt"] = GetCurrentDT().ToString("dd-MMM-yyyy");
+                ViewData["SysCurrentDt"] = BlotterCurrentDate;
                 return PartialView("_GetAllBlotterInternal", blotterMulit);
             }
             catch (Exception)

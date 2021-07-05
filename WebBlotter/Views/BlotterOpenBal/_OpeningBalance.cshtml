@@ -61,11 +61,11 @@
         <thead>
             <tr>
                 @*<th>SNo</th>*@
-                @if (ViewData["BR"].ToString() != "01")
+                @if (Session["BR"].ToString() != "01")
                 {
-                <th>Data Type</th>}
-                <th>Opening Balance</th>
+                    <th>Data Type</th>}
                 <th>Date</th>
+                <th>Opening Balance</th>
                 <th></th>
             </tr>
         </thead>
@@ -75,27 +75,27 @@
             {
             <tr>
                 @*<td width="6%">@Html.DisplayFor(modelItem => item.Id)</td>*@
-                @if (ViewData["BR"].ToString() != "01")
+                @if (Session["BR"].ToString() != "01")
                 {
                     <td align="right" width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>
                 }
-                    <td align="left" width="8%">@Html.DisplayFor(modelItem => item.OpenBalActual)</td>
-                    <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BalDate)</td>
+                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BalDate)</td>
+                <td align="left" width="8%">@Html.DisplayFor(modelItem => item.OpenBalActual)</td>
 
 
-                    <td width="18%" align="right">
-                        @if ((bool)ViewData["isEditable"])
-                        {
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                        }
-                        |
-                        @if ((bool)ViewData["IsDeletable"])
-                        {
-                            @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                        }
-                    </td>
-                </tr>
+                <td width="18%" align="right">
+                    @if ((bool)ViewData["isEditable"])
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    }
+                    |
+                    @if ((bool)ViewData["IsDeletable"])
+                    {
+                        @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    }
+                </td>
+            </tr>
 
             }
 

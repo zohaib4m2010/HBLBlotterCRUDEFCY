@@ -51,10 +51,20 @@
 </head>
 
 <body class="wide comments example">
+    <!--Search By Date -->
+    @using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+    {
+        @Html.AntiForgeryToken();
+        <div class="btn-group d-inline my-2 my-lg-0 navbar-right" style="margin-right: 10px !important;" role="group">
+            <input id="BlotterCurrentDateId" name="BlotterCurrentDate" type="date" value="@ViewBag.CurrentDt" onchange="this.form.submit()" class="form-control datepicker text-box single-line" />
+        </div>
+    }
+    <!--Search By Date -->
+
 
     <div class="fw-container" style="margin-top:50px;">
         <a name="top" id="top"></a>
-        <h2>SBP Blotter As On @ViewData["SysCurrentDt"]</h2>
+        <h2>Internal Blotter As On @ViewData["SysCurrentDt"]</h2>
         <div class="fw-body">
             <div class="content">
                 <div class="info">

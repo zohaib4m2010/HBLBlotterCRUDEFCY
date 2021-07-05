@@ -143,6 +143,7 @@
     <Compile Include="Classes\AuthAccess.cs" />
     <Compile Include="Classes\UserProfile.cs" />
     <Compile Include="Classes\Utilities.cs" />
+    <Compile Include="Controllers\BlotterBai_MuajjalController.cs" />
     <Compile Include="Controllers\BlotterBreakupsController.cs" />
     <Compile Include="Controllers\BlotterClearingController.cs" />
     <Compile Include="Controllers\BlotterController.cs" />
@@ -150,6 +151,8 @@
     <Compile Include="Controllers\BlotterCRRFINCONController.cs" />
     <Compile Include="Controllers\BlotterDTLController.cs" />
     <Compile Include="Controllers\BlotterDTLDBController.cs" />
+    <Compile Include="Controllers\BlotterEstAdjBalController.cs" />
+    <Compile Include="Controllers\BlotterFundsTransferController.cs" />
     <Compile Include="Controllers\BlotterLoginController.cs" />
     <Compile Include="Controllers\BlotterManualDealsController.cs" />
     <Compile Include="Controllers\BlotterOpenBalController.cs" />
@@ -160,6 +163,7 @@
     <Compile Include="Controllers\BlotterTBOController.cs" />
     <Compile Include="Controllers\BlotterTradeController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
+    <Compile Include="Controllers\ChangePasswordController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NostroBanksController.cs" />
     <Compile Include="Controllers\UserPageRelationController.cs" />
@@ -169,7 +173,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\SBP_BlotterBai_Muajjal.cs" />
     <Compile Include="Models\SBP_BlotterCRD.cs" />
+    <Compile Include="Models\SBP_BlotterFundsTransfer.cs" />
+    <Compile Include="Models\SBP_BlotterManualEstBalance.cs" />
     <Compile Include="Models\SBP_BlotterOpeningBalance.cs" />
     <Compile Include="Models\SBP_BlotterRECON.cs" />
     <Compile Include="Models\SBP_BlotterRTGS.cs" />
@@ -1271,10 +1279,21 @@
     <Content Include="Views\UserProfile\_Edit.cshtml" />
     <Content Include="Views\UserPageRelation\_Edit.cshtml" />
     <Content Include="Views\UserPageRelation\_UserPageRelation.cshtml" />
+    <Content Include="Views\BlotterEstAdjBal\_EstimatedAdjustedBalance.cshtml" />
+    <Content Include="Views\BlotterEstAdjBal\_Create.cshtml" />
+    <Content Include="Views\BlotterEstAdjBal\_Edit.cshtml" />
+    <Content Include="Views\BlotterFundsTransfer\_FundsTransfer.cshtml" />
+    <Content Include="Views\BlotterFundsTransfer\_Create.cshtml" />
+    <Content Include="Views\BlotterFundsTransfer\_Edit.cshtml" />
+    <Content Include="Views\ChangePassword\_ChangePassword.cshtml" />
+    <Content Include="Views\BlotterBai_Muajjal\_BlotterBai_Muajjal.cshtml" />
+    <Content Include="Views\BlotterBai_Muajjal\_Create.cshtml" />
+    <Content Include="Views\BlotterBai_Muajjal\_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BlotterCashFlow\" />
+    <Folder Include="Views\SBP_BlotterBai_Muajjal\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -37,7 +37,6 @@ namespace WebBlotter.Controllers
                 List<Models.SBP_BlotterOpeningBalance> BlotterOpenBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterOpeningBalance>>().Result;
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-                ViewData["BR"] = Session["BR"].ToString();
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);
@@ -61,7 +60,6 @@ namespace WebBlotter.Controllers
 
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             SBP_BlotterOpeningBalance model = new SBP_BlotterOpeningBalance();
-            ViewData["BR"] = Session["BR"].ToString();
             return PartialView("_Create", model);
         }
 
@@ -85,7 +83,6 @@ namespace WebBlotter.Controllers
 
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 SBP_BlotterOpeningBalance model = new SBP_BlotterOpeningBalance();
-                ViewData["BR"] = Session["BR"].ToString();
                 return PartialView("_Create", model);
             }
             catch (Exception ex) { }
@@ -112,7 +109,7 @@ namespace WebBlotter.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    if (Session["BR"].ToString() == "1")
+                    if (Session["BR"].ToString() == "01")
                     {
                         BlotterOpenBal.DataType = "SBP";
                     }
@@ -153,7 +150,6 @@ namespace WebBlotter.Controllers
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
-            ViewData["BR"] = Session["BR"].ToString();
             return PartialView("_Edit", BlotterOpenBal);
 
         }
@@ -162,7 +158,7 @@ namespace WebBlotter.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(Models.SBP_BlotterOpeningBalance BlotterOpenBal)
         {
-            if (Session["BR"].ToString() == "1")
+            if (Session["BR"].ToString() == "01")
             {
                 BlotterOpenBal.DataType = "SBP";
             }

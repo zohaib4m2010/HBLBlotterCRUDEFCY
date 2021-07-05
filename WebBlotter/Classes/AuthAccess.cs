@@ -14,6 +14,7 @@ namespace WebBlotter.Classes
     {
         private readonly string[] allowedroles;
         private bool isLoggedIn;
+        private bool CHangePassword;
         private bool SerssionExpired = false;
         public AuthAccessAttribute(params string[] roles)
         {
@@ -64,6 +65,12 @@ namespace WebBlotter.Classes
                             httpContext.Session["Currencies"] = item.CurrencyID;
                             httpContext.Session["Pages"] = item.Pages;
                             httpContext.Session["ActiveController"] = controllerName;
+                            if (item.ChangePassword)
+                            {
+                                CHangePassword = item.ChangePassword;
+                                authorize = false;
+                                return authorize;
+                            }
                             List<UserPageAccess> UPA = new List<UserPageAccess>();
                             foreach (var pg in item.Pages.Split(','))
                             {
@@ -101,7 +108,7 @@ namespace WebBlotter.Classes
                         break;
                     }
                 }
-                if (actionName == "Edit" || actionName == "Create" || actionName == "_Create" || actionName == "Update" || actionName == "Delete" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation")
+                if (actionName == "Edit" || actionName == "Create" || actionName == "_Create" || actionName == "Update" || actionName == "Delete" || actionName == "Reset" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation")
                 {
 
                     authorize = true;
@@ -122,12 +129,24 @@ namespace WebBlotter.Classes
         {
             if (isLoggedIn && !SerssionExpired)
             {
-                filterContext.Result = new RedirectToRouteResult(
-                new RouteValueDictionary
+                if (CHangePassword)
                 {
+                    filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary
+                    {
+                        { "controller", "ChangePassword" },
+                        { "action", "ChangePassword" }
+                    });
+                }
+                else
+                {
+                    filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary
+                    {
                     { "controller", "Home" },
                     { "action", "Unauthorize" }
-                });
+                    });
+                }
             }
             else
             {

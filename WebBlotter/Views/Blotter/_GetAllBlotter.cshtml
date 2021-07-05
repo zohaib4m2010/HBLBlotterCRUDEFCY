@@ -51,6 +51,16 @@
 </head>
 
 <body class="wide comments example">
+    <!--Search By Date -->
+    @using (Html.BeginForm( Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+    {
+        @Html.AntiForgeryToken();
+        <div class="btn-group d-inline my-2 my-lg-0 navbar-right" style="margin-right: 10px !important;" role="group">
+            <input id="BlotterCurrentDateId" name="BlotterCurrentDate" type="date" value="@ViewBag.CurrentDt" onchange="this.form.submit()" class="form-control datepicker text-box single-line" />
+        </div>
+    }
+    <!--Search By Date -->
+
 
     <div class="fw-container" style="margin-top:50px;">
         <a name="top" id="top"></a>
@@ -238,17 +248,17 @@
     <script type="text/javascript">
 
 
-                                        function formatDate(date) {
-                                            var d = new Date(date),
-                                                month = '' + (d.getMonth() + 1),
-                                                day = '' + d.getDate(),
-                                                year = d.getFullYear();
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
 
-                                            if (month.length < 2) month = '0' + month;
-                                            if (day.length < 2) day = '0' + day;
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
 
-                                            return [month, day, year].join('/');
-                                        }
+            return [month, day, year].join('/');
+        }
 
     </script>
     <div>

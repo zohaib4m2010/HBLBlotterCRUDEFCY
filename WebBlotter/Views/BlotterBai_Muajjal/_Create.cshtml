@@ -1,4 +1,4 @@
-﻿@model WebBlotter.Models.SBP_BlotterTrade
+﻿@model WebBlotter.Models.SBP_BlotterBai_Muajjal
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,13 +6,13 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-
-@using (Html.BeginForm("_Create", "BlotterTrade", FormMethod.Post))
+@using (Html.BeginForm("_Create", "BlotterBai_Muajjal", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <Fieldset>
         <div class="form-horizontal">
-            <h2>Create Blotter Trade</h2>
+            @*<h2>Blotter Bai_Muajjal As On @ViewData["SysCurrentDt"]</h2>*@
+            <h2>Create Blotter Bai_Muajjal</h2>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @if (Session["BR"].ToString() != "01")
@@ -38,26 +38,22 @@
                     </div>
                 </div>
             }
-
             <div class="form-group">
-                <label class="control-label col-md-2">Select Type</label>
+                @Html.LabelFor(model => model.ValueDate, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @*@Html.DropDownListFor(model2 => model2.TTTID, new SelectList(Model.TTTID.ToString(), "datavaluefield", "datatextfield", Model.TTTID))*@
-                    <select name="TTID" class="form-control">
-                        @foreach (var item in ViewBag.TradeTransactionTitles)
-                        {
-                            <option value="@item.TTID">@item.TranctionTitle</option>
-                        }
-                    </select>
+
+                    @Html.EditorFor(model => model.ValueDate, new { htmlAttributes = new { @class = "form-control datepicker", @Value = DateTime.Now.ToString("yyyy-MM-dd") } })
+
+                    @Html.ValidationMessageFor(model => model.ValueDate, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Trade_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.MaturityDate, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
 
-                    @Html.EditorFor(model => model.Trade_Date, new { htmlAttributes = new { @class = "form-control datepicker", @Value = DateTime.Now.ToString("yyyy-MM-dd") } })
+                    @Html.EditorFor(model => model.MaturityDate, new { htmlAttributes = new { @class = "form-control datepicker", @Value = DateTime.Now.ToString("yyyy-MM-dd") } })
 
-                    @Html.ValidationMessageFor(model => model.Trade_Date, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.MaturityDate, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
@@ -68,17 +64,17 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Trade_InFlow, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.BM_InFlow, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Trade_InFlow, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Trade_InFlow, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.BM_InFlow, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BM_InFlow, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Trade_OutFLow, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.BM_OutFLow, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Trade_OutFLow, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Trade_OutFLow, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.BM_OutFLow, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BM_OutFLow, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">

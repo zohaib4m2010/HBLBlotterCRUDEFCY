@@ -12,7 +12,7 @@ namespace WebBlotter.Models
         public int TTID { get; set; }
         //[Required]
         [Display(Name = "Date")]
-        [DataType(DataType.Date, ErrorMessage = "Date only")]
+        [DataType(System.ComponentModel.DataAnnotations.DataType.Date, ErrorMessage = "Date only")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> Clearing_Date { get; set; }
         
@@ -40,6 +40,7 @@ namespace WebBlotter.Models
         public int BID { get; set; }
         public int CurID { get; set; }
         public string Flag { get; set; }
-        
+        public string DataType { get; set; }
+
     }
 }

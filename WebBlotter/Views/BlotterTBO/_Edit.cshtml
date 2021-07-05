@@ -15,8 +15,31 @@
         <div class="form-horizontal">
             <h2>Edit Blotter TBO</h2>
             <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.SNo)
+            @if (Session["BR"].ToString() != "01")
+            {
+                <div class="form-group">
+                    <label class="control-label col-md-2">Data Type</label>
+                    <div class="col-md-10">
+                        <select name="DataType" class="form-control">
+                            <option value="SBP">State Bank of Pakistan</option>
+                            <option value="HBLC">Inter Branch Account</option>
+                        </select>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group" style="display:none;">
+                    >
+                    <label class="control-label col-md-2">Data Type</label>
+                    <div class="col-md-10">
+                        <select name="DataType" class="form-control">
+                            <option value="SBP">State Bank of Pakistan</option>
+                        </select>
+                    </div>
+                </div>
+            }
             <div class="form-group">
                 <label class="control-label col-md-2">Select Type</label>
                 <div class="col-md-10">
