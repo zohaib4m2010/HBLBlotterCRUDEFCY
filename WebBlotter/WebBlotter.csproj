@@ -152,6 +152,7 @@
     <Compile Include="Controllers\BlotterDTLController.cs" />
     <Compile Include="Controllers\BlotterDTLDBController.cs" />
     <Compile Include="Controllers\BlotterEstAdjBalController.cs" />
+    <Compile Include="Controllers\BlotterFundingRepoController.cs" />
     <Compile Include="Controllers\BlotterFundsTransferController.cs" />
     <Compile Include="Controllers\BlotterLoginController.cs" />
     <Compile Include="Controllers\BlotterManualDealsController.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\SBP_BlotterBai_Muajjal.cs" />
     <Compile Include="Models\SBP_BlotterCRD.cs" />
+    <Compile Include="Models\SBP_BlotterFundingRepo.cs" />
     <Compile Include="Models\SBP_BlotterFundsTransfer.cs" />
     <Compile Include="Models\SBP_BlotterManualEstBalance.cs" />
     <Compile Include="Models\SBP_BlotterOpeningBalance.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="Models\SP_GetLatestBreakup_Result.cs" />
     <Compile Include="Models\SP_GetOPICSManualData_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterCRD_Result.cs" />
+    <Compile Include="Models\SP_GetSBPBlotterFR_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterRECON_Result.cs" />
     <Compile Include="Models\SP_SBPBlotterRunningBal.cs" />
     <Compile Include="Models\SP_SBPBlotter_FCY_Result.cs" />
@@ -1175,6 +1178,8 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\BlotterFundingRepo\_BlotterFundingRepo.cshtml" />
+    <Content Include="Views\BlotterFundingRepo\_Create.cshtml" />
     <Content Include="Views\BlotterTBO\_BlotterTBO.cshtml" />
     <Content Include="Views\BlotterTBO\_Create.cshtml" />
     <Content Include="Views\BlotterTBO\_Edit.cshtml" />
@@ -1293,7 +1298,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BlotterCashFlow\" />
-    <Folder Include="Views\SBP_BlotterBai_Muajjal\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

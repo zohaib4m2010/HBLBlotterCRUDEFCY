@@ -32,12 +32,18 @@ namespace WebBlotter.Controllers
             response.EnsureSuccessStatusCode();
             List<Models.SBP_BlotterCRRReportDaysWiseBal> BlotterCRRReportsDayWiseBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterCRRReportDaysWiseBal>>().Result;
 
-            
+
             //HttpResponseMessage response1 = serviceObj.GetResponse("/api/Blotter/GetLatestBlotterDTLReportForToday?&BR=" + Session["BR"].ToString());
             //response.EnsureSuccessStatusCode();
             //Models.SBP_BlotterCRRReportDaysWiseBal BlotterCRRReportForTodayBal = response.Content.ReadAsAsync<Models.SBP_BlotterCRRReportDaysWiseBal>().Result;
 
             //ViewBag.SBP_BlotterCRRReportForTodayBal = BlotterCRRReportForTodayBal;
+
+            HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString());
+            response2.EnsureSuccessStatusCode();
+            Models.SBP_BlotterOpeningBalance BlotterOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
+
+            ViewBag.SBP_BlotterOpeningBalaceForToday = BlotterOpeningBalaceForToday;
 
             ViewBag.SBP_BlotterCRRReportDaysWiseBal = BlotterCRRReportsDayWiseBal;
 
@@ -45,11 +51,12 @@ namespace WebBlotter.Controllers
             return View();
         }
 
-        public ActionResult FillBlotterManualData(string Date,int Recon)
+        public ActionResult FillBlotterManualData(string Date, string flag, int Recon)
         {
             Models.GetBlotterMnualDataParam BMDP = new Models.GetBlotterMnualDataParam();
             BMDP.Recon = (Recon == 1) ? true : false;
             BMDP.DateFor = Convert.ToDateTime(Date);
+            BMDP.flag = flag;
             BMDP.BR = Convert.ToInt32(Session["BR"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PostResponse("/api/Blotter/GetOPICSManualData",BMDP);

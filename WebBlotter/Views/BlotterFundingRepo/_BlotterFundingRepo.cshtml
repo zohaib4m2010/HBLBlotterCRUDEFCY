@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetSBPBlotterFR_Result>
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/Custom.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<h3>BLOTTER Funding Repo</h3>
+
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "primary-btn1 fa fa-plus" })
+</p>
+
+@*@if (TempData["DataStatus"] != "Data not available" && TempData["DataStatus"] != null)
+{
+    <div class="snackbar btn btn-success bg-info px-3 py-3">@TempData["DataStatus"]</div>
+}
+else
+{
+    <h2 class="alert-dark">@TempData["DataStatus"]</h2>
+}*@
+
+<script>
+    $(function () {
+        $("#chkAll").change(function () {
+            $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+        });
+    });
+</script>
+
+@if (Model.Count() > 0)
+{
+    using (Html.BeginForm("Delete", "BlotterFundingRepo", FormMethod.Post))
+    {
+        <table id="customers" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>SNO</th>
+                    @*<th>Data Type</th>*@
+                    <th>Bank</th>
+                    <th>Days</th>
+                    <th>Rate</th>
+                    <th>Deal Type</th>
+                    <th>Broker</th>
+                    <th>Issue Date</th>
+                    <th>Issue Type</th>
+                    <th>In Flow</th>
+                    <th>Out FLow</th>
+                    <th>Note</th>
+                    <th><input type="checkbox" id="chkAll" name="chkAll" /></th>
+                </tr>
+            </thead>
+
+            @foreach (var item in Model)
+            {
+                <tbody>
+                    <tr>
+                        <td width="8%">@Html.DisplayFor(modelItem => item.SNo)</td>
+                        @*<td width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>*@
+                        <td width="8%">@Html.DisplayFor(modelItem => item.Bank)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Days)</td>
+                        <td width="10%" align="right">@Html.DisplayFor(modelItem => item.Rate)</td>
+                        <td width="10%">@Html.DisplayFor(modelItem => item.DealType)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Broker)</td>
+                        <td width="10%">@Html.DisplayFor(modelItem => item.Issue_Date)</td>
+                        <td width="10%">@Html.DisplayFor(modelItem => item.IssueType)</td>
+                        <td width="10%" align="right">@Html.DisplayFor(modelItem => item.InFlow)</td>
+                        <td width="10%" align="right">@Html.DisplayFor(modelItem => item.OutFLow)</td>
+                        <td width="10%" align="right">@Html.DisplayFor(modelItem => item.Note)</td>
+                        <td>
+                            <input type="checkbox" name="employeeIdsToDelete" id="employeeIdsToDelete" value="@item.SNo" />
+                            @*@Html.ActionLink(" ", "Delete", new { id = item.SNo }, new { @class = "btn btn-danger fa fa-trash", @OnClick = "return confirm('Are you sure you want to delete this record?');", @title = "Delete" })*@
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+        <input type="submit" class="btn btn-danger" value="Delete Record" />
+    }
+}

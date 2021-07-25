@@ -12,17 +12,14 @@
 </head>
 <body>
     <div class="container">
-
-        <div class="page-header">
+        <br />
+        @*<div class="page-header">
             <h1>
                 Welcome @Session["UserName"].ToString()
                 <hr />
-                @*BLOTTER @ViewData["SysCurrentDt"]*@
-
-                @*<small><span data-bind="text: genre"></span></small>*@
             </h1>
 
-        </div>
+        </div>*@
         <!--<div class="row">
         <div class="span2">
             <div class="navbar">
@@ -37,11 +34,38 @@
             </div>
         </div>
     </div>-->
-
-
+        @if (ViewBag.SBP_BlotterOpeningBalaceForToday != null)
+        {
+            <div class="row">
+                <div class="col-md-2">
+                    <b>Actual Opn Bal: </b><input type="text" id="ActualOpnBal" class="form-control" onkeyup="return TotalOpeningBal()" readonly value="@ViewBag.SBP_BlotterOpeningBalaceForToday.OpenBalActual" />
+                </div>
+                <div class="col-md-1" style="padding-top: 25px; width: 0% !important;">
+                    <b>-</b>
+                </div>
+                <div class="col-md-2">
+                    <b>Estimated Opn Bal:</b><input type="text" id="EstOpnBal" class="form-control" onkeyup="return TotalOpeningBal()" readonly value="@ViewBag.SBP_BlotterOpeningBalaceForToday.EstimatedOpenBal" />
+                </div>
+                <div class="col-md-1" style="padding-top: 25px; width: 0% !important;">
+                    <b>=</b>
+                </div>
+                <div class="col-md-2">
+                    <b>Difference:</b><input type="text" id="TotalOpnBal" class="form-control" style="font-size: 16px; color:black; border:0px solid white" readonly value="@(ViewBag.SBP_BlotterOpeningBalaceForToday.OpenBalActual-ViewBag.SBP_BlotterOpeningBalaceForToday.EstimatedOpenBal)" />
+                </div>
+            </div>
+        }
+        <br />
+        <br />
+            <div class="row">
+                <div class="col-md-7"><h3>Amount in Million</h3></div>
+                @if (ViewBag.SBP_BlotterCRRReportDaysWiseBal != null)
+                {
+                    <div class="col-md-5"><h3>CRR 3% Requirement : @ViewBag.SBP_BlotterCRRReportDaysWiseBal[0].CRR3PcrReq.ToString("#,##0,,")</h3></div>
+                }
+                </div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Amount in Million</h3>
+
                 <table id="BlotterDTLReportDayWise" class="table table-striped table-bordered table-hover ">
                     <thead>
                         <tr>
@@ -67,53 +91,53 @@
                         {
                             foreach (var item in ViewBag.SBP_BlotterCRRReportDaysWiseBal)
                             {
-                        <tr>
-                            <td align="left" width="8%">@item.ReportDate.ToString("dd/MM/yyyy")</td>
-                            <td align="left" width="8%">@item.WeekDays</td>
-                            @*<td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0,,")</td>*@
-                            <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0,,")</td>
-                            <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0,,")</td>
-                            <td align="left" width="8%">@((item.BalMaintain5Pcr).ToString("#0.##0%"))</td>
-                            @*<td align="left" width="8%">@item.BalMaintain3Pcr</td>*@
-                            <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0,,"))</td>
-                            <td align="left" width="8%">@((item.AvgForRemDays).ToString("#,##0,,"))</td>
-                            <td align="left" width="8%">@((item.ReserveSurplus).ToString("#,##0,,"))</td>
-                            <td align="left" width="8%">@((item.Reserve).ToString("#0.##0%"))</td>
-                            @*<td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0,,")</td>*@
-                            <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,"))</td>
-                            @if (item.Remarks == "Warning")
-                            {
-                                <td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">@item.Remarks</td>
-                            }
-                            else if (item.Remarks == "OK")
-                            {
-                                <td align="left" width="8%" style="background-color: #73ff71bf;   color: #1ec141;  font-weight: bold;">@item.Remarks</td>
-                            }
-                            else
-                            {
-                                <td align="left" width="8%">@item.Remarks</td>
-                            }
+                                <tr>
+                                    <td align="left" width="8%">@item.ReportDate.ToString("dd/MM/yyyy")</td>
+                                    <td align="left" width="8%">@item.WeekDays</td>
+                                    @*<td align="left" width="8%" class="KHISum">@item.KarachiTotal.ToString("#,##0,,")</td>*@
+                                    <td align="left" width="8%" class="CRR5PcrReq">@item.CRR5PcrReq.ToString("#,##0,,")</td>
+                                    <td align="left" width="8%" class="PKSum">@item.PakistanToTal.ToString("#,##0,,")</td>
+                                    <td align="left" width="8%">@((item.BalMaintain5Pcr).ToString("#0.##0%"))</td>
+                                    @*<td align="left" width="8%">@item.BalMaintain3Pcr</td>*@
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR5PcrReq)).ToString("#,##0,,"))</td>
+                                    <td align="left" width="8%">@((item.AvgForRemDays).ToString("#,##0,,"))</td>
+                                    <td align="left" width="8%">@((item.ReserveSurplus).ToString("#,##0,,"))</td>
+                                    <td align="left" width="8%">@((item.Reserve).ToString("#0.##0%"))</td>
+                                    @*<td align="left" width="8%">@item.CRR3PcrReq.ToString("#,##0,,")</td>*@
+                                    <td align="left" width="8%">@((Convert.ToDecimal(item.PakistanToTal) - Convert.ToDecimal(item.CRR3PcrReq)).ToString("#,##0,,"))</td>
+                                    @if (item.Remarks == "Warning")
+                                    {
+                                        <td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">@item.Remarks</td>
+                                    }
+                                    else if (item.Remarks == "OK")
+                                    {
+                                        <td align="left" width="8%" style="background-color: #73ff71bf;   color: #1ec141;  font-weight: bold;">@item.Remarks</td>
+                                    }
+                                    else
+                                    {
+                                        <td align="left" width="8%">@item.Remarks</td>
+                                    }
 
-                            @*<td align="left" width="8%">@item.Penalty.ToString("#,##0,,M")</td>*@
-                        </tr>
+                                    @*<td align="left" width="8%">@item.Penalty.ToString("#,##0,,M")</td>*@
+                                </tr>
                             }
                         }
                         <tr>
                             <td align="left" width="8%"></td>
                             <td align="left" width="8%"></td>
                             @*<td align="left" width="8%">
-            <script>
+                                <script>
 
-                var sumval = 0;
-                var sumBal = 0;
-                $('#BlotterDTLReportDayWise .KHISum').each(function () {
-                    sumval = this.innerText;
-                    sumval = sumval.replace(/\,/g, '');
-                    sumBal += parseFloat(sumval) //+OpeningB1;
-                });
-                document.write(sumBal.toLocaleString('en-CA'));
-            </script>
-        </td>*@
+                                    var sumval = 0;
+                                    var sumBal = 0;
+                                    $('#BlotterDTLReportDayWise .KHISum').each(function () {
+                                        sumval = this.innerText;
+                                        sumval = sumval.replace(/\,/g, '');
+                                        sumBal += parseFloat(sumval) //+OpeningB1;
+                                    });
+                                    document.write(sumBal.toLocaleString('en-CA'));
+                                </script>
+                            </td>*@
                             <td align="left" width="8%" class="PKSumVal">
                                 <script>
                                     sumval = 0;
@@ -163,20 +187,21 @@
                             </td>
 
                             <script>
-								if(((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100) >=5){
-                                    document.write('<td align="left" width="8%" style="background-color: #73ff71bf;   color: #1ec141;  font-weight: bold;">'+((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '% </td>')
-								}
-								else{
-                                    document.write('<td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">'+((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '% </td>')}
+                                if (((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100) >= 5) {
+                                    document.write('<td align="left" width="8%" style="background-color: #73ff71bf;   color: #1ec141;  font-weight: bold;">' + ((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '% </td>')
+                                }
+                                else {
+                                    document.write('<td align="left" width="8%" style="background-color: #ff7171bf;   color: #f00;  font-weight: bold;">' + ((0.05 / parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) * parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, ''))) * 100).toFixed(2) + '% </td>')
+                                }
                             </script>
 
                         </tr>
                         <tr>
                             <td class="AvgBHHeading">
                                 <script>
-                                    if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) > parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')) ) {
+                                    if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) > parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, ''))) {
                                         document.write('Fortnightly Long Position');
-                                    } else if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) < parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, '')))  {
+                                    } else if (parseFloat(($('#BlotterDTLReportShort .AvgBH')[0].innerText).replace(/\,/g, '')) < parseFloat(($('#BlotterDTLReportShort .FBR5')[0].innerText).replace(/\,/g, ''))) {
                                         document.write('Fortnightly Short Position');
                                     }
                                 </script>
@@ -196,16 +221,30 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <label class="control-label col-md-4" for="Clearing_Date">Select Date</label>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="Clearing_Date">Select Date</label>
                     </div>
-                    <div class="col-md-8">
-                        <input class="form-control datepicker text-box single-line" data-val="true" data-val-date="The field Date must be a date." id="FillOPICSManual_Date" name="Clearing_Date" type="date">
-
-                        <input type="button" id="ReconManualData" value="Recon" class="btn btn-default" />
+                    <div class="col-md-2">
+                        <input class="form-control datepicker text-box single-line" data-val="true" data-val-date="The field Date must be a date." id="FillOPICSManual_Date" name="Clearing_Date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">Select Flag</label>
+                    </div>
+                    <div class="col-md-1">
+                        <select id="Flag" class="form-control">
+                            <option value="F">F</option>
+                            <option value="M">M</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" id="SearchManualData" value="Search" onclick="FillOPICSManual()" class="btn btn-primary" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" id="ReconManualData" value="Recon" class="btn btn-primary" />
                     </div>
                 </div>
+                <br />
                 <div id="FillManualData">
                 </div>
             </div>
@@ -213,15 +252,27 @@
     </div>
     <script>
 
-        $("#FillOPICSManual_Date").change(function () {
-            var val = this.value;
-            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + val+"&Recon=0");
+        //$("#FillOPICSManual_Date").change(function () {
+        //    var val = this.value;
+        //    $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + val+"&Recon=0");
 
 
-        });
+        //});
+
+        //$("#ReconManualData").click(function () {
+        //    $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + $("#FillOPICSManual_Date").val() + "&Recon=1");
+        //});
+
+        function FillOPICSManual() {
+            debugger;
+            var dateval = $("#FillOPICSManual_Date").val();
+            var flagval = $('#Flag option:selected').text();
+            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + dateval + "&flag=" + flagval + "&Recon=0");
+        }
+
 
         $("#ReconManualData").click(function () {
-            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + $("#FillOPICSManual_Date").val() + "&Recon=1");
+            $("#FillManualData").load("/Home/FillBlotterManualData/?Date=" + $("#FillOPICSManual_Date").val() + "&flag=" + flagval + "&Recon=1");
         });
     </script>
     <script src="~/Scripts/jquery-3.4.1.js"></script>
