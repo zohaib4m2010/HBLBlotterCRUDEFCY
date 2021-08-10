@@ -16,6 +16,7 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class BlotterFundingRepoController : Controller
     {
+        UtilityClass UC = new UtilityClass();
         #region Latest Code
         //public ActionResult BlotterFundingRepo(FormCollection form)
         //{
@@ -337,16 +338,16 @@ namespace WebBlotter.Controllers
                 {
                     if (Request.Form["DealType[" + i + "]"] != null)
                     {
-                        var DataType_data = Request.Form["DataType[" + i + "]"];
+                        var DataType_data = (Session["BR"].ToString() != "01")?Request.Form["DataType[" + i + "]"]:"SBP";
                         var Bank_data = Request.Form["Bank[" + i + "]"];
                         var Days_data = Convert.ToInt32(Request.Form["Days[" + i + "]"]);
-                        var Rate_data = Convert.ToInt32(Request.Form["Rate[" + i + "]"]);
+                        var Rate_data = Convert.ToDouble(Request.Form["Rate[" + i + "]"]);
                         var DealType_data = Request.Form["DealType[" + i + "]"];
                         var Broker_data = Request.Form["Broker[" + i + "]"];
                         var Issue_Date_data = Request.Form["Issue_Date[" + i + "]"];
                         var IssueType_data = Request.Form["IssueType[" + i + "]"];
                         var InFlow_data = Convert.ToDecimal(Request.Form["InFlow[" + i + "]"]);
-                        var OutFLow_data = Convert.ToDecimal(Request.Form["OutFLow[" + i + "]"]);
+                        var OutFLow_data = UC.CheckNegativeValue(Convert.ToDecimal(Request.Form["OutFLow[" + i + "]"]));
                         var Note_data = Request.Form["Note[" + i + "]"];
 
                         BlotterFR.Add(new SBP_BlotterFundingRepo

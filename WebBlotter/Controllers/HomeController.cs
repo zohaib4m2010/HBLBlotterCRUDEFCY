@@ -32,6 +32,7 @@ namespace WebBlotter.Controllers
             response.EnsureSuccessStatusCode();
             List<Models.SBP_BlotterCRRReportDaysWiseBal> BlotterCRRReportsDayWiseBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterCRRReportDaysWiseBal>>().Result;
 
+            ViewBag.SBP_BlotterCRRReportDaysWiseBal = BlotterCRRReportsDayWiseBal;
 
             //HttpResponseMessage response1 = serviceObj.GetResponse("/api/Blotter/GetLatestBlotterDTLReportForToday?&BR=" + Session["BR"].ToString());
             //response.EnsureSuccessStatusCode();
@@ -39,13 +40,11 @@ namespace WebBlotter.Controllers
 
             //ViewBag.SBP_BlotterCRRReportForTodayBal = BlotterCRRReportForTodayBal;
 
-            HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString());
+            HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString() + "&Date=" + DateTime.Now.ToString("yyyy-MM-dd"));
             response2.EnsureSuccessStatusCode();
             Models.SBP_BlotterOpeningBalance BlotterOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
 
             ViewBag.SBP_BlotterOpeningBalaceForToday = BlotterOpeningBalaceForToday;
-
-            ViewBag.SBP_BlotterCRRReportDaysWiseBal = BlotterCRRReportsDayWiseBal;
 
 
             return View();

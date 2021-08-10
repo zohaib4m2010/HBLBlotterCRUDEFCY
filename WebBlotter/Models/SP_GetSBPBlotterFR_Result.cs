@@ -19,8 +19,8 @@ namespace WebBlotter.Models
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> Issue_Date { get; set; }
         public string IssueType { get; set; }
-        public Nullable<decimal> InFlow { get; set; }
-        public Nullable<decimal> OutFLow { get; set; }
+        public decimal InFlow { get; set; }
+        public decimal OutFLow { get; set; }
         public string Note { get; set; }
         public int UserID { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }

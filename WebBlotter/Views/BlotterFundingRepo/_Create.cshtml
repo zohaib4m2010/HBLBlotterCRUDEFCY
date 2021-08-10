@@ -173,134 +173,136 @@ else
             <thead>
                 <tr>
                     <th>Remove</th>
-                    <th>Data Type</th>
-                    <th>Bank</th>
-                    <th>Days</th>
-                    <th>Rate</th>
-                    <th>Deal Type</th>
-                    <th>Broker</th>
-                    <th>Issue Date</th>
-                    <th>Issue Type</th>
-                    <th>In Flow</th>
-                    <th>Out FLow</th>
-                    <th>Note</th>
-                </tr>
+                    @if (@Session["BR"].ToString() != "01")
+                    {
+                        <th>Data Type</th>
+                    }
+                        <th>Bank</th>
+                        <th>Days</th>
+                        <th>Rate</th>
+                        <th>Deal Type</th>
+                        <th>Broker</th>
+                        <th>Issue Date</th>
+                        <th>Issue Type</th>
+                        <th>In Flow</th>
+                        <th>Out FLow</th>
+                        <th>Note</th>
+                    </tr>
             </thead>
             <tbody>
                 <tr id="tablerow0">
                     <td>
                         <input type="checkbox" name="chk[0]" />
                     </td>
-                    <td>
-                        <div>
-                            @if (@Session["BR"].ToString() == "01")
-                            {
-                           <select name="DataType[0]" class="form-control dropdown_input"> <option value="SBP">State Bank of Pakistan</option></select>
-                            }
-                            else
-                            {
-                            <select name="DataType[0]" class="form-control dropdown_input">
+                    @if (@Session["BR"].ToString() != "01")
+                    {
+                        <td>
+                            <div>
+
                                 
-                                <option value="SBP">State Bank of Pakistan</option>
+                                <select name="DataType[0]" class="form-control dropdown_input">
+
+                                    <option value="SBP">State Bank of Pakistan</option>
+
+                                    <option value="HBLC">Inter Branch Account</option>
+                                </select>
                                 
-                                <option value="HBLC">Inter Branch Account</option>
-                            </select>
-                            }
-                            @*<input class="form-control" name="DataType[0]" type="text" value="" />*@
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control" name="Bank[0]" type="text" value="" />
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control" name="Days[0]" type="text" value="" />
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control" name="Rate[0]" type="text" value="" />
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <select name="DealType[0]" class="form-control dropdown_input">
-                                <option value="Rev Repo">Rev Repo</option>
-                                <option value="Repo">Repo</option>
-                                <option value="Call Lend">Call Lend</option>
-                                <option value="Call Borrow">Call Borrow</option>
-                                <option value="OMO">OMO</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <select name="Broker[0]" class="form-control dropdown_input">
-                                <option value="Arif Habib">Arif Habib</option>
-                                <option value="BMA">BMA</option>
-                                <option value="Bright">Bright</option>
-                                <option value="CMKA">CMKA</option>
-                                <option value="CNM">CNM</option>
-                                <option value="Continental">Continental</option>
-                                <option value="CMKA">CMKA</option>
-                                <option value="Icon">Icon</option>
-                                <option value="IONE">IONE</option>
-                                <option value="JS">JS</option>
-                                <option value="Magenta">Magenta</option>
-                                <option value="Optimus">Optimus</option>
-                                <option value="Phone">Phone</option>
-                                <option value="Pearl">Pearl</option>
-                                <option value="Paramount">Paramount</option>
-                                <option value="Paramount">Paramount</option>
-                                <option value="Vector">Vector</option>
-                                <option value="Phone">Phone</option>
-                                <option value="Reuters">Reuters</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control date_input" name="Issue_Date[0]" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <select name="IssueType[0]" class="form-control dropdown_input">
-                                <option value="TB 3M">TB 3M</option>
-                                <option value="TB 6M">TB 6M</option>
-                                <option value="TB 1Y">TB 1Y</option>
-                                <option value="PIB 3Y">PIB 3Y</option>
-                                <option value="PIB 5Y">PIB 5Y</option>
-                                <option value="PIB 7Y">PIB 7Y</option>
-                                <option value="PIB 10Y">PIB 10Y</option>
-                                <option value="PIB 3Y FL">PIB 3Y FL</option>
-                                <option value="PIB 5Y FL">PIB 5Y FL</option>
-                                <option value="PIB 10Y FL">PIB 10Y FL</option>
-                                <option value="PIB 15Y">PIB 15Y</option>
-                                <option value="PIB 3Y FLQ">PIB 3Y FLQ</option>
-                                <option value="PIB 5Y FLQ">PIB 5Y FLQ</option>
-                                <option value="PPIB 10Y FLQ">PIB 10Y FLQ</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control" name="InFlow[0]" type="text" value="" />
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control" name="OutFLow[0]" type="text" value="" />
-                        </div>
-                    </td>
-                    <td>
-                        <div>
-                            <input class="form-control" name="Note[0]" type="text" value="" />
-                        </div>
-                    </td>
-                </tr>
+                                @*<input class="form-control" name="DataType[0]" type="text" value="" />*@
+                            </div>
+                        </td>
+                    }
+                        <td>
+                            <div>
+                                <input class="form-control" name="Bank[0]" type="text" value="" />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input class="form-control" name="Days[0]" type="text" value="" />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input class="form-control" name="Rate[0]" type="text" value="" />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <select name="DealType[0]" class="form-control dropdown_input">
+                                    <option value="Rev Repo">Rev Repo</option>
+                                    <option value="Repo">Repo</option>
+                                    <option value="Call Lend">Call Lend</option>
+                                    <option value="Call Borrow">Call Borrow</option>
+                                    <option value="OMO">OMO</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <select name="Broker[0]" class="form-control dropdown_input">
+                                    <option value="Arif Habib">Arif Habib</option>
+                                    <option value="BMA">BMA</option>
+                                    <option value="Bright">Bright</option>
+                                    <option value="CMKA">CMKA</option>
+                                    <option value="CNM">CNM</option>
+                                    <option value="Continental">Continental</option>
+                                    <option value="CMKA">CMKA</option>
+                                    <option value="Icon">Icon</option>
+                                    <option value="IONE">IONE</option>
+                                    <option value="JS">JS</option>
+                                    <option value="Magenta">Magenta</option>
+                                    <option value="Optimus">Optimus</option>
+                                    <option value="Phone">Phone</option>
+                                    <option value="Pearl">Pearl</option>
+                                    <option value="Paramount">Paramount</option>
+                                    <option value="Paramount">Paramount</option>
+                                    <option value="Vector">Vector</option>
+                                    <option value="Phone">Phone</option>
+                                    <option value="Reuters">Reuters</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input class="form-control date_input" name="Issue_Date[0]" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <select name="IssueType[0]" class="form-control dropdown_input">
+                                    <option value="TB 3M">TB 3M</option>
+                                    <option value="TB 6M">TB 6M</option>
+                                    <option value="TB 1Y">TB 1Y</option>
+                                    <option value="PIB 3Y">PIB 3Y</option>
+                                    <option value="PIB 5Y">PIB 5Y</option>
+                                    <option value="PIB 7Y">PIB 7Y</option>
+                                    <option value="PIB 10Y">PIB 10Y</option>
+                                    <option value="PIB 3Y FL">PIB 3Y FL</option>
+                                    <option value="PIB 5Y FL">PIB 5Y FL</option>
+                                    <option value="PIB 10Y FL">PIB 10Y FL</option>
+                                    <option value="PIB 15Y">PIB 15Y</option>
+                                    <option value="PIB 3Y FLQ">PIB 3Y FLQ</option>
+                                    <option value="PIB 5Y FLQ">PIB 5Y FLQ</option>
+                                    <option value="PPIB 10Y FLQ">PIB 10Y FLQ</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input class="form-control" name="InFlow[0]" type="text" value="" />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input class="form-control" name="OutFLow[0]" type="text" value="" />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input class="form-control" name="Note[0]" type="text" value="" />
+                            </div>
+                        </td>
+                    </tr>
             </tbody>
         </table>
         <hr />

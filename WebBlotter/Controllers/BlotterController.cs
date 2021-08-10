@@ -65,6 +65,12 @@ namespace WebBlotter.Controllers
                     List<Models.SP_SBPBlotter_FCY_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_FCY_Result>>().Result;
                     blotterMulit.GetAllBlotterFCY01 = blotter;
                 }
+
+                HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString()+"&Date="+ BlotterCurrentDate);
+                response2.EnsureSuccessStatusCode();
+                Models.SBP_BlotterOpeningBalance BlotterOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
+
+                ViewBag.SBP_BlotterOpeningBalaceForToday = BlotterOpeningBalaceForToday;
                 ViewBag.Title = "All Blotter";
                 ViewData["SysCurrentDt"] = BlotterCurrentDate;
                 return PartialView("_GetAllBlotter", blotterMulit);

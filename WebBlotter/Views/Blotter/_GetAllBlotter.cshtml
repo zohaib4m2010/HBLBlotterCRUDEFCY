@@ -62,189 +62,214 @@
     <!--Search By Date -->
 
 
-    <div class="fw-container" style="margin-top:50px;">
-        <a name="top" id="top"></a>
-        <h2>SBP Blotter As On @ViewData["SysCurrentDt"]</h2>
-        <div class="fw-body">
-            <div class="content">
-                <div class="info">
+        <div class="fw-container" style="margin-top:50px;">
+            <a name="top" id="top"></a>
+            <h2>SBP Blotter As On @ViewData["SysCurrentDt"]</h2>
+
+            @if (ViewBag.SBP_BlotterOpeningBalaceForToday != null)
+            {
+                <div class="row">
+                    <div class="col-md-2">
+                        <b>Actual Opn Bal: </b><input type="text" id="ActualOpnBal" class="form-control" onkeyup="return TotalOpeningBal()" readonly value="@ViewBag.SBP_BlotterOpeningBalaceForToday.OpenBalActual.ToString("#,##0,,")" />
+                    </div>
+                    <div class="col-md-1" style="padding-top: 25px; width: 0% !important;">
+                        <b>-</b>
+                    </div>
+                    <div class="col-md-2">
+                        <b>Estimated Opn Bal:</b><input type="text" id="EstOpnBal" class="form-control" onkeyup="return TotalOpeningBal()" readonly value="@ViewBag.SBP_BlotterOpeningBalaceForToday.EstimatedOpenBal.ToString("#,##0,,")" />
+                    </div>
+                    <div class="col-md-1" style="padding-top: 25px; width: 0% !important;">
+                        <b>=</b>
+                    </div>
+                    <div class="col-md-2">
+                        <b>Difference:</b><input type="text" id="TotalOpnBal" class="form-control" style="font-size: 16px; color:black; border:0px solid white" readonly value="@((ViewBag.SBP_BlotterOpeningBalaceForToday.OpenBalActual-ViewBag.SBP_BlotterOpeningBalaceForToday.EstimatedOpenBal).ToString("#,##0,,"))" />
+                    </div>
+                    <div class="col-md-1" style="padding-top: 25px; width: 0% !important;">
+                        <b>@((ViewBag.SBP_BlotterOpeningBalaceForToday.OpenBalActual - ViewBag.SBP_BlotterOpeningBalaceForToday.EstimatedOpenBal) > 0 ? "Surplus" : ((ViewBag.SBP_BlotterOpeningBalaceForToday.OpenBalActual - ViewBag.SBP_BlotterOpeningBalaceForToday.EstimatedOpenBal) < 0) ? "Deficit" : "")</b>
+                    </div>
                 </div>
-                <script>
-                    var OpeningB = 0;
-                    var count = 0;
-                    var OpeningB1 = 0;
-                </script>
-                <table id="totalMe" class="table table-striped table-bordered table-hover display">
-                    <thead>
-                        <tr>
-                            <th>DealNo</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Inflow</th>
-                            <th>Outflow</th>
-                            <th>Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.GetAllBlotter01 != null)
-                        {
-                            foreach (var item in Model.GetAllBlotter01)
-                            {
-                                <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.DEALNO)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                                    <td align="right" class="sum" id="Inflow">
-                                        @*@Html.DisplayFor(modelItem => item.Inflow)*@
-                                        <script>
-                                        var DailyAmt = parseFloat(@item.Inflow);
-                                        var PAmount =(DailyAmt);
-                                        document.write(PAmount.toLocaleString('en-CA'));
-                                        </script>
-                                    </td>
-                                    <td align="right" class="sum1">
-                                        @*@Html.DisplayFor(modelItem => item.Outflow)*@
-                                        <script>
-                                        var DailyAmt = parseFloat(@item.Outflow);
-                                        var PAmount =(DailyAmt);
-                                        document.write(PAmount.toLocaleString('en-CA'));
-                                        </script>
-                                    </td>
-                                    <td align="right" class="sum3">
-                                        <script>
-                                        if (count==0){
-                                            OpeningB= @item.OpeningBalance;
-                                            OpeningB1 = parseFloat(OpeningB);
-                                        }
-                                        var sum = 0;
-                                        var sumIn = "";
-                                        $('#totalMe .sum').each(function () {
-                                            sumIn = this.innerText;
-                                            sumIn = sumIn.replace(/\,/g, '');
-                                            sum += parseFloat(sumIn);
-                                        });
-
-                                        var sum1 = 0;
-                                        var sumOut = "";
-                                        var sumBal=0;
-                                        $('#totalMe .sum1').each(function () {
-                                            sumOut = this.innerText;
-                                            sumOut = sumOut.replace(/\,/g, '');
-                                            sum1 += parseFloat(sumOut) //+OpeningB1;
-                                        });
-
-                                        sumBal =( sum1 + sum +OpeningB1);
-                                        document.write(sumBal.toLocaleString('en-CA'));
-                                        count=count+1;
-                                        </script>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else if (Model.GetAllBlotterFCY01 != null)
-                        {
-                            foreach (var item in Model.GetAllBlotterFCY01)
-                            {
-                                <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.DealNo)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                                    <td align="right" class="sum" id="Inflow">
-                                        @*@Html.DisplayFor(modelItem => item.Inflow)*@
-                                        <script>
-                                        var DailyAmt = parseFloat(@item.Inflow);
-                                        var PAmount =(DailyAmt);
-                                        document.write(PAmount.toLocaleString('en-CA'));
-                                        </script>
-                                    </td>
-                                    <td align="right" class="sum1">
-                                        @*@Html.DisplayFor(modelItem => item.Outflow)*@
-                                        <script>
-                                        var DailyAmt = parseFloat(@item.Outflow);
-                                        var PAmount =(DailyAmt);
-                                        document.write(PAmount.toLocaleString('en-CA'));
-                                        </script>
-                                    </td>
-                                    <td align="right" class="sum3">
-                                        <script>
-                                        if (count==0){
-                                            OpeningB= @item.OpeningBalance;
-                                            OpeningB1 = parseFloat(OpeningB);
-                                        }
-                                        var sum = 0;
-                                        var sumIn = "";
-                                        $('#totalMe .sum').each(function () {
-                                            sumIn = this.innerText;
-                                            sumIn = sumIn.replace(/\,/g, '');
-                                            sum += parseFloat(sumIn);
-                                        });
-
-                                        var sum1 = 0;
-                                        var sumOut = "";
-                                        var sumBal=0;
-                                        $('#totalMe .sum1').each(function () {
-                                            sumOut = this.innerText;
-                                            sumOut = sumOut.replace(/\,/g, '');
-                                            sum1 += parseFloat(sumOut) //+OpeningB1;
-                                        });
-
-                                        sumBal =( sum1 + sum +OpeningB1);
-                                        document.write(sumBal.toLocaleString('en-CA'));
-                                        count=count+1;
-                                        </script>
-                                    </td>
-                                </tr>
-                            }
-                        }
-
-                        @if (Model.GetAllBlotterFCY01 != null || Model.GetAllBlotter01 != null)
-                        {
+            }
+            <br />
+            <div class="fw-body">
+                <div class="content">
+                    <div class="info">
+                    </div>
+                    <script>
+                        var OpeningB = 0;
+                        var count = 0;
+                        var OpeningB1 = 0;
+                    </script>
+                    <table id="totalMe" class="table table-striped table-bordered table-hover display">
+                        <thead>
                             <tr>
-                                <td>Closing Balance</td>
-                                <td></td>
-                                <td></td>
-                                <td align="right" id="Inflow">
-                                    <span style="font-weight:bold">
-                                        <script>
-                                            var sum = 0;
-                                            $('#totalMe .sum').each(function () {
-                                                sum += parseFloat(this.innerText.replace(/\,/g, ''));
-                                            });
-                                            document.write(sum.toLocaleString('en-CA'));
-
-                                        </script>
-                                    </span>
-                                </td>
-                                <td align="right" id="Outflow">
-                                    <span style="font-weight:bold">
-                                        <script>
-                                            var sum1 = 0;
-                                            $('#totalMe .sum1').each(function () {
-                                                sum1 += parseFloat(this.innerText.replace(/\,/g, ''));
-                                            });
-                                            document.write(sum1.toLocaleString('en-CA'));
-                                        </script>
-                                    </span>
-                                </td>
-                                <td align="right" id="Bal">
-                                    <span style="font-weight:bold">
-                                        <script>
-                                            var sum2 = sum1 + sum + OpeningB1;
-                                            //$('#totalMe .sum3').each(function () {
-                                            //    sum2 += parseFloat(this.innerText.replace(/\,/g, ''));
-                                            //});
-                                            //var sumBal =  sum
-                                            document.write(sum2.toLocaleString('en-CA'));
-                                        </script>
-                                    </span>
-                                </td>
+                                <th>DealNo</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Inflow</th>
+                                <th>Outflow</th>
+                                <th>Balance</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if (Model.GetAllBlotter01 != null)
+                            {
+                                foreach (var item in Model.GetAllBlotter01)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.DEALNO)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                                        <td align="right" class="sum" id="Inflow">
+                                            @*@Html.DisplayFor(modelItem => item.Inflow)*@
+                                            <script>
+                                        var DailyAmt = parseFloat(@item.Inflow);
+                                        var PAmount =(DailyAmt);
+                                        document.write(PAmount.toLocaleString('en-CA'));
+                                            </script>
+                                        </td>
+                                        <td align="right" class="sum1">
+                                            @*@Html.DisplayFor(modelItem => item.Outflow)*@
+                                            <script>
+                                        var DailyAmt = parseFloat(@item.Outflow);
+                                        var PAmount =(DailyAmt);
+                                        document.write(PAmount.toLocaleString('en-CA'));
+                                            </script>
+                                        </td>
+                                        <td align="right" class="sum3">
+                                            <script>
+                                        if (count==0){
+                                            OpeningB= @item.OpeningBalance;
+                                            OpeningB1 = parseFloat(OpeningB);
+                                        }
+                                        var sum = 0;
+                                        var sumIn = "";
+                                        $('#totalMe .sum').each(function () {
+                                            sumIn = this.innerText;
+                                            sumIn = sumIn.replace(/\,/g, '');
+                                            sum += parseFloat(sumIn);
+                                        });
+
+                                        var sum1 = 0;
+                                        var sumOut = "";
+                                        var sumBal=0;
+                                        $('#totalMe .sum1').each(function () {
+                                            sumOut = this.innerText;
+                                            sumOut = sumOut.replace(/\,/g, '');
+                                            sum1 += parseFloat(sumOut) //+OpeningB1;
+                                        });
+
+                                        sumBal =( sum1 + sum +OpeningB1);
+                                        document.write(sumBal.toLocaleString('en-CA'));
+                                        count=count+1;
+                                            </script>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else if (Model.GetAllBlotterFCY01 != null)
+                            {
+                                foreach (var item in Model.GetAllBlotterFCY01)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.DealNo)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                                        <td align="right" class="sum" id="Inflow">
+                                            @*@Html.DisplayFor(modelItem => item.Inflow)*@
+                                            <script>
+                                        var DailyAmt = parseFloat(@item.Inflow);
+                                        var PAmount =(DailyAmt);
+                                        document.write(PAmount.toLocaleString('en-CA'));
+                                            </script>
+                                        </td>
+                                        <td align="right" class="sum1">
+                                            @*@Html.DisplayFor(modelItem => item.Outflow)*@
+                                            <script>
+                                        var DailyAmt = parseFloat(@item.Outflow);
+                                        var PAmount =(DailyAmt);
+                                        document.write(PAmount.toLocaleString('en-CA'));
+                                            </script>
+                                        </td>
+                                        <td align="right" class="sum3">
+                                            <script>
+                                        if (count==0){
+                                            OpeningB= @item.OpeningBalance;
+                                            OpeningB1 = parseFloat(OpeningB);
+                                        }
+                                        var sum = 0;
+                                        var sumIn = "";
+                                        $('#totalMe .sum').each(function () {
+                                            sumIn = this.innerText;
+                                            sumIn = sumIn.replace(/\,/g, '');
+                                            sum += parseFloat(sumIn);
+                                        });
+
+                                        var sum1 = 0;
+                                        var sumOut = "";
+                                        var sumBal=0;
+                                        $('#totalMe .sum1').each(function () {
+                                            sumOut = this.innerText;
+                                            sumOut = sumOut.replace(/\,/g, '');
+                                            sum1 += parseFloat(sumOut) //+OpeningB1;
+                                        });
+
+                                        sumBal =( sum1 + sum +OpeningB1);
+                                        document.write(sumBal.toLocaleString('en-CA'));
+                                        count=count+1;
+                                            </script>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                            @if (Model.GetAllBlotterFCY01 != null || Model.GetAllBlotter01 != null)
+                            {
+                                <tr>
+                                    <td>Closing Balance</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td align="right" id="Inflow">
+                                        <span style="font-weight:bold">
+                                            <script>
+                                                var sum = 0;
+                                                $('#totalMe .sum').each(function () {
+                                                    sum += parseFloat(this.innerText.replace(/\,/g, ''));
+                                                });
+                                                document.write(sum.toLocaleString('en-CA'));
+
+                                            </script>
+                                        </span>
+                                    </td>
+                                    <td align="right" id="Outflow">
+                                        <span style="font-weight:bold">
+                                            <script>
+                                                var sum1 = 0;
+                                                $('#totalMe .sum1').each(function () {
+                                                    sum1 += parseFloat(this.innerText.replace(/\,/g, ''));
+                                                });
+                                                document.write(sum1.toLocaleString('en-CA'));
+                                            </script>
+                                        </span>
+                                    </td>
+                                    <td align="right" id="Bal">
+                                        <span style="font-weight:bold">
+                                            <script>
+                                                var sum2 = sum1 + sum + OpeningB1;
+                                                //$('#totalMe .sum3').each(function () {
+                                                //    sum2 += parseFloat(this.innerText.replace(/\,/g, ''));
+                                                //});
+                                                //var sumBal =  sum
+                                                document.write(sum2.toLocaleString('en-CA'));
+                                            </script>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
     <script type="text/javascript">
 
 

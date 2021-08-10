@@ -165,7 +165,10 @@ namespace WebBlotter.Controllers
             BlotterOpenBal.UpdateDate = DateTime.Now;
             if (BlotterOpenBal.BalDate == null)
                 BlotterOpenBal.BalDate = DateTime.Now;
+            BlotterOpenBal.UserID = Convert.ToInt16(Session["UserID"].ToString());
             BlotterOpenBal.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
+            BlotterOpenBal.BID = Convert.ToInt16(Session["BranchID"].ToString());
+            BlotterOpenBal.BR = Convert.ToInt16(Session["BR"].ToString());
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterOpenBal/UpdateOpenBal", BlotterOpenBal);
             response.EnsureSuccessStatusCode();

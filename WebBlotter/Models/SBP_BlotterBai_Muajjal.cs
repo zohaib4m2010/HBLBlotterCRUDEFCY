@@ -28,7 +28,7 @@ namespace WebBlotter.Models
         public Nullable<decimal> BM_InFlow { get; set; }
 
         [Required]
-        [Display(Name = "InFlow")]
+        [Display(Name = "OutFlow")]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public Nullable<decimal> BM_OutFLow { get; set; }
         public string Note { get; set; }
