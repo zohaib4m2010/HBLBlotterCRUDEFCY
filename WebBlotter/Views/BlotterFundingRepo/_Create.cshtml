@@ -37,17 +37,14 @@
                 '<td>' +
                 '<input type="checkbox" name="chk[' + counter + ']" />' +
                 '</td>' +
-                '<td>' + DataType+
-                //'<input type="text" class="form-control" name="DataType[' + counter + ']" value="" />' +
+                '<td>' +
+                '<input type="text" class="form-control" maxlength="40" onkeypress="return checkString()" name="Bank[' + counter + ']" value="" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control" name="Bank[' + counter + ']" value="" />' +
+                '<input type="number" class="form-control" maxlength="3" name="Days[' + counter + ']" value="" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control" name="Days[' + counter + ']" value="" />' +
-                '</td>' +
-                '<td>' +
-                '<input type="text" class="form-control" name="Rate[' + counter + ']" value="" />' +
+                '<input type="text" class="form-control" maxlength="11" onkeypress="return isNumberKey()" name="Rate[' + counter + ']" value="" />' +
                 '</td>' +
                 '<td>' +
                 '<select name="DealType[' + counter + ']" class="form-control dropdown_input">' +
@@ -103,10 +100,10 @@
                 '</select >' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control" name="InFlow[' + counter + ']" value="" />' +
+                '<input type="text" class="form-control" maxlength="11" onkeypress="return isNumberKey()" name="InFlow[' + counter + ']" value="" />' +
                 '</td>' +
                 '<td>' +
-                '<input type="text" class="form-control" name="OutFlow[' + counter + ']" value="" />' +
+                '<input type="text" class="form-control" maxlength="11" onkeypress="return isNumberKey()" name="OutFlow[' + counter + ']" value="" />' +
                 '</td>' +
                 '<td>' +
                 '<input type="text" class="form-control" name="Note[' + counter + ']" value="" />' +
@@ -148,6 +145,28 @@
         return false;
     }
 
+
+    
+        function isNumberKey() {
+
+            if ((event.keyCode == 8) || (event.keyCode == 32) || (event.keyCode > 42 && event.keyCode < 58))
+                return true;
+            else {
+                alert("Please Enter Valid Number");
+                return false;
+            }
+    }
+
+    function checkString() {
+
+        if ((event.keyCode == 8) || (event.keyCode == 32) || (event.keyCode > 64 && event.keyCode < 91) || (event.keyCode > 96 && event.keyCode < 123))
+            return true;
+        else {
+            alert("Please Enter Valid Name");
+            return false;
+        }
+    }
+    
 </script>
 
 <h3>Create Funding Repo</h3>
@@ -213,17 +232,17 @@ else
                     }
                         <td>
                             <div>
-                                <input class="form-control" name="Bank[0]" type="text" value="" />
+                                <input class="form-control" maxlength="40" onkeypress="return checkString()"  name="Bank[0]" type="text" value="" />
                             </div>
                         </td>
                         <td>
                             <div>
-                                <input class="form-control" name="Days[0]" type="text" value="" />
+                                <input class="form-control" maxlength="3" name="Days[0]"  type="number" value="" />
                             </div>
                         </td>
                         <td>
                             <div>
-                                <input class="form-control" name="Rate[0]" type="text" value="" />
+                                <input class="form-control" maxlength="11" name="Rate[0]" onkeypress="return isNumberKey()" type="text" value="" />
                             </div>
                         </td>
                         <td>
@@ -289,12 +308,12 @@ else
                         </td>
                         <td>
                             <div>
-                                <input class="form-control" name="InFlow[0]" type="text" value="" />
+                                <input class="form-control" maxlength="11" onkeypress="return isNumberKey()" name="InFlow[0]" type="text" value="" />
                             </div>
                         </td>
                         <td>
                             <div>
-                                <input class="form-control" name="OutFLow[0]" type="text" value="" />
+                                <input class="form-control" maxlength="11" onkeypress="return isNumberKey()" name="OutFLow[0]" type="text" value="" />
                             </div>
                         </td>
                         <td>

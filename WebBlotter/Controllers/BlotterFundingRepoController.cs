@@ -250,14 +250,40 @@ namespace WebBlotter.Controllers
                 selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
             UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            var DateVal = (dynamic)null;
+            if (form["SearchByDate"] != null)
+            {
+                DateVal = form["SearchByDate"].ToString();
+                ViewBag.DateVal = DateVal;
+            }
             #endregion
 
             ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterFundingRepo/GetAllblotterFundingRepo?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + selectCurrency + "&BR=" + Session["BR"].ToString());
+            HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterFundingRepo/GetAllblotterFundingRepo?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + selectCurrency + "&BR=" + Session["BR"].ToString() + "&DateVal=" + DateVal);
             response.EnsureSuccessStatusCode();
-            List<Models.SP_GetSBPBlotterFR_Result> blotterFR = response.Content.ReadAsAsync<List<Models.SP_GetSBPBlotterFR_Result>>().Result;
-            if (blotterFR.Count < 1)
-                ViewData["DataStatus"] = "Data Not Availavle";
+            // List<Models.SP_GetSBPBlotterFR_Result> blotterFR = response.Content.ReadAsAsync<List<Models.SP_GetSBPBlotterFR_Result>>().Result;
+            List<Models.SP_GetSBPBlotterFR_Result> blotterFR = new List<Models.SP_GetSBPBlotterFR_Result>();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Message == "Success")
+                {
+                    JavaScriptSerializer ser = new JavaScriptSerializer();
+                    Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                    blotterFR = JsonConvert.DeserializeObject<List<Models.SP_GetSBPBlotterFR_Result>>(ResponseDD["Data"]);
+                }
+                else
+                {
+                    TempData["DataStatus"] = "Data not available";
+                }
+            }
             ViewBag.Title = "All Blotter Setup";
             var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(blotterFR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
@@ -338,7 +364,7 @@ namespace WebBlotter.Controllers
                 {
                     if (Request.Form["DealType[" + i + "]"] != null)
                     {
-                        var DataType_data = (Session["BR"].ToString() != "01")?Request.Form["DataType[" + i + "]"]:"SBP";
+                        var DataType_data = (Session["BR"].ToString() != "01") ? Request.Form["DataType[" + i + "]"] : "SBP";
                         var Bank_data = Request.Form["Bank[" + i + "]"];
                         var Days_data = Convert.ToInt32(Request.Form["Days[" + i + "]"]);
                         var Rate_data = Convert.ToDouble(Request.Form["Rate[" + i + "]"]);
@@ -377,8 +403,26 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterFundingRepo/InsertFundingRepo", BlotterFR);
                     response.EnsureSuccessStatusCode();
-                    UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterFR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-                    return RedirectToAction("BlotterFundingRepo");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+
+                        if (getreponse.Status == true)
+                        {
+                            TempData["DataStatus"] = getreponse.Message;
+                        }
+                        else
+                        {
+                            TempData["DataStatus"] = getreponse.Message;
+                        }
+                        UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterFR), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                        return RedirectToAction("BlotterFundingRepo");
+                    }
                 }
             }
             catch (Exception) { }
@@ -392,6 +436,24 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PostResponse("api/BlotterFundingRepo/DeleteFundingRepo", employeeIdsToDelete);
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+                else
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(employeeIdsToDelete), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterFundingRepo");
         }

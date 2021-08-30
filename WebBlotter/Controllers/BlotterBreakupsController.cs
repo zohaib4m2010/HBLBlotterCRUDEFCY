@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
 
 namespace WebBlotter.Controllers
 {
@@ -35,9 +37,28 @@ namespace WebBlotter.Controllers
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetAllBlotterBreakups?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
-                Models.SP_GetLatestBreakup_Result BlotterBreakups = response.Content.ReadAsAsync<Models.SP_GetLatestBreakup_Result>().Result;
-                if (BlotterBreakups == null)
-                    ViewData["DataStatus"] = "Data Not Available";
+                //Models.SP_GetLatestBreakup_Result BlotterBreakups = response.Content.ReadAsAsync<Models.SP_GetLatestBreakup_Result>().Result;
+                Models.SP_GetLatestBreakup_Result BlotterBreakups = new Models.SP_GetLatestBreakup_Result();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResult = response.Content.ReadAsStringAsync().Result;
+                    var jsonLinq = JObject.Parse(jsonResult);
+
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(jsonLinq["Status"]);
+                    getreponse.Message = jsonLinq["Message"].ToString();
+                    getreponse.Data = jsonLinq["Data"].ToString();
+                    if (getreponse.Status == true)
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(jsonLinq.ToString());
+                        BlotterBreakups = JsonConvert.DeserializeObject<List<Models.SP_GetLatestBreakup_Result>>(ResponseDD["Data"]);
+                    }
+                    else
+                        TempData["DataStatus"] = "Data not available";
+                }
+
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 ViewData["BranchName"] = Session["BranchName"].ToString();
@@ -139,6 +160,19 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterBreakups/InsertBlotterBreakups", BlotterBreakups);
                     response.EnsureSuccessStatusCode();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+                        if (getreponse.Status == true)
+                            TempData["DataStatus"] = getreponse.Message;
+                        else
+                            TempData["DataStatus"] = getreponse.Message;
+                    }
                     return RedirectToAction("BlotterBreakups");
                 }
             }
@@ -163,7 +197,27 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterBreakups/GetBlotterBreakups?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
-            Models.SBP_BlotterBreakups BlotterBreakups = response.Content.ReadAsAsync<Models.SBP_BlotterBreakups>().Result;
+            //Models.SBP_BlotterBreakups BlotterBreakups = response.Content.ReadAsAsync<Models.SBP_BlotterBreakups>().Result;
+            Models.SBP_BlotterBreakups BlotterBreakups = new Models.SBP_BlotterBreakups();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    JavaScriptSerializer ser = new JavaScriptSerializer();
+                    Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                    BlotterBreakups = JsonConvert.DeserializeObject<Models.SBP_BlotterBreakups>(ResponseDD["Data"]);
+                }
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterBreakups), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return PartialView("_Edit", BlotterBreakups);
 
@@ -185,6 +239,19 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterBreakups/UpdateBlotterBreakups", BlotterBreakups);
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+                if (getreponse.Status == true)
+                    TempData["DataStatus"] = getreponse.Message;
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             return RedirectToAction("BlotterBreakups");
         }
 
@@ -194,6 +261,22 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterBreakups/DeleteBlotterBreakups?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             return RedirectToAction("BlotterBreakups");
         }
 

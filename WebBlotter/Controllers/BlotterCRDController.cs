@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using WebBlotter.Classes;
 using WebBlotter.Models;
 using WebBlotter.Repository;
@@ -26,11 +28,28 @@ namespace WebBlotter.Controllers
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank?currId=" + currid);
                 response.EnsureSuccessStatusCode();
-                List<Models.NostroBank> blotterNB = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
+                //List<Models.NostroBank> blotterNB = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
 
+                List<Models.NostroBank> blotterNB = new List<Models.NostroBank>();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Message == "Success")
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        blotterNB = JsonConvert.DeserializeObject<List<Models.NostroBank>>(ResponseDD["Data"]);
+                    }
+                }
                 return blotterNB;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -40,18 +59,47 @@ namespace WebBlotter.Controllers
         {
             #region Added by shakir (Currency parameter)
             var selectCurrency = (dynamic)null;
+            
             if (form["selectCurrency"] != null)
                 selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
             else
                 selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
             UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+            var DateVal = (dynamic)null;
+            if (form["SearchByDate"] != null)
+            {
+                DateVal = form["SearchByDate"].ToString();
+                ViewBag.DateVal = DateVal;
+            }
             #endregion
 
             ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCRD/GetAllBlotterCRD?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + selectCurrency + "&BR=" + Session["BR"].ToString());
+            HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCRD/GetAllBlotterCRD?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + selectCurrency + "&BR=" + Session["BR"].ToString() + "&DateVal=" + DateVal);
             response.EnsureSuccessStatusCode();
-            List<Models.SP_GetSBPBlotterCRD_Result> blotterCRD = response.Content.ReadAsAsync<List<Models.SP_GetSBPBlotterCRD_Result>>().Result;
+            //List<Models.SP_GetSBPBlotterCRD_Result> blotterCRD = response.Content.ReadAsAsync<List<Models.SP_GetSBPBlotterCRD_Result>>().Result;
+            List<Models.SP_GetSBPBlotterCRD_Result> blotterCRD = new List<Models.SP_GetSBPBlotterCRD_Result>();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Message == "Success")
+                {
+                    JavaScriptSerializer ser = new JavaScriptSerializer();
+                    Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                    blotterCRD = JsonConvert.DeserializeObject<List<Models.SP_GetSBPBlotterCRD_Result>>(ResponseDD["Data"]);
+                }
+                else
+                {
+                    TempData["DataStatus"] = "Data not available";
+                }
+            }
             if (blotterCRD.Count < 1)
                 ViewData["DataStatus"] = "Data Not Availavle";
             ViewBag.Title = "All Blotter Setup";
@@ -143,6 +191,25 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterCRD/InsertCRD", BlotterCRD);
                     response.EnsureSuccessStatusCode();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+
+                        if (getreponse.Status == true)
+                        {
+                            TempData["DataStatus"] = getreponse.Message;
+                        }
+                        else
+                        {
+                            TempData["DataStatus"] = getreponse.Message;
+                        }
+                    }
                     UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRD), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("BlotterCRD");
                 }
@@ -171,7 +238,24 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterCRD/GetBlotterCRD?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
-            Models.SBP_BlotterCRD BlotterCRD = response.Content.ReadAsAsync<Models.SBP_BlotterCRD>().Result;
+            // Models.SBP_BlotterCRD BlotterCRD = response.Content.ReadAsAsync<Models.SBP_BlotterCRD>().Result;
+            Models.SBP_BlotterCRD BlotterCRD = new Models.SBP_BlotterCRD();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Message == "Success")
+                {
+                    JavaScriptSerializer ser = new JavaScriptSerializer();
+                    Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                    BlotterCRD = JsonConvert.DeserializeObject<Models.SBP_BlotterCRD>(ResponseDD["Data"]);
+                }
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRD), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.Nostro_Accountid = BlotterCRD.Nostro_Account;
             ViewBag.CRDNostroBanks = GetAllNostroBanks();
@@ -192,6 +276,25 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterCRD/UpdateCRD", BlotterCRD);
             response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+                else
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRD), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterCRD");
         }
@@ -201,6 +304,25 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterCRD/DeleteCRD?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+                else
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterCRD");
         }

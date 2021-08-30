@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using WebBlotter.Models;
 
 namespace WebBlotter.Repository
 {
@@ -22,5 +22,25 @@ namespace WebBlotter.Repository
         {
             return Client.GetAsync(url).Result;
         }
+
+        internal HttpResponseMessage PostResponse(string v, List<SP_SBPBlotter_FCY_Result> blotterDataFCY)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal HttpResponseMessage PutResponse(string v, List<SP_SBPBlotter_FCY_Result> blotterDataFCY)
+        {
+            throw new NotImplementedException();
+        }
+
+        //internal HttpResponseMessage PostResponse(string v, List<SP_SBPBlotter_Result> blotterDataLCY)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //internal HttpResponseMessage PutResponse(string v, List<SP_SBPBlotter_Result> blotterDataLCY)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

@@ -15,7 +15,21 @@
             <h2>Create Blotter TBO</h2>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @if (Session["BR"].ToString() != "01")
+            <div class="form-group">
+        <label class="control-label col-md-2">Select Nostro Bank</label>
+        <div class="col-md-10">
+            <select name="Nostro_AccountId" class="form-control">
+                @if (ViewBag.NostroBanksDDL != null)
+                {
+                    foreach (var item in ViewBag.NostroBanksDDL)
+                    {
+                        <option value="@item.ID">@item.BankName</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+             @if (Session["BR"].ToString() != "01")
             {
                 <div class="form-group">
                     <label class="control-label col-md-2">Data Type</label>

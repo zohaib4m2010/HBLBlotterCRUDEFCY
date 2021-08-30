@@ -7,6 +7,13 @@
 
 <link href="~/css/Custom.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#chkAll").change(function () {
+            $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+        });
+    });
+</script>
 
 <h3>BLOTTER Funding Repo</h3>
 
@@ -15,21 +22,24 @@
 </p>
 
 @*@if (TempData["DataStatus"] != "Data not available" && TempData["DataStatus"] != null)
-{
-    <div class="snackbar btn btn-success bg-info px-3 py-3">@TempData["DataStatus"]</div>
-}
-else
-{
-    <h2 class="alert-dark">@TempData["DataStatus"]</h2>
-}*@
+    {
+        <div class="snackbar btn btn-success bg-info px-3 py-3">@TempData["DataStatus"]</div>
+    }
+    else
+    {
+        <h2 class="alert-dark">@TempData["DataStatus"]</h2>
+    }*@
 
-<script>
-    $(function () {
-        $("#chkAll").change(function () {
-            $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
-        });
-    });
-</script>
+<!--Search By Date -->
+@using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    <div class="btn-group d-inline my-2 my-lg-0 navbar-right" style="margin-right: 10px !important;" role="group">
+        <input id="SearchByDateId" name="SearchByDate" type="date" value="@ViewBag.DateVal" onchange="this.form.submit()" class="form-control datepicker text-box single-line" />
+    </div>
+}
+<!--Search By Date -->
+
 
 @if (Model.Count() > 0)
 {

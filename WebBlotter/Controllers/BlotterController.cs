@@ -10,6 +10,10 @@ using WebBlotter.ViewModel;
 using System.Net.Mail;
 using System.Configuration;
 using WebBlotter.Classes;
+using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
+using WebBlotter.Models;
 
 namespace WebBlotter.Controllers
 {
@@ -20,6 +24,44 @@ namespace WebBlotter.Controllers
         // GET: Product  
         Boolean SendE = false;
         //string BrCode = ConfigurationManager.AppSettings["BranchCode"].ToString();
+
+        private List<Models.SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
+        {
+            try
+            {
+                var currid = (dynamic)null;
+                if (Session["SelectedCurrency"] != null)
+                {
+                    currid = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                }
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBankFromOpicsDDL?currId=" + currid + "&BRCode=" + Session["BR"].ToString());
+                response.EnsureSuccessStatusCode();
+                List<Models.SP_GetNostroBankFromOPICS_Result> blotterNB = new List<Models.SP_GetNostroBankFromOPICS_Result>();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Message == "Success")
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        blotterNB = JsonConvert.DeserializeObject<List<Models.SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
+                        ViewBag.NostroBanksDDL = blotterNB;
+                    }
+                }
+                return blotterNB;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public ActionResult GetAllBlotter(FormCollection form)
         {
             try
@@ -27,13 +69,13 @@ namespace WebBlotter.Controllers
                 #region Added by shakir (Currency parameter)
 
                 var selectCurrency = (dynamic)null;
-                var BlotterCurrentDate = (dynamic)null;
-
                 if (form["selectCurrency"] != null)
                     selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
                 else
                     selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
+                var BlotterCurrentDate = (dynamic)null;
+                string bankname = string.Empty;
                 if (form["BlotterCurrentDate"] != null)
                 {
                     BlotterCurrentDate = form["BlotterCurrentDate"].ToString();
@@ -44,29 +86,72 @@ namespace WebBlotter.Controllers
                     ViewBag.CurrentDt = DateTime.Now.ToString("yyyy-MM-dd");
                     BlotterCurrentDate = ViewBag.CurrentDt;
                 }
+                if (form["Nostro_Bank"] != null)
+                {
+                    bankname = form["Nostro_Bank"].ToString();
+                    ViewBag.BankCode = bankname;
+                }
+
 
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
                 #endregion
 
+                ViewBag.NostroBanksDDL = GetAllNostroBanks();
                 BlotterMultiModel blotterMulit = new BlotterMultiModel();
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
                 if (Convert.ToInt32(selectCurrency) == 1)
                 {
                     HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=SBP" + "&CurrentDate=" + BlotterCurrentDate);
                     response.EnsureSuccessStatusCode();
-                    List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                    //List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                     // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                    List<Models.SP_SBPBlotter_Result> blotter = new List<Models.SP_SBPBlotter_Result>();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+                        if (getreponse.Status == true)
+                        {
+                            JavaScriptSerializer ser = new JavaScriptSerializer();
+                            Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                            blotter = JsonConvert.DeserializeObject<List<Models.SP_SBPBlotter_Result>>(ResponseDD["Data"]);
+                        }
+                        else
+                            TempData["DataStatus"] = getreponse.Message;
+                    }
                     blotterMulit.GetAllBlotter01 = blotter;
                 }
                 else
                 {
-                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterFCYList?brcode=" + Session["BR"].ToString() + "&CurrId=" + selectCurrency + "&CurrentDate=" + BlotterCurrentDate);
+                    HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterFCYList?brcode=" + Session["BR"].ToString() + "&CurrId=" + selectCurrency + "&CurrentDate=" + BlotterCurrentDate + "&NostroBank=" + bankname);
                     response.EnsureSuccessStatusCode();
-                    List<Models.SP_SBPBlotter_FCY_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_FCY_Result>>().Result;
+                    //List<Models.SP_SBPBlotter_FCY_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_FCY_Result>>().Result;
+                    List<Models.SP_SBPBlotter_FCY_Result> blotter = new List<Models.SP_SBPBlotter_FCY_Result>();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+                        if (getreponse.Status == true)
+                        {
+                            JavaScriptSerializer ser = new JavaScriptSerializer();
+                            Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                            blotter = JsonConvert.DeserializeObject<List<Models.SP_SBPBlotter_FCY_Result>>(ResponseDD["Data"]);
+                        }
+                        else
+                            TempData["DataStatus"] = getreponse.Message;
+                    }
                     blotterMulit.GetAllBlotterFCY01 = blotter;
                 }
-
-                HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString()+"&Date="+ BlotterCurrentDate);
+                HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString() + "&Date=" + BlotterCurrentDate);
                 response2.EnsureSuccessStatusCode();
                 Models.SBP_BlotterOpeningBalance BlotterOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
 
@@ -81,6 +166,117 @@ namespace WebBlotter.Controllers
             }
         }
 
+        [System.Web.Mvc.HttpPost]
+        public ActionResult _Create(FormCollection form)
+        {
+            ServiceRepository serviceObj = new ServiceRepository();
+            List<Models.BlotterDataColor_Result> BlotterDataLCY = new List<BlotterDataColor_Result>();
+            List<Models.BlotterDataColor_Result> BlotterDataFCY = new List<BlotterDataColor_Result>();
+
+            #region Currency parameter
+            var selectCurrency = (dynamic)null;
+            if (form["selectCurrency"] != null)
+                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
+            else
+                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+
+            UtilityClass.GetSelectedCurrecy(selectCurrency);
+            #endregion
+            try
+            {
+                bool statuschk = false;
+                if (Convert.ToInt32(selectCurrency) == 1)
+                {
+                    for (int i = 0; i <= Request.Form.Count; i++)
+                    {
+                        if (Request.Form["GetAllBlotter01[" + i + "].DealNo"] != null)
+                        {
+                            var DealNo = Request.Form["GetAllBlotter01[" + i + "].DealNo"];
+                            var Description = Request.Form["GetAllBlotter01[" + i + "].Description"];
+                            var Status = Request.Form["GetAllBlotter01[" + i + "].Status"];
+                            decimal Inflow = Convert.ToDecimal(Request.Form["GetAllBlotter01[" + i + "].Inflow"]);
+                            decimal Outflow = Convert.ToDecimal(Request.Form["GetAllBlotter01[" + i + "].Outflow"]);
+                            decimal OpeningBalance = Convert.ToDecimal(Request.Form["OpeningBalance[" + i + "]"]);
+                            var chk = Request.Form["CheckLCY[" + i + "]"];
+                            if (chk == "on")
+                            {
+                                statuschk = true;
+                            }
+                            else
+                            {
+                                statuschk = false;
+                            }
+
+                            BlotterDataLCY.Add(new BlotterDataColor_Result
+                            {
+                                DealNo = Convert.ToInt32(DealNo),
+                                Description = Description,
+                                Status = Status,
+                                Inflow = Inflow,
+                                Outflow = Outflow,
+                                Balance = OpeningBalance,
+                                Recon_isActive = statuschk
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i <= Request.Form.Count; i++)
+                    {
+                        if (Request.Form["CheckFCY[" + i + "]"] != null)
+                        {
+                            var DealNo = Request.Form["GetAllBlotterFCY01[" + i + "].DealNo"];
+                            var Description = Request.Form["GetAllBlotterFCY01[" + i + "].Description"];
+                            var Status = Request.Form["GetAllBlotterFCY01[" + i + "].Status"];
+                            decimal Inflow = Convert.ToDecimal(Request.Form["GetAllBlotterFCY01[" + i + "].Inflow"]);
+                            decimal Outflow = Convert.ToDecimal(Request.Form["GetAllBlotterFCY01[" + i + "].Outflow"]);
+                            decimal OpeningBalance = Convert.ToDecimal(Request.Form["OpeningBalance[" + i + "]"]);
+                            var chk = Request.Form["CheckFCY[" + i + "]"];
+                            if (chk == "On")
+                            {
+                                statuschk = true;
+                            }
+                            else
+                            {
+                                statuschk = false;
+                            }
+                            BlotterDataFCY.Add(new BlotterDataColor_Result
+                            {
+                                DealNo = Convert.ToInt32(DealNo),
+                                Description = Description,
+                                Status = Status,
+                                Inflow = Inflow,
+                                Outflow = Outflow,
+                                Balance = OpeningBalance,
+                                Recon_isActive = statuschk
+                            });
+                        }
+                    }
+                }
+                if (Request.Form["Save"] != null && (BlotterDataLCY.Count > 0 || BlotterDataFCY.Count > 0)) // For Insert
+                {
+                    if (Convert.ToInt32(selectCurrency) == 1)
+                    {
+                        HttpResponseMessage response = serviceObj.PostResponse("/api/Blotter/InsertBlotterListLCY", BlotterDataLCY);
+                        response.EnsureSuccessStatusCode();
+                        return RedirectToAction("GetAllBlotter");
+                    }
+                    else
+                    {
+                        HttpResponseMessage response = serviceObj.PostResponse("/api/Blotter/InsertBlotterListFCY", BlotterDataFCY);
+                        response.EnsureSuccessStatusCode();
+                        return RedirectToAction("GetAllBlotter");
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("GetAllBlotter");
+                }
+            }
+            catch (Exception ex) { }
+            return RedirectToAction("GetAllBlotter");
+        }
         public ActionResult GetAllBlotterInternal(FormCollection form)
         {
             try

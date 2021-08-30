@@ -69,10 +69,12 @@
                                             if (val[0] == Session["SelectedCurrency"].ToString())
                                             {
                                                 <option value="@val[0]" selected>@val[1]</option>
+                                                TempData["CurrencyName"] = @val[1];
                                             }
                                             else
                                             {
                                                 <option value="@val[0]">@val[1]</option>
+                                                TempData["CurrencyName"] = @val[1];
                                             }
                                         }
                                     }
@@ -80,6 +82,7 @@
                                     {
                                         var val = Session["Currencies"].ToString().Split('~');
                                         <option value="@val[0]">@val[1]</option>
+                                        TempData["CurrencyName"] = @val[1];
                                     }
                                 </select>
                             </div>

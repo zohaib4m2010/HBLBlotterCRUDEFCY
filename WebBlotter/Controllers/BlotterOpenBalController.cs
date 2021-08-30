@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using WebBlotter.Classes;
 using WebBlotter.Models;
 using WebBlotter.Repository;
@@ -29,12 +31,38 @@ namespace WebBlotter.Controllers
                     selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
+
+                var DateVal = (dynamic)null;
+                if (form["SearchByDate"] != null)
+                {
+                    DateVal = form["SearchByDate"].ToString();
+                    ViewBag.DateVal = DateVal;
+                }
                 #endregion
 
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterOpenBal/GetAllBlotterOpenBal?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterOpenBal/GetAllBlotterOpenBal?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString() + "&DateVal=" + DateVal);
                 response.EnsureSuccessStatusCode();
-                List<Models.SBP_BlotterOpeningBalance> BlotterOpenBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterOpeningBalance>>().Result;
+                //List<Models.SBP_BlotterOpeningBalance> BlotterOpenBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterOpeningBalance>>().Result;
+                List<Models.SBP_BlotterOpeningBalance> BlotterOpenBal = new List<Models.SBP_BlotterOpeningBalance>();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Status == true)
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        BlotterOpenBal = JsonConvert.DeserializeObject<List<Models.SBP_BlotterOpeningBalance>>(ResponseDD["Data"]);
+                    }
+                    else
+                        TempData["DataStatus"] = "Data not available";
+                }
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
@@ -122,6 +150,19 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterOpenBal/InsertOpenBal", BlotterOpenBal);
                     response.EnsureSuccessStatusCode();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+                        if (getreponse.Status == true)
+                            TempData["DataStatus"] = getreponse.Message;
+                        else
+                            TempData["DataStatus"] = getreponse.Message;
+                    }
                     UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("OpeningBalance");
                 }
@@ -146,7 +187,26 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterOpenBal/GetBlotterOpenBalById?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
-            Models.SBP_BlotterOpeningBalance BlotterOpenBal = response.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
+            //Models.SBP_BlotterOpeningBalance BlotterOpenBal = response.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
+            Models.SBP_BlotterOpeningBalance BlotterOpenBal = new Models.SBP_BlotterOpeningBalance();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    JavaScriptSerializer ser = new JavaScriptSerializer();
+                    Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                    BlotterOpenBal = JsonConvert.DeserializeObject<Models.SBP_BlotterOpeningBalance>(ResponseDD["Data"]);
+                }
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
@@ -172,6 +232,19 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterOpenBal/UpdateOpenBal", BlotterOpenBal);
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+                if (getreponse.Status == true)
+                    TempData["DataStatus"] = getreponse.Message;
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("OpeningBalance");
         }
@@ -181,6 +254,22 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterOpenBal/DeleteOpenBal?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("OpeningBalance");
         }

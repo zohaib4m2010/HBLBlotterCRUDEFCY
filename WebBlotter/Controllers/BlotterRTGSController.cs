@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using WebBlotter.Models;
 using WebBlotter.Classes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
 
 namespace WebBlotter.Controllers
 {
@@ -16,6 +18,7 @@ namespace WebBlotter.Controllers
     {
         UtilityClass UC = new UtilityClass();
         // GET: BlotterRTGS
+       
         private List<Models.SP_GETAllTransactionTitles_Result> GetAllRTGSTransactionTitles()
         {
             try
@@ -45,12 +48,38 @@ namespace WebBlotter.Controllers
                     selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
+                var DateVal = (dynamic)null;
+                if (form["SearchByDate"] != null)
+                {
+                    DateVal = form["SearchByDate"].ToString();
+                    ViewBag.DateVal = DateVal;
+                }
                 #endregion
 
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRTGS/GetAllBlotterRTGS?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRTGS/GetAllBlotterRTGS?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString() + "&DateVal=" + DateVal);
                 response.EnsureSuccessStatusCode();
-                List<Models.SP_GetAll_SBPBlotterRTGS_Result> blotterRTGS = response.Content.ReadAsAsync<List<Models.SP_GetAll_SBPBlotterRTGS_Result>>().Result;
+                //List<Models.SP_GetAll_SBPBlotterRTGS_Result> blotterRTGS = response.Content.ReadAsAsync<List<Models.SP_GetAll_SBPBlotterRTGS_Result>>().Result;
+                List<Models.SP_GetAll_SBPBlotterRTGS_Result> blotterRTGS = new List<Models.SP_GetAll_SBPBlotterRTGS_Result>();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Status == true)
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        blotterRTGS = JsonConvert.DeserializeObject<List<Models.SP_GetAll_SBPBlotterRTGS_Result>>(ResponseDD["Data"]);
+                    }
+                    else
+                        TempData["DataStatus"] = "Data not available";
+                }
+
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
                 UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(blotterRTGS), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
 
@@ -87,7 +116,7 @@ namespace WebBlotter.Controllers
                 }
                 else
                 {
-
+                   
                     ViewBag.RTGSTransactionTitles = GetAllRTGSTransactionTitles();
                 }
             }
@@ -153,12 +182,25 @@ namespace WebBlotter.Controllers
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterRTGS/InsertRTGS", BlotterRTGS);
                     response.EnsureSuccessStatusCode();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                        var JsonLinq = JObject.Parse(jsonResponse);
+                        WebApiResponse getreponse = new WebApiResponse();
+                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                        getreponse.Message = JsonLinq["Message"].ToString();
+                        getreponse.Data = JsonLinq["Data"].ToString();
+                        if (getreponse.Status == true)
+                            TempData["DataStatus"] = getreponse.Message;
+                        else
+                            TempData["DataStatus"] = getreponse.Message;
+                    }
+
                     UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterRTGS), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     return RedirectToAction("BlotterRTGS");
                 }
                 else
                 {
-
                     ViewBag.RTGSTransactionTitles = GetAllRTGSTransactionTitles();
                 }
             }
@@ -183,7 +225,28 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRTGS/GetBlotterRTGS?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
-            Models.SBP_BlotterRTGS BlotterRTGS = response.Content.ReadAsAsync<Models.SBP_BlotterRTGS>().Result;
+            //Models.SBP_BlotterRTGS BlotterRTGS = response.Content.ReadAsAsync<Models.SBP_BlotterRTGS>().Result;
+            Models.SBP_BlotterRTGS BlotterRTGS = new Models.SBP_BlotterRTGS();
+
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    JavaScriptSerializer ser = new JavaScriptSerializer();
+                    Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                    BlotterRTGS = JsonConvert.DeserializeObject<Models.SBP_BlotterRTGS>(ResponseDD["Data"]);
+                }
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterRTGS), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.RTGSTransactionTitles = GetAllRTGSTransactionTitles();
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
@@ -204,6 +267,20 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterRTGS/UpdateRTGS", BlotterRTGS);
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+                if (getreponse.Status == true)
+                    TempData["DataStatus"] = getreponse.Message;
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
+
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterRTGS), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterRTGS");
         }
@@ -213,6 +290,22 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.DeleteResponse("api/BlotterRTGS/DeleteRTGS?id=" + id.ToString());
             response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                var JsonLinq = JObject.Parse(jsonResponse);
+                WebApiResponse getreponse = new WebApiResponse();
+                getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                getreponse.Message = JsonLinq["Message"].ToString();
+                getreponse.Data = JsonLinq["Data"].ToString();
+
+                if (getreponse.Status == true)
+                {
+                    TempData["DataStatus"] = getreponse.Message;
+                }
+                else
+                    TempData["DataStatus"] = getreponse.Message;
+            }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(id), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("BlotterRTGS");
         }

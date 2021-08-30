@@ -46,8 +46,20 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+<!--Search By Date -->
+@using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    <div class="btn-group d-inline my-2 my-lg-0 navbar-right" style="margin-right: 10px !important;" role="group">
+        <input id="SearchByDateId" name="SearchByDate" type="date" value="@ViewBag.DateVal" onchange="this.form.submit()" class="form-control datepicker text-box single-line" />
+    </div>
+}
+<!--Search By Date -->
+
 @if (Model != null)
 {
+
     <table id="customers" class="table table-striped table-bordered table-hover ">
         <thead>
             <tr>

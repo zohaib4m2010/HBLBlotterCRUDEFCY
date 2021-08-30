@@ -27,6 +27,7 @@ namespace WebBlotter.Models
         public string Customer { get; set; }
         public List<NameDropDown> DescriptionDD { get; set; }
         public List<NameDropDown> CustDD { get; set; }
+        public Nullable<bool> Recon_IsActive { get; set; }
 
     }
 }

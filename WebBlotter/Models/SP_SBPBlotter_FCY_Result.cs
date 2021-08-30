@@ -17,5 +17,6 @@ namespace WebBlotter.Models
         public Nullable<decimal> Inflow { get; set; }
         public Nullable<decimal> Outflow { get; set; }
         public decimal OpeningBalance { get; set; }
+        public Nullable<bool> Recon_IsActive { get; set; }
     }
 }

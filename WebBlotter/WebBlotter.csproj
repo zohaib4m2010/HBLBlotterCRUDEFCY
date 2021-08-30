@@ -143,6 +143,7 @@
     <Compile Include="Classes\AuthAccess.cs" />
     <Compile Include="Classes\UserProfile.cs" />
     <Compile Include="Classes\Utilities.cs" />
+    <Compile Include="Classes\WebApiResponse.cs" />
     <Compile Include="Controllers\BlotterBai_MuajjalController.cs" />
     <Compile Include="Controllers\BlotterBreakupsController.cs" />
     <Compile Include="Controllers\BlotterClearingController.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BlotterDataColor_Result.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\SBP_BlotterBai_Muajjal.cs" />
     <Compile Include="Models\SBP_BlotterCRD.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="Models\SP_GetAll_SBPBlotterTBO_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterTrade_Result.cs" />
     <Compile Include="Models\SP_GetLatestBreakup_Result.cs" />
+    <Compile Include="Models\SP_GetNostroBankFromOPICS_Result.cs" />
     <Compile Include="Models\SP_GetOPICSManualData_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterCRD_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterFR_Result.cs" />

@@ -11,5 +11,7 @@ namespace WebBlotter.Models
         public string flag { get; set; }
         public System.DateTime DateFor { get; set; }
         public bool Recon { get; set; }
+        public int CurId { get; set; }
+
     }
 }

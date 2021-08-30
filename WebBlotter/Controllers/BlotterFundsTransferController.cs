@@ -29,10 +29,16 @@ namespace WebBlotter.Controllers
                     selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
+                var DateVal = (dynamic)null;
+                if (form["SearchByDate"] != null)
+                {
+                    DateVal = form["SearchByDate"].ToString();
+                    ViewBag.DateVal = DateVal;
+                }
                 #endregion
 
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterFundsTransfer/GetAllBlotterFundsTransfer?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterFundsTransfer/GetAllBlotterFundsTransfer?UserID=" + Session["UserID"].ToString() + "&BranchID=" + Session["BranchID"].ToString() + "&CurID=" + Session["SelectedCurrency"].ToString() + "&BR=" + Session["BR"].ToString() + "&DateVal=" + DateVal);
                 response.EnsureSuccessStatusCode();
                 List<Models.SBP_BlotterFundsTransfer> blotterFundsTransfer = response.Content.ReadAsAsync<List<Models.SBP_BlotterFundsTransfer>>().Result;
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
