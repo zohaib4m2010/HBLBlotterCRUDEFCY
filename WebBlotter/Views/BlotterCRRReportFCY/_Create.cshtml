@@ -121,16 +121,18 @@
         var cell = $(this);
         var Currency = $(this).parent().find("td:nth-child(1) input").val();
         var Deposit = +cell.parent().find("td:nth-child(2) input").val();
-        var Rate = +cell.parent().find("td:nth-child(3) label").text();
+        var Rate = +cell.parent().find("td:nth-child(3) input").val();
+        var ParityRate = +cell.parent().find("td:nth-child(4) label").text();
         var EquivalentUSD = 0;
         var USDRate = parseFloat(@ViewBag.ConversionUSDRate).toFixed(2);
         if (Currency == "AUD" || Currency == "NZD") {
-            EquivalentUSD = (parseFloat(Deposit).toFixed(4) * parseFloat(Rate).toFixed(4)) / parseFloat(USDRate).toFixed(4);
+            EquivalentUSD = parseFloat(Deposit).toFixed(4) * parseFloat(ParityRate).toFixed(4);
+            //EquivalentUSD = (parseFloat(Deposit).toFixed(4) * parseFloat(ParityRate).toFixed(4));
             cell.parent().find("td:nth-child(5) input").val(parseFloat(EquivalentUSD).toFixed(2));
         }
         else {
-            EquivalentUSD = (parseFloat(Deposit).toFixed(4) * parseFloat(Rate).toFixed(4)) / (parseFloat(USDRate).toFixed(4));
-            cell.parent().find("td:nth-child(5) input").val(parseFloat(EquivalentUSD).toFixed(2));
+            EquivalentUSD = (parseFloat(Deposit).toFixed(4) / parseFloat(ParityRate).toFixed(4));
+            cell.parent().find("td:nth-child(5) input").val(parseFloat(EquivalentUSD).toFixed(4));
         }
         //var TotalUSDRate = parseFloat(EquivalentUSD).toFixed(4) * parseFloat(Deposit).toFixed(4);
         cell.parent().find("td:nth-child(6) input").val(parseFloat(EquivalentUSD * 0.05).toFixed(2));

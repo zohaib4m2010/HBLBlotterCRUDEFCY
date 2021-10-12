@@ -149,7 +149,14 @@
                     <tr>
                         <td align="left" width="8%"></td>
                         <td align="left" width="8%"></td>
-                        <td align="left" width="24%">If Previous Week > than todays then Withdrawal</td>
+                        @if (Convert.ToInt64(Model.Sum(i => i.CRRBal5PcrReq) - ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek5PcrReq) > 0)
+                        {
+                            <td align="left" width="24%">Surrender to SBP</td>
+                        }
+                        else
+                        {
+                            <td align="left" width="24%">Withdrawal from SBP</td>
+                        }
                         <td align="left" width="8%"></td>
                         <td align="right" width="8%"> @Convert.ToInt64(Model.Sum(i => i.CRRBal5PcrReq) - ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek5PcrReq).ToString("#,##0")</td>
                         <td align="right" width="8%">@Convert.ToInt64(Model.Sum(i => i.CRRBal10PcrReq) - ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek10PcrReq).ToString("#,##0")</td>
