@@ -1,0 +1,142 @@
+﻿@model WebBlotter.ViewModel.BlotterCRRFCYModel
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("_Create", "BlotterCRRReportFCY", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Blotter CRR Reporting FCY</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CRRReportFCY.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.CRRReportFCY.StartDate, new { htmlAttributes = new { @class = "form-control", @Value = DateTime.Now.ToString("yyyy-MM-dd") } })
+
+                @Html.ValidationMessageFor(model => model.CRRReportFCY.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CRRReportFCY.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.CRRReportFCY.EndDate, new { htmlAttributes = new { @class = "form-control datepicker", @Value = DateTime.Now.ToString("yyyy-MM-dd") } })
+
+                @Html.ValidationMessageFor(model => model.CRRReportFCY.EndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CRRReportFCY.PreWeek5PcrReq, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CRRReportFCY.PreWeek5PcrReq, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CRRReportFCY.PreWeek5PcrReq, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CRRReportFCY.PreWeek10PcrReq, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CRRReportFCY.PreWeek10PcrReq, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CRRReportFCY.PreWeek10PcrReq, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <br />
+        <table id="customers" class="table table-striped table-bordered table-hover ">
+            <thead>
+                <tr>
+                    <th>Currency</th>
+                    <th>Deposit</th>
+                    <th>Rate</th>
+                    <th>Parity Rate</th>
+                    <th>Equivalent USD</th>
+                    <th>CRR-5%</th>
+                    <th>SCRR-10%</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var i = 0;
+                    foreach (var item in ViewBag.ConversionRateCRR)
+                    {
+                        <tr>
+                            <td>
+                                @Html.EditorFor(x => Model.CRRReportingCurrencyWise[i].CCY, new { htmlAttributes = new { @class = "hide", @Value = item.CCY } })
+                                @Html.EditorFor(x => Model.CRRReportingCurrencyWise[i].CurID, new { htmlAttributes = new { @class = "hide", @Value = item.CurrencyID } })
+                                <label>@item.CCY</label>
+                            </td>
+                            <td>
+                                @Html.EditorFor(x => Model.CRRReportingCurrencyWise[i].Deposit, new { htmlAttributes = new { @class = "form-control", @Value = "0" } })
+                            </td>
+                            <td width="50px" align="right">
+                                <label>@item.SPOTRATE_8</label>
+                            </td>
+                            <td width="50px" align="right">
+                                <label>@item.ExchangeRate</label>
+                            </td>
+                            <td>
+                                @Html.EditorFor(x => Model.CRRReportingCurrencyWise[i].EquivalentUSD, new { htmlAttributes = new { @class = "form-control", @Value = item.ExchangeRate } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(x => Model.CRRReportingCurrencyWise[i].CRRBal5PcrReq, new { htmlAttributes = new { @class = "form-control", @Value = "0" } })
+                            </td>
+                            <td>
+                                @Html.EditorFor(x => Model.CRRReportingCurrencyWise[i].CRRBal10PcrReq, new { htmlAttributes = new { @class = "form-control", @Value = "0" } })
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+
+    $("#customers").on("input", "td:nth-child(2)", function () {
+        debugger;
+        var cell = $(this);
+        var Currency = $(this).parent().find("td:nth-child(1) input").val();
+        var Deposit = +cell.parent().find("td:nth-child(2) input").val();
+        var Rate = +cell.parent().find("td:nth-child(3) label").text();
+        var EquivalentUSD = 0;
+        var USDRate = parseFloat(@ViewBag.ConversionUSDRate).toFixed(2);
+        if (Currency == "AUD" || Currency == "NZD") {
+            EquivalentUSD = (parseFloat(Deposit).toFixed(4) * parseFloat(Rate).toFixed(4)) / parseFloat(USDRate).toFixed(4);
+            cell.parent().find("td:nth-child(5) input").val(parseFloat(EquivalentUSD).toFixed(2));
+        }
+        else {
+            EquivalentUSD = (parseFloat(Deposit).toFixed(4) * parseFloat(Rate).toFixed(4)) / (parseFloat(USDRate).toFixed(4));
+            cell.parent().find("td:nth-child(5) input").val(parseFloat(EquivalentUSD).toFixed(2));
+        }
+        //var TotalUSDRate = parseFloat(EquivalentUSD).toFixed(4) * parseFloat(Deposit).toFixed(4);
+        cell.parent().find("td:nth-child(6) input").val(parseFloat(EquivalentUSD * 0.05).toFixed(2));
+        cell.parent().find("td:nth-child(7) input").val(parseFloat(EquivalentUSD * 0.1).toFixed(2));
+    });
+
+
+</script>
+

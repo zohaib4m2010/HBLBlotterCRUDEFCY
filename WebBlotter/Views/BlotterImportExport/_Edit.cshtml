@@ -1,0 +1,228 @@
+﻿@model WebBlotter.Models.SBP_BlotterImportExport
+
+
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script>
+    function CheckType() {
+        debugger;
+        var type = $("#BlotterType").val();
+        if (type == "") {
+            alert("Please Select Type")
+            return false;
+        }
+        else {
+
+        }
+    }
+
+    function hideFields() {
+        var Blottertype = $("#BlotterType").val();
+        if (Blottertype == "Import") {
+            $("#txtinflow").prop('disabled', true);
+            $("#txtoutflow").prop('disabled', false);
+            $(".hideforImport").hide();
+        }
+        else if (Blottertype == "Export") {
+            var OrgCurrencyid = $("#OrigCurrency").val();
+            if (OrgCurrencyid > 1) {
+                $(".hideforImport").show();
+            }
+            else {
+                $("#txtinflow").prop('disabled', true);
+                $("#txtoutflow").prop('disabled', false);
+            }
+
+        }
+    }
+
+    function FillNostroBankData(curid) {
+        debugger;
+        //var flagval = $('#OrigCurrency option:selected').text();
+        $("#FillOrgNostroBank").load("/BlotterImportExport/GetOrgNostroBanks/?OrgCurId=" + curid + "&Againstcurid=0");
+    }
+    function FillAgainstNostroBankData(Againstcurid) {
+        debugger;
+        var curid = 0;
+        $("#AgainstNostro_AccountId").load("/BlotterImportExport/GetOrgNostroBanks/?OrgCurId=" + curid + "&Againstcurid=" + Againstcurid);
+
+    }
+
+</script>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>SBP_BlotterImportExport</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Select Currency</label>
+            <div class="col-md-10">
+                <select name="OrigCurrency" id="OrigCurrency" class="form-control" onchange="FillNostroBankData(this.value)">
+                    @if (Session["Currencies"].ToString().Contains(','))
+                    {
+                        foreach (var item in Session["Currencies"].ToString().Split(','))
+                        {
+                            if (ViewBag.OrgCurId != null && Model.CurId == ViewBag.OrgCurId)
+                            {
+                                var val = item.Split('~');
+                                <option value=@ViewBag.OrgCurId selected>@val[1]</option>
+                            }
+                            else
+                            {
+                                var val = item.Split('~');
+                                <option value="@val[0]">@val[1]</option>
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        var val = Session["Currencies"].ToString().Split('~');
+                        <option value="@val[0]">@val[1]</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Select Nostro Bank</label>
+            <select name="Nostro_AccountId" id="FillOrgNostroBank" class="form-control">
+                @if (ViewBag.ImportExportNostroBanks != null)
+                {
+                    foreach (var item in ViewBag.ImportExportNostroBanks)
+                    {
+                        if (ViewBag.OrgNostroBankId != null && item.ID == ViewBag.OrgNostroBankId)
+                        {
+                            <option value=@ViewBag.OrgNostroBankId selected>@item.BankName</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.BankName</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Branch, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Branch, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Branch, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Customer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Customer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Customer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Inflow, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Inflow, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Inflow, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group hideforImport">
+            <label class="control-label col-md-4">Select Against Currency</label>
+            <div class="col-md-8">
+                <select name="AgainstCurrency" class="form-control" onchange="FillAgainstNostroBankData(this.value)">
+                    @if (Session["Currencies"].ToString().Contains(','))
+                    {
+                        foreach (var item in Session["Currencies"].ToString().Split(','))
+                        {
+                            if (ViewBag.AgainstCurId != null && Model.CurId == ViewBag.AgainstCurId)
+                            {
+                                var val = item.Split('~');
+                                <option value=@ViewBag.AgainstCurId selected>@val[1]</option>
+                            }
+                            else
+                            {
+                                var val = item.Split('~');
+                                <option value="@val[0]">@val[1]</option>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var val = Session["Currencies"].ToString().Split('~');
+                        <option value="@val[0]">@val[1]</option>
+                    }
+                </select>
+            </div>l
+        </div>
+
+        <div class="form-group hideforImport">
+            <label class="control-label col-md-4">Select Against Nostro Bank</label>
+            <div class="col-md-8">
+                @*<div id="FillOrgNostroBank">
+                    </div>*@
+                <select name="AgainstNostro_AccountId" id="AgainstNostro_AccountId" class="form-control">
+                    @if (ViewBag.ImportExportAgainstNostroBanks != null)
+                    {
+                        foreach (var item in ViewBag.ImportExportAgainstNostroBanks)
+                        {
+                            if (ViewBag.AgainstNostroBankId != null && Model.AgainstNostroBankId == ViewBag.AgainstNostroBankId)
+                            {
+                                <option value=@ViewBag.AgainstNostroBankId selected>@item.BankName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ID">@item.BankName</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Outflow, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Outflow, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Outflow, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

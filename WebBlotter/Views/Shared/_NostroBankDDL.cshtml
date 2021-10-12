@@ -1,0 +1,21 @@
+﻿@if (ViewBag.ImportExportNostroBanks != null)
+{
+    <select name="BankCode" class="form-control">
+
+        @foreach (var item in ViewBag.ImportExportNostroBanks)
+        {
+            <option value="@item.BankCode">@item.BankName</option>
+        }
+    </select>
+}
+
+@if (ViewBag.ImportExportAgainstNostroBanks != null)
+{
+    <select name="AgainstBankCode" class="form-control">
+        @foreach (var item in ViewBag.ImportExportAgainstNostroBanks)
+        {
+            <option value="@item.BankCode">@item.BankName</option>
+        }
+    </select>
+}
+

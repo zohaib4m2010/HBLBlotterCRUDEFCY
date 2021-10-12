@@ -54,6 +54,15 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+<!--Search By Date -->
+@using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    <div class="btn-group d-inline my-2 my-lg-0 navbar-right" style="margin-right: 10px !important;" role="group">
+        <input id="SearchByDateId" name="SearchByDate" type="date" value="@ViewBag.DateVal" onchange="this.form.submit()" class="form-control datepicker text-box single-line" />
+    </div>
+}
+<!--Search By Date -->
 <div>
 
     @*<script src="Scripts/moment.js"></script>*@
@@ -61,11 +70,12 @@
         <thead>
             <tr>
                 <th>S.No. </th>
-                <th>Value Date        </th>
+                <th>Value Date</th>
                 <th>Maturity Date</th>
                 @if (Session["BR"].ToString() != "01")
                 {
-                    <th>Data Type</th>}
+                    <th>Data Type</th>
+                }
                 <th>Description</th>
                 <th>InFlow</th>
                 <th>OutFlow</th>
@@ -76,47 +86,47 @@
 
             @foreach (var item in Model)
             {
-            <tr>
-                <td width="6%">@Html.DisplayFor(modelItem => item.SNo)</td>
-                <td id="ValDate" width="8%">
-                    @Html.DisplayFor(modelItem => item.ValueDate)
-                    <script>
+                <tr>
+                    <td width="6%">@Html.DisplayFor(modelItem => item.SNo)</td>
+                    <td id="ValDate" width="8%">
+                        @Html.DisplayFor(modelItem => item.ValueDate)
+                        <script>
                                   var NowMoment = moment("@Html.DisplayFor(modelItem => item.ValueDate)");
                         var eDisplayMoment = document.getElementById('ValDate');
                                  eDisplayMoment.innerHTML = NowMoment.format('DD-MMM-YYYY');
-                    </script>
-                </td>
-                <td id="MatDate" width="8%">
-                    @Html.DisplayFor(modelItem => item.MaturityDate)
-                    <script>
+                        </script>
+                    </td>
+                    <td id="MatDate" width="8%">
+                        @Html.DisplayFor(modelItem => item.MaturityDate)
+                        <script>
                                   var NowMoment = moment("@Html.DisplayFor(modelItem => item.MaturityDate)");
                         var eDisplayMoment = document.getElementById('MatDate');
                                  eDisplayMoment.innerHTML = NowMoment.format('DD-MMM-YYYY');
-                    </script>
-                </td>
+                        </script>
+                    </td>
 
-                @if (Session["BR"].ToString() != "01")
-                {
-                    <td align="right" width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>
-                }
-                <td align="left" width="8%">@Html.DisplayFor(modelItem => item.Note)</td>
-                <td align="right" width="8%">@Html.DisplayFor(modelItem => item.BM_InFlow)</td>
-                <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BM_OutFLow)</td>
-
-
-                <td width="18%" align="right">
-                    @if ((bool)ViewData["isEditable"])
+                    @if (Session["BR"].ToString() != "01")
                     {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.SNo })
+                        <td align="right" width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>
                     }
-                    |
-                    @if ((bool)ViewData["IsDeletable"])
-                    {
-                        @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
-                        @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
-                    }
-                </td>
-            </tr>
+                    <td align="left" width="8%">@Html.DisplayFor(modelItem => item.Note)</td>
+                    <td align="right" width="8%">@Html.DisplayFor(modelItem => item.BM_InFlow)</td>
+                    <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BM_OutFLow)</td>
+
+
+                    <td width="18%" align="right">
+                        @if ((bool)ViewData["isEditable"])
+                        {
+                            @Html.ActionLink("Edit", "Edit", new { id = item.SNo })
+                        }
+                        |
+                        @if ((bool)ViewData["IsDeletable"])
+                        {
+                            @*@Html.ActionLink("Details", "Details", new { id = item.SNo }) |*@
+                            @Html.ActionLink("Delete", "Delete", new { id = item.SNo })
+                        }
+                    </td>
+                </tr>
 
             }
 

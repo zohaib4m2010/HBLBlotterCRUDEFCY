@@ -16,7 +16,7 @@ namespace WebBlotter.Controllers
     [AuthAccess]
     public class BlotterCRDController : Controller
     {
-        private List<Models.NostroBank> GetAllNostroBanks()
+        private List<Models.SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
         {
             try
             {
@@ -26,11 +26,9 @@ namespace WebBlotter.Controllers
                     currid = Convert.ToInt32(Session["SelectedCurrency"].ToString());
                 }
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank?currId=" + currid);
+                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBankFromOpicsDDL?currId=" + currid + "&BRCode=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
-                //List<Models.NostroBank> blotterNB = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
-
-                List<Models.NostroBank> blotterNB = new List<Models.NostroBank>();
+                List<Models.SP_GetNostroBankFromOPICS_Result> blotterNB = new List<Models.SP_GetNostroBankFromOPICS_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -44,7 +42,8 @@ namespace WebBlotter.Controllers
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterNB = JsonConvert.DeserializeObject<List<Models.NostroBank>>(ResponseDD["Data"]);
+                        blotterNB = JsonConvert.DeserializeObject<List<Models.SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
+                        ViewBag.CRDNostroBanks = blotterNB;
                     }
                 }
                 return blotterNB;
@@ -54,7 +53,7 @@ namespace WebBlotter.Controllers
                 throw;
             }
         }
-        
+
         public ActionResult BlotterCRD(FormCollection form)
         {
             #region Added by shakir (Currency parameter)
@@ -72,6 +71,10 @@ namespace WebBlotter.Controllers
             {
                 DateVal = form["SearchByDate"].ToString();
                 ViewBag.DateVal = DateVal;
+            }
+            else
+            {
+                ViewBag.DateVal = DateTime.Now.ToString("yyyy-MM-dd");
             }
             #endregion
 
@@ -187,7 +190,7 @@ namespace WebBlotter.Controllers
                     BlotterCRD.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterCRD.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterCRD.CreateDate = DateTime.Now;
-                    BlotterCRD.Nostro_Account = Convert.ToInt32(form["Nostro_AccountId"].ToString());
+                    BlotterCRD.BankCode = form["BankCode"].ToString();
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterCRD/InsertCRD", BlotterCRD);
                     response.EnsureSuccessStatusCode();
@@ -257,7 +260,7 @@ namespace WebBlotter.Controllers
                 }
             }
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRD), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            ViewBag.Nostro_Accountid = BlotterCRD.Nostro_Account;
+            ViewBag.BankCode = BlotterCRD.BankCode;
             ViewBag.CRDNostroBanks = GetAllNostroBanks();
             return PartialView("_Edit", BlotterCRD);
             
@@ -272,7 +275,7 @@ namespace WebBlotter.Controllers
             BlotterCRD.BR = Convert.ToInt16(Session["BR"].ToString());
             BlotterCRD.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             BlotterCRD.UpdateDate = DateTime.Now;
-            BlotterCRD.Nostro_Account = Convert.ToInt32(form["Nostro_AccountId"].ToString());
+            BlotterCRD.BankCode = form["BankCode"].ToString();
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterCRD/UpdateCRD", BlotterCRD);
             response.EnsureSuccessStatusCode();

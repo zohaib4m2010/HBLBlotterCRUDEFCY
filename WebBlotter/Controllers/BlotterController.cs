@@ -89,6 +89,7 @@ namespace WebBlotter.Controllers
                 if (form["Nostro_Bank"] != null)
                 {
                     bankname = form["Nostro_Bank"].ToString();
+
                     ViewBag.BankCode = bankname;
                 }
 
@@ -224,7 +225,7 @@ namespace WebBlotter.Controllers
                 {
                     for (int i = 0; i <= Request.Form.Count; i++)
                     {
-                        if (Request.Form["CheckFCY[" + i + "]"] != null)
+                        if (Request.Form["GetAllBlotterFCY01[" + i + "].DealNo"] != null)
                         {
                             var DealNo = Request.Form["GetAllBlotterFCY01[" + i + "].DealNo"];
                             var Description = Request.Form["GetAllBlotterFCY01[" + i + "].Description"];
@@ -233,7 +234,7 @@ namespace WebBlotter.Controllers
                             decimal Outflow = Convert.ToDecimal(Request.Form["GetAllBlotterFCY01[" + i + "].Outflow"]);
                             decimal OpeningBalance = Convert.ToDecimal(Request.Form["OpeningBalance[" + i + "]"]);
                             var chk = Request.Form["CheckFCY[" + i + "]"];
-                            if (chk == "On")
+                            if (chk == "on")
                             {
                                 statuschk = true;
                             }
@@ -307,8 +308,26 @@ namespace WebBlotter.Controllers
                 ServiceRepositoryBlotter serviceObj = new ServiceRepositoryBlotter();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetAllBlotterList?brcode=" + Session["BR"].ToString() + "&DataType=HBLC" + "&CurrentDate=" + BlotterCurrentDate);
                 response.EnsureSuccessStatusCode();
-                List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                //List<Models.SP_SBPBlotter_Result> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
                 // List<blotterMulit.GetAllBlotter01> blotter = response.Content.ReadAsAsync<List<Models.SP_SBPBlotter_Result>>().Result;
+                List<Models.SP_SBPBlotter_Result> blotter = new List<SP_SBPBlotter_Result>();
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Status == true)
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        blotter = JsonConvert.DeserializeObject<List<Models.SP_SBPBlotter_Result>>(ResponseDD["Data"]);
+                    }
+                    else
+                        TempData["DataStatus"] = getreponse.Message;
+                }
                 blotterMulit.GetAllBlotter01 = blotter;
                 ViewBag.Title = "All Blotter Internal";
                 ViewData["SysCurrentDt"] = BlotterCurrentDate;

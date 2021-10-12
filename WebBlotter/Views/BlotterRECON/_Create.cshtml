@@ -5,7 +5,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script>
+    $(document).ready(function () {
+        var Opnbalance =  $("#TheirBooksID").val() || 0;
+        FNEquivalentUSD(Opnbalance);
+    });
+    function FNEquivalentUSD(Opnbalance) {
+        if (Opnbalance != "") {
+            debugger;
+            var EquivalentUSDVal;
 
+            var SPOTRATE_8Val =  @ViewBag.ConversionRate.SPOTRATE_8 || 0;
+            var USDRateVal =  @ViewBag.ConversionRate.USDRate || 0;
+            var CurrencyID =  @ViewBag.ConversionRate.CurrencyID;
+            if (CurrencyID == 14) {
+                EquivalentUSDVal = (parseFloat(Opnbalance).toFixed(4) / (parseFloat(SPOTRATE_8Val).toFixed(4)) * parseFloat(USDRateVal).toFixed(2)) || 0;
+            }
+            else {
+                EquivalentUSDVal = (parseFloat(SPOTRATE_8Val).toFixed(4) * parseFloat(Opnbalance).toFixed(4)) / parseFloat(USDRateVal).toFixed(2) || 0;
+            }
+             $("#EquivalentUSDID").val(parseFloat(EquivalentUSDVal).toFixed(4)) || 0;
+            var ConversionRateVal = parseFloat(Opnbalance).toFixed(4) / EquivalentUSDVal || 0;
+            $("#ConversionRateID").val(parseFloat(ConversionRateVal).toFixed(4)) || 0;
+        }
+        else {
+            $("#ConversionRateID").val("");
+            $("#EquivalentUSDID").val("");
+        }
+    }
+  
+
+</script>
 @using (Html.BeginForm("_Create", "BlotterRECON", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -18,12 +48,12 @@
         <div class="form-group">
             <label class="control-label col-md-2">Select Nostro Bank</label>
             <div class="col-md-10">
-                <select name="NostroBankId" class="form-control">
+                <select name="BankCode" class="form-control">
                     @if (ViewBag.RECONNostroBanks != null)
                     {
                         foreach (var item in ViewBag.RECONNostroBanks)
                         {
-                            <option value="@item.ID">@item.BankName</option>
+                            <option value="@item.BankCode">@item.BankName</option>
                         }
                     }
                 </select>
@@ -48,24 +78,25 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TheirBooks, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TheirBooks, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.TheirBooks, new { htmlAttributes = new { @class = "form-control", id = "TheirBooksID", onkeyup = "FNEquivalentUSD(this.value);" } })
                 @Html.ValidationMessageFor(model => model.TheirBooks, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ConversionRate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ConversionRate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ConversionRate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.EquivalentUSD, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EquivalentUSD, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EquivalentUSD, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.EquivalentUSD, new { htmlAttributes = new { @class = "form-control", id = "EquivalentUSDID" } })
+                    @Html.ValidationMessageFor(model => model.EquivalentUSD, "", new { @class = "text-danger" })
+                @*<input type="hidden" class="form-control" value="@Model.EquivalentUSD" id="EquivalentUSDID" name="EquivalentUSDID"  />*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConversionRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ConversionRate, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.ConversionRate.SPOTRATE_8, id = "ConversionRateID" } })
+                @Html.ValidationMessageFor(model => model.ConversionRate, "", new { @class = "text-danger" })
             </div>
         </div>
 

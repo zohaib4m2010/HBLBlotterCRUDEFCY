@@ -14,8 +14,8 @@ namespace WebBlotter.Models
         [DataType(DataType.Date, ErrorMessage = "Date only")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> LastStatementDate { get; set; }
-        public string OurBooks { get; set; }
-        public string TheirBooks { get; set; }
+        public Nullable<decimal> OurBooks { get; set; }
+        public Nullable<decimal> TheirBooks { get; set; }
         public Nullable<decimal> ConversionRate { get; set; }
         public Nullable<decimal> EquivalentUSD { get; set; }
         public Nullable<decimal> LimitAvailable { get; set; }

@@ -15,9 +15,9 @@ namespace WebBlotter.Controllers
 {
     [AuthAccess]
     public class BlotterRECONController : Controller
-    { 
+    {
 
-        private List<Models.NostroBank> GetAllNostroBanks()
+        private List<Models.SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
         {
             try
             {
@@ -27,9 +27,9 @@ namespace WebBlotter.Controllers
                     currid = Convert.ToInt32(Session["SelectedCurrency"].ToString());
                 }
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank?currId=" + currid);
+                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBankFromOpicsDDL?currId=" + currid + "&BRCode=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
-                List<Models.NostroBank> blotterNB = new List<Models.NostroBank>();
+                List<Models.SP_GetNostroBankFromOPICS_Result> blotterNB = new List<Models.SP_GetNostroBankFromOPICS_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -43,16 +43,70 @@ namespace WebBlotter.Controllers
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterNB = JsonConvert.DeserializeObject<List<Models.NostroBank>>(ResponseDD["Data"]);
+                        blotterNB = JsonConvert.DeserializeObject<List<Models.SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
+                        ViewBag.NostroBanksDDL = blotterNB;
                     }
                 }
                 return blotterNB;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
         }
+
+        private Models.SP_Get_SBPBlotterConversionRate_Result GetConversionRate()
+        {
+            try
+            {
+                var currid = (dynamic)null;
+                if (Session["SelectedCurrency"] != null)
+                {
+                    currid = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                }
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRECON/GetConversionRateRECON?currID=" + currid + "&BR=" + Session["BR"].ToString());
+                response.EnsureSuccessStatusCode();
+                Models.SP_Get_SBPBlotterConversionRate_Result blotterCR = new Models.SP_Get_SBPBlotterConversionRate_Result();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Message == "Success")
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        blotterCR = JsonConvert.DeserializeObject<Models.SP_Get_SBPBlotterConversionRate_Result>(ResponseDD["Data"]);
+                        if (blotterCR != null)
+                        {
+                            ViewBag.ConversionRate = blotterCR;
+                        }
+                        else
+                        {
+                            blotterCR.CurrencyID = 0;
+                            blotterCR.SPOTRATE_8 = 0;
+                            blotterCR.USDRate = 0;
+                            ViewBag.ConversionRate = blotterCR;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ConversionRate = blotterCR;
+                    }
+                }
+                return blotterCR;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
 
         public ActionResult BlotterRECON(FormCollection form)
         {
@@ -70,6 +124,10 @@ namespace WebBlotter.Controllers
             {
                 DateVal = form["SearchByDate"].ToString();
                 ViewBag.DateVal = DateVal;
+            }
+            else
+            {
+                ViewBag.DateVal = DateTime.Now.ToString("yyyy-MM-dd");
             }
             #endregion
 
@@ -125,6 +183,7 @@ namespace WebBlotter.Controllers
                 {
                     // model.CreateDate = DateTime.Now.Date;
                     ViewBag.RECONNostroBanks = GetAllNostroBanks();
+                    GetConversionRate();
                 }
             }
             catch (Exception ex)
@@ -154,6 +213,7 @@ namespace WebBlotter.Controllers
                 #endregion
 
                 ViewBag.RECONNostroBanks = GetAllNostroBanks();
+                GetConversionRate();
                 return PartialView("_Create");
             }
             catch (Exception ex) { }
@@ -176,7 +236,7 @@ namespace WebBlotter.Controllers
                     BlotterRECON.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterRECON.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterRECON.CreateDate = DateTime.Now;
-                    BlotterRECON.NostroBankId = Convert.ToInt32(form["NostroBankId"].ToString());
+                    BlotterRECON.BankCode = form["BankCode"].ToString();
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterRECON/InsertRECON", BlotterRECON);
                     response.EnsureSuccessStatusCode();
@@ -199,6 +259,7 @@ namespace WebBlotter.Controllers
                 else
                 {
                     ViewBag.RECONNostroBanks = GetAllNostroBanks();
+                    GetConversionRate();
                 }
             }
             catch (Exception ex) { }
@@ -242,8 +303,9 @@ namespace WebBlotter.Controllers
                     TempData["DataStatus"] = getreponse.Message;
             }   
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterRECON), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            ViewBag.nostobankid = BlotterRECON.NostroBankId;
+            ViewBag.BankCode = BlotterRECON.BankCode;
             ViewBag.RECONNostroBanks = GetAllNostroBanks();
+            GetConversionRate();
             return PartialView("_Edit", BlotterRECON);
 
         }
@@ -257,7 +319,7 @@ namespace WebBlotter.Controllers
             BlotterRECON.BR = Convert.ToInt16(Session["BR"].ToString());
             BlotterRECON.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
             BlotterRECON.UpdateDate = DateTime.Now;
-            BlotterRECON.NostroBankId = Convert.ToInt32(form["NostroBankId"].ToString());
+            BlotterRECON.BankCode = form["BankCode"].ToString();
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/BlotterRECON/UpdateRECON", BlotterRECON);
             response.EnsureSuccessStatusCode();

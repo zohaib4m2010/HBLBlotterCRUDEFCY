@@ -108,7 +108,7 @@ namespace WebBlotter.Classes
                         break;
                     }
                 }
-                if (actionName == "Edit" || actionName == "Create" || actionName == "_Create" || actionName == "Update" || actionName == "Delete" || actionName == "Reset" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation")
+                if (actionName == "Edit" || actionName == "Create" || actionName == "_Create" || actionName == "Update" || actionName == "Delete" || actionName == "Reset" || actionName == "FillBlotterManualData" || actionName == "AddOpeningBalanceByBID" || actionName == "CreateOpnBal" || actionName == "EditOpeningBalance" || actionName == "UpdateOpeningBalance" || actionName == "UpdateUserPageRelation" || actionName == "GetOrgNostroBanks")
                 {
 
                     authorize = true;

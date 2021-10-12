@@ -10,7 +10,7 @@ namespace WebBlotter.Models
     public class SBP_BlotterCRD
     {
         public long SNo { get; set; }
-        public long Nostro_Account { get; set; }
+        public string BankCode { get; set; }
         //[Required]
         [DisplayName("Value Date")]
         [DataType(DataType.Date, ErrorMessage = "Date only")]

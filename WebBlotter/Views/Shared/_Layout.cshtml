@@ -23,12 +23,12 @@
             z-index: 9999;
             background: url(../../Content/Images/Spinner.gif) 50% 50% no-repeat #fff;
         }
-        </style>
+    </style>
 </head>
 <body>
     <div class="navbar navbar-fixed-top navbar-expand-lg navbar-light bg-light">
         <div class="container">
-                @Html.ActionLink("SBP Blotter", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("SBP Blotter", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -46,9 +46,7 @@
                     {
                         var val = Session["Pages"].ToString().Split('~');
                         <li class="nav-item">@Html.ActionLink(val[0], val[1], val[2], new { area = "" }, new { @class = "nav-link" })</li>
-
                     }
-
                 </ul>
 
                 @if (Session["Currencies"] != null && Convert.ToInt32(Session["SelectedCurrency"]) > 1)
@@ -60,7 +58,7 @@
                             @Html.AntiForgeryToken();
                             <div class="btn-group d-inline  my-2 my-lg-0" role="group">
                                 @*<select name="selectCurrency" class="form-control" onchange="this.form.submit()" formaction=@Url.Action("Testing") formmethod="post">*@
-                                <select name="selectCurrency" class="form-control" onchange="this.form.submit()">
+                                <select name="selectCurrency" class="form-control" onchange="this.form.submit()" style = "width: 90px;" >
                                     @if (Session["Currencies"].ToString().Contains(','))
                                     {
                                         foreach (var item in Session["Currencies"].ToString().Split(','))
@@ -69,12 +67,14 @@
                                             if (val[0] == Session["SelectedCurrency"].ToString())
                                             {
                                                 <option value="@val[0]" selected>@val[1]</option>
-                                                TempData["CurrencyName"] = @val[1];
+                                                TempData["CurrencyName"] = val[1];
+
                                             }
                                             else
                                             {
                                                 <option value="@val[0]">@val[1]</option>
-                                                TempData["CurrencyName"] = @val[1];
+                                                TempData["CurrencyName"] = val[1];
+
                                             }
                                         }
                                     }
@@ -82,7 +82,8 @@
                                     {
                                         var val = Session["Currencies"].ToString().Split('~');
                                         <option value="@val[0]">@val[1]</option>
-                                        TempData["CurrencyName"] = @val[1];
+                                        TempData["CurrencyName"] = val[1];
+                                        TempData.Keep();
                                     }
                                 </select>
                             </div>

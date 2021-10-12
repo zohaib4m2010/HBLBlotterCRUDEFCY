@@ -37,6 +37,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -145,21 +146,26 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\WebApiResponse.cs" />
     <Compile Include="Controllers\BlotterBai_MuajjalController.cs" />
+    <Compile Include="Controllers\BlotterBalDIffController.cs" />
     <Compile Include="Controllers\BlotterBreakupsController.cs" />
     <Compile Include="Controllers\BlotterClearingController.cs" />
     <Compile Include="Controllers\BlotterController.cs" />
     <Compile Include="Controllers\BlotterCRDController.cs" />
     <Compile Include="Controllers\BlotterCRRFINCONController.cs" />
+    <Compile Include="Controllers\BlotterCRRReportFCYController.cs" />
+    <Compile Include="Controllers\BlotterDMMOController.cs" />
     <Compile Include="Controllers\BlotterDTLController.cs" />
     <Compile Include="Controllers\BlotterDTLDBController.cs" />
     <Compile Include="Controllers\BlotterEstAdjBalController.cs" />
     <Compile Include="Controllers\BlotterFundingRepoController.cs" />
     <Compile Include="Controllers\BlotterFundsTransferController.cs" />
+    <Compile Include="Controllers\BlotterImportExportController.cs" />
     <Compile Include="Controllers\BlotterLoginController.cs" />
     <Compile Include="Controllers\BlotterManualDealsController.cs" />
     <Compile Include="Controllers\BlotterOpenBalController.cs" />
     <Compile Include="Controllers\BlotterOpeningController.cs" />
     <Compile Include="Controllers\BlotterRECONController.cs" />
+    <Compile Include="Controllers\BlotterReservedController.cs" />
     <Compile Include="Controllers\BlotterRTGSController.cs" />
     <Compile Include="Controllers\BlotterSetupController.cs" />
     <Compile Include="Controllers\BlotterTBOController.cs" />
@@ -176,11 +182,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BlotterDataColor_Result.cs" />
+    <Compile Include="Models\BlotterSBP_Reserved.cs" />
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\SBP_BlotterBai_Muajjal.cs" />
     <Compile Include="Models\SBP_BlotterCRD.cs" />
+    <Compile Include="Models\SBP_BlotterCRRReportFCY.cs" />
+    <Compile Include="Models\SBP_BlotterCRRReportingCurrencyWise.cs" />
     <Compile Include="Models\SBP_BlotterFundingRepo.cs" />
     <Compile Include="Models\SBP_BlotterFundsTransfer.cs" />
+    <Compile Include="Models\SBP_BlotterImportExport.cs" />
     <Compile Include="Models\SBP_BlotterManualEstBalance.cs" />
     <Compile Include="Models\SBP_BlotterOpeningBalance.cs" />
     <Compile Include="Models\SBP_BlotterRECON.cs" />
@@ -201,10 +211,12 @@
     <Compile Include="Models\SBP_BlotterSetup.cs" />
     <Compile Include="Models\SBP_BlotterTBO.cs" />
     <Compile Include="Models\SBP_BlotterTrade.cs" />
+    <Compile Include="Models\SBP_DMMO.cs" />
     <Compile Include="Models\SBP_LoginInfo.cs" />
     <Compile Include="Models\SP_ADD_SessionStart.cs" />
     <Compile Include="Models\SP_FXBlotter_Result.cs" />
     <Compile Include="Models\SP_GetAllBlotterCurrencyById_Result.cs" />
+    <Compile Include="Models\SP_GetAllNostroBankList_Result.cs" />
     <Compile Include="Models\SP_GETAllNostroBanks_Result.cs" />
     <Compile Include="Models\SP_GETAllTransactionTitles_Result.cs" />
     <Compile Include="Models\SP_GetAllUserPageRelations_Result.cs" />
@@ -217,8 +229,15 @@
     <Compile Include="Models\SP_GetNostroBankFromOPICS_Result.cs" />
     <Compile Include="Models\SP_GetOPICSManualData_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterCRD_Result.cs" />
+    <Compile Include="Models\SP_GetSBPBlotterCRRReportFCY_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterFR_Result.cs" />
+    <Compile Include="Models\SP_GetSBPBlotterOpeningClosingBalanceDIfferential_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterRECON_Result.cs" />
+    <Compile Include="Models\SP_GetSBP_BlotterImportExport_Result.cs" />
+    <Compile Include="Models\SP_GetSBP_CRRReportingFCYCurrWise_Result.cs" />
+    <Compile Include="Models\SP_GetSBP_DMMO_Result.cs" />
+    <Compile Include="Models\SP_GetSBP_Reserved_Result.cs" />
+    <Compile Include="Models\SP_Get_SBPBlotterConversionRate_Result.cs" />
     <Compile Include="Models\SP_SBPBlotterRunningBal.cs" />
     <Compile Include="Models\SP_SBPBlotter_FCY_Result.cs" />
     <Compile Include="Models\SP_SBPGetLoginInfo_Result.cs" />
@@ -232,6 +251,7 @@
     <Compile Include="Repository\ServiceRepositoryBlotter.cs" />
     <Compile Include="Repository\UtilityClass.cs" />
     <Compile Include="ViewModel\BlotterCashFlowMultiModel.cs" />
+    <Compile Include="ViewModel\BlotterCRRFCYModel.cs" />
     <Compile Include="ViewModel\BlotterMultiModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1297,6 +1317,17 @@
     <Content Include="Views\BlotterBai_Muajjal\_BlotterBai_Muajjal.cshtml" />
     <Content Include="Views\BlotterBai_Muajjal\_Create.cshtml" />
     <Content Include="Views\BlotterBai_Muajjal\_Edit.cshtml" />
+    <Content Include="Views\BlotterImportExport\_BlotterImportExport.cshtml" />
+    <Content Include="Views\BlotterImportExport\_Create.cshtml" />
+    <Content Include="Views\BlotterImportExport\_Edit.cshtml" />
+    <Content Include="Views\Shared\_NostroBankDDL.cshtml" />
+    <Content Include="Views\BlotterBalanceDifferential\_BlotterOpenCloseBalDiff.cshtml" />
+    <Content Include="Views\BlotterDMMO\_BlotterDMMO.cshtml" />
+    <Content Include="Views\BlotterReserved\_BlotterReserved.cshtml" />
+    <Content Include="Views\Home\_HomeFCY.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_Create.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_BlotterCRRReportFCY.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

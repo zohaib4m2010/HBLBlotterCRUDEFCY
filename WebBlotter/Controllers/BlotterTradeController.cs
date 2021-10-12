@@ -19,7 +19,7 @@ namespace WebBlotter.Controllers
 
         UtilityClass UC = new UtilityClass();
         // GET: BlotterTrade
-        private List<Models.NostroBank> GetAllNostroBanks()
+        private List<Models.SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
         {
             try
             {
@@ -29,11 +29,9 @@ namespace WebBlotter.Controllers
                     currid = Convert.ToInt32(Session["SelectedCurrency"].ToString());
                 }
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank?currId=" + currid);
+                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBankFromOpicsDDL?currId=" + currid + "&BRCode=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
-                //List<Models.NostroBank> blotterNB = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
-
-                List<Models.NostroBank> blotterNB = new List<Models.NostroBank>();
+                List<Models.SP_GetNostroBankFromOPICS_Result> blotterNB = new List<Models.SP_GetNostroBankFromOPICS_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -47,12 +45,13 @@ namespace WebBlotter.Controllers
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterNB = JsonConvert.DeserializeObject<List<Models.NostroBank>>(ResponseDD["Data"]);
+                        blotterNB = JsonConvert.DeserializeObject<List<Models.SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
+                        ViewBag.NostroBanksDDL = blotterNB;
                     }
                 }
                 return blotterNB;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -107,6 +106,10 @@ namespace WebBlotter.Controllers
                 {
                     DateVal = form["SearchByDate"].ToString();
                     ViewBag.DateVal = DateVal;
+                }
+                else
+                {
+                    ViewBag.DateVal = DateTime.Now.ToString("yyyy-MM-dd");
                 }
                 #endregion
 
@@ -228,6 +231,7 @@ namespace WebBlotter.Controllers
                     BlotterTrade.BID = Convert.ToInt16(Session["BranchID"].ToString());
                     BlotterTrade.BR = Convert.ToInt16(Session["BR"].ToString());
                     BlotterTrade.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
+                    BlotterTrade.BankCode = form["BankCode"].ToString();
                     BlotterTrade.CreateDate = DateTime.Now;
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PostResponse("api/BlotterTrade/InsertTrade", BlotterTrade);
@@ -299,6 +303,7 @@ namespace WebBlotter.Controllers
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             var isDateChangable = Convert.ToBoolean(Session["CurrentPagesAccess"].ToString().Split('~')[2]);
             ViewData["isDateChangable"] = isDateChangable;
+            ViewBag.BankCode = BlotterTrade.BankCode;
             ViewBag.NostroBanksDDL = GetAllNostroBanks();
             ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
             return PartialView("_Edit", BlotterTrade);
@@ -307,7 +312,7 @@ namespace WebBlotter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(Models.SBP_BlotterTrade BlotterTrade)
+        public ActionResult Update(Models.SBP_BlotterTrade BlotterTrade, FormCollection form)
         {
             try
             {
@@ -318,6 +323,7 @@ namespace WebBlotter.Controllers
                         BlotterTrade.Trade_Date = DateTime.Now;
                     BlotterTrade.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
                     BlotterTrade.UpdateDate = DateTime.Now;
+                    BlotterTrade.BankCode = form["BankCode"].ToString();
                     UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterTrade), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
                     ServiceRepository serviceObj = new ServiceRepository();
                     HttpResponseMessage response = serviceObj.PutResponse("api/BlotterTrade/UpdateTrade", BlotterTrade);

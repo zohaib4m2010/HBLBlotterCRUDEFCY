@@ -69,9 +69,11 @@
             <tr>
                 <th>S.No. </th>
                 <th>Date        </th>
+                <th>Nostro Bank</th>
                 @if (Session["BR"].ToString() != "01")
                 {
-                    <th>Data Type</th>}
+                    <th>Data Type</th>
+                }
                 <th>Transaction Type</th>
                 <th>Description</th>
                 <th>InFlow</th>
@@ -93,6 +95,8 @@
                                  eDisplayMoment.innerHTML = NowMoment.format('DD-MMM-YYYY');
                         </script>
                     </td>
+
+                    <td align="left" width="15%">@Html.DisplayFor(modelItem => item.BankName)</td>
                     @if (Session["BR"].ToString() != "01")
                     {
                         <td align="right" width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>

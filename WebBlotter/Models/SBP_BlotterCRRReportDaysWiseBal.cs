@@ -31,12 +31,16 @@ namespace WebBlotter.Models
         public Nullable<decimal> PakistanToTal { get; set; }
         public double CRR3PcrReq { get; set; }
         public double CRR5PcrReq { get; set; }
-        public decimal BalMaintain3Pcr { get; set; }
-        public decimal BalMaintain5Pcr { get; set; }
+        public double BalMaintain3Pcr { get; set; }
+        public double BalMaintain5Pcr { get; set; }
         public Nullable<decimal> Penalty { get; set; }
         public decimal AvgForRemDays { get; set; }
         public decimal ReserveSurplus { get; set; }
         public double Reserve { get; set; }
+        public decimal CRR5PcrReqWithoutEB { get; set; }
+        public decimal BlotterBalance { get; set; }
+        public Nullable<double> BalMaintAgainstExtBenft { get; set; }
+        public Nullable<double> BalMaintAgainstPenalty { get; set; }
         public string Remarks { get; set; }
         public Nullable<int> BR { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }

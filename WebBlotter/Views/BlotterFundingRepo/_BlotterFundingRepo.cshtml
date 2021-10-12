@@ -39,43 +39,40 @@
     </div>
 }
 <!--Search By Date -->
-
-
-@if (Model.Count() > 0)
+@using (Html.BeginForm("Delete", "BlotterFundingRepo", FormMethod.Post))
 {
-    using (Html.BeginForm("Delete", "BlotterFundingRepo", FormMethod.Post))
-    {
-        <table id="customers" class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>SNO</th>
-                    @*<th>Data Type</th>*@
-                    <th>Bank</th>
-                    <th>Days</th>
-                    <th>Rate</th>
-                    <th>Deal Type</th>
-                    <th>Broker</th>
-                    <th>Issue Date</th>
-                    <th>Issue Type</th>
-                    <th>In Flow</th>
-                    <th>Out FLow</th>
-                    <th>Note</th>
-                    <th><input type="checkbox" id="chkAll" name="chkAll" /></th>
-                </tr>
-            </thead>
-
-            @foreach (var item in Model)
+    <table id="customers" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                @*<th>SNO</th>*@
+                @*<th>Data Type</th>*@
+                <th>Bank</th>
+                <th>Days</th>
+                <th>Rate</th>
+                <th>Deal Type</th>
+                <th>Broker</th>
+                <th>Issue Date</th>
+                <th>Issue Type</th>
+                <th>In Flow</th>
+                <th>Out FLow</th>
+                <th>Note</th>
+                <th><input type="checkbox" id="chkAll" name="chkAll" /></th>
+            </tr>
+        </thead>
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
             {
                 <tbody>
                     <tr>
-                        <td width="8%">@Html.DisplayFor(modelItem => item.SNo)</td>
+                        @*<td width="8%">@Html.DisplayFor(modelItem => item.SNo)</td>*@
                         @*<td width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>*@
                         <td width="8%">@Html.DisplayFor(modelItem => item.Bank)</td>
                         <td>@Html.DisplayFor(modelItem => item.Days)</td>
                         <td width="10%" align="right">@Html.DisplayFor(modelItem => item.Rate)</td>
                         <td width="10%">@Html.DisplayFor(modelItem => item.DealType)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Broker)</td>
-                        <td width="10%">@Html.DisplayFor(modelItem => item.Issue_Date)</td>
+                        <td width="12%">@Html.DisplayFor(modelItem => item.Broker)</td>
+                        <td width="12%">@Html.DisplayFor(modelItem => item.Issue_Date)</td>
                         <td width="10%">@Html.DisplayFor(modelItem => item.IssueType)</td>
                         <td width="10%" align="right">@Html.DisplayFor(modelItem => item.InFlow)</td>
                         <td width="10%" align="right">@Html.DisplayFor(modelItem => item.OutFLow)</td>
@@ -87,7 +84,10 @@
                     </tr>
                 </tbody>
             }
-        </table>
+        }
+    </table>
+    if (Model.Count() > 0)
+    {
         <input type="submit" class="btn btn-danger" value="Delete Record" />
     }
 }

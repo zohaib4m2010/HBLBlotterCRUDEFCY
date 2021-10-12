@@ -36,5 +36,6 @@ namespace WebBlotter.Models
         public int CurID { get; set; }
         public string Flag { get; set; }
         public string DataType { get; set; }
+        public string BankCode { get; set; }
     }
 }

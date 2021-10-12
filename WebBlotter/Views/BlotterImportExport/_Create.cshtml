@@ -1,0 +1,193 @@
+﻿@model WebBlotter.Models.SBP_BlotterImportExport
+
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script>
+    function CheckType() {
+        debugger;
+        var OrigCurrency = $("#OrigCurrency").val();
+        var AgainstCurrency = $("#AgainstCurrency").val();
+        if (OrigCurrency == "" || AgainstCurrency == "") {
+            alert("Please Select Currencies")
+            return false;
+        }
+        else if (OrigCurrency == AgainstCurrency) {
+            alert("Original Currency is same as against currency, Please select different currencies")
+            return false;
+        }
+        else {
+
+        }
+    }
+
+    //function hideFields() {
+    //    var Blottertype = $("#BlotterType").val();
+    //    if (Blottertype == "Import") {
+    //        $("#txtinflow").prop('disabled', true);
+    //        $("#txtoutflow").prop('disabled', false);
+    //        $(".hideforImport").hide();
+    //    }
+    //    else if (Blottertype == "Export") {
+    //        var OrgCurrencyid = $("#OrigCurrency").val();
+    //        if (OrgCurrencyid > 1) {
+    //            $(".hideforImport").show();
+    //        }
+    //        else {
+    //            $("#txtinflow").prop('disabled', true);
+    //            $("#txtoutflow").prop('disabled', false);
+    //        }
+
+    //    }
+    //}
+
+    function FillNostroBankData(curid) {
+        
+        //var flagval = $('#OrigCurrency option:selected').text();
+        $("#FillOrgNostroBank").load("/BlotterImportExport/GetOrgNostroBanks/?OrgCurId=" + curid + "&Againstcurid=0");
+    }
+    function FillAgainstNostroBankData(Againstcurid) {
+    
+        var curid = 0;
+        $("#AgainstNostro_AccountId").load("/BlotterImportExport/GetOrgNostroBanks/?OrgCurId=" + curid + "&Againstcurid=" + Againstcurid);
+
+    }
+
+</script>
+
+@using (Html.BeginForm("_Create", "BlotterImportExport", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>SBP Blotter Import & Export</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Select Type</label>
+            <div class="col-md-10">
+                <select name="BlotterType" id="BlotterType" class="form-control dropdown_input">
+                    <option value="Import" selected>Import</option>
+                    <option value="Export">Export</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @Value = DateTime.Now.ToString("yyyy-MM-dd") } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Select Currency</label>
+            <div class="col-md-10">
+                <select name="OrigCurrency" id="OrigCurrency" class="form-control" onchange="FillNostroBankData(this.value)">
+                    @if (Session["Currencies"].ToString().Contains(','))
+                    {
+                        foreach (var item in Session["Currencies"].ToString().Split(','))
+                        {
+                            var val = item.Split('~');
+                            <option value="@val[0]">@val[1]</option>
+                        }
+                    }
+                    else
+                    {
+                        var val = Session["Currencies"].ToString().Split('~');
+                        <option value="@val[0]">@val[1]</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Select Nostro Bank</label>
+            @*<div id="FillOrgNostroBank">
+                </div>*@
+            <select name="BankCode" id="FillOrgNostroBank" class="form-control">
+            </select>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Branch, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Branch, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Branch, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Customer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Customer, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Customer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Inflow, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Inflow, new { htmlAttributes = new { @class = "form-control", id = "txtinflow", @Value = "0" } })
+                @Html.ValidationMessageFor(model => model.Inflow, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group hideforImport">
+            <label class="control-label col-md-4">Select Against Currency</label>
+            <div class="col-md-8">
+                <select name="AgainstCurrency" id="AgainstCurrency" class="form-control" onchange="FillAgainstNostroBankData(this.value)">
+                    @if (Session["Currencies"].ToString().Contains(','))
+                    {
+                        foreach (var item in Session["Currencies"].ToString().Split(','))
+                        {
+                            var val = item.Split('~');
+                            <option value="@val[0]">@val[1]</option>
+                        }
+                    }
+                    else
+                    {
+                        var val = Session["Currencies"].ToString().Split('~');
+                        <option value="@val[0]">@val[1]</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group hideforImport">
+            <label class="control-label col-md-4">Select Against Nostro Bank</label>
+            <div class="col-md-8">
+                @*<div id="FillOrgNostroBank">
+                    </div>*@
+                <select name="AgainstBankCode" id="AgainstNostro_AccountId" class="form-control">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Outflow, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Outflow, new { htmlAttributes = new { @class = "form-control", id = "txtoutflow", @Value = "0" } })
+                @Html.ValidationMessageFor(model => model.Outflow, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" onclick="return CheckType()" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

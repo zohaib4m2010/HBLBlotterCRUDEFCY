@@ -1,0 +1,65 @@
+﻿@model WebBlotter.ViewModel.BlotterCRRFCYModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h4>Edit Blotter CRR Reporting FCY </h4>
+
+@using (Html.BeginForm("Update", "BlotterCRRReportFCY", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.CRRReportFCY.CRRID)
+
+        <div class="form-horizontal">
+            <hr />
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CRRReportFCY.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.EditorFor(model => model.CRRReportFCY.StartDate, new { htmlAttributes = new { @class = "form-control", @Value = Model.CRRReportFCY.StartDate.Value.Date.ToString("yyyy-MM-dd") } })
+
+                    @Html.ValidationMessageFor(model => model.CRRReportFCY.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CRRReportFCY.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.EditorFor(model => model.CRRReportFCY.EndDate, new { htmlAttributes = new { @class = "form-control datepicker", @Value = Model.CRRReportFCY.EndDate.Value.Date.ToString("yyyy-MM-dd") } })
+
+                    @Html.ValidationMessageFor(model => model.CRRReportFCY.EndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CRRReportFCY.PreWeek5PcrReq, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CRRReportFCY.PreWeek5PcrReq, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CRRReportFCY.PreWeek5PcrReq, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CRRReportFCY.PreWeek10PcrReq, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CRRReportFCY.PreWeek10PcrReq, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CRRReportFCY.PreWeek10PcrReq, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Update" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+}
+

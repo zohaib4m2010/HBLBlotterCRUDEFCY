@@ -8,7 +8,7 @@ namespace WebBlotter.Models
     public class SP_SBPBlotter_FCY_Result
     {
         public int DealNo { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } 
         public string Status { get; set; }
         public Nullable<System.DateTime> DealDate { get; set; }
         public Nullable<System.DateTime> ValueDate { get; set; }
@@ -18,5 +18,6 @@ namespace WebBlotter.Models
         public Nullable<decimal> Outflow { get; set; }
         public decimal OpeningBalance { get; set; }
         public Nullable<bool> Recon_IsActive { get; set; }
+
     }
 }

@@ -32,11 +32,16 @@ namespace WebBlotter.Controllers
 
                 UtilityClass.GetSelectedCurrecy(selectCurrency);
 
+
                 var DateVal = (dynamic)null;
                 if (form["SearchByDate"] != null)
                 {
                     DateVal = form["SearchByDate"].ToString();
                     ViewBag.DateVal = DateVal;
+                }
+                else
+                {
+                    ViewBag.DateVal = DateTime.Now.ToString("yyyy-MM-dd");
                 }
                 #endregion
 
@@ -64,7 +69,7 @@ namespace WebBlotter.Controllers
                         TempData["DataStatus"] = "Data not available";
                 }
                 var PAccess = Session["CurrentPagesAccess"].ToString().Split('~');
-                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterOpenBal), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString() + "&DateVal=" + DateVal);
                 ViewData["isDateChangable"] = Convert.ToBoolean(PAccess[2]);
                 ViewData["isEditable"] = Convert.ToBoolean(PAccess[3]);
                 ViewData["IsDeletable"] = Convert.ToBoolean(PAccess[4]);

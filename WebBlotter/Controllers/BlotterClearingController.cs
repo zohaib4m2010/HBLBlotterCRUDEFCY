@@ -92,6 +92,10 @@ namespace WebBlotter.Controllers
                     DateVal = form["SearchByDate"].ToString();
                     ViewBag.DateVal = DateVal;
                 }
+                else
+                {
+                    ViewBag.DateVal = DateTime.Now.ToString("yyyy-MM-dd");
+                }
                 #endregion
 
                 ServiceRepository serviceObj = new ServiceRepository();

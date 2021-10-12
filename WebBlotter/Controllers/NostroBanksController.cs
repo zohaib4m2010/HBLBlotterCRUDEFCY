@@ -51,7 +51,7 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetAllNostroBank?currId=" + selectCurrency);
                 response.EnsureSuccessStatusCode();
                 //List<Models.NostroBank> NostroBank = response.Content.ReadAsAsync<List<Models.NostroBank>>().Result;
-                List<Models.NostroBank> NostroBank = new List<Models.NostroBank>();
+                List<Models.SP_GetAllNostroBankList_Result> NostroBank = new List<Models.SP_GetAllNostroBankList_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -65,7 +65,7 @@ namespace WebBlotter.Controllers
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        NostroBank = JsonConvert.DeserializeObject<List<Models.NostroBank>>(ResponseDD["Data"]);
+                        NostroBank = JsonConvert.DeserializeObject<List<Models.SP_GetAllNostroBankList_Result>>(ResponseDD["Data"]);
                     }
                     else
                         TempData["DataStatus"] = "Data not available";

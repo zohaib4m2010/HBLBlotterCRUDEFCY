@@ -25,12 +25,12 @@
     <div class="form-group">
         <label class="control-label col-md-2">Select Nostro Bank</label>
         <div class="col-md-10">
-            <select name="Nostro_AccountId" class="form-control">
+            <select name="BankCode" class="form-control">
                 @if (ViewBag.CRDNostroBanks != null)
                 {
                     foreach (var item in ViewBag.CRDNostroBanks)
                     {
-                        <option value="@item.ID">@item.BankName</option>
+                        <option value="@item.BankCode">@item.BankName</option>
                     }
                 }
             </select>

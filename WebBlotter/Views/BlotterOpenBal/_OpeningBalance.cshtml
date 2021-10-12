@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<WebBlotter.Models.SBP_BlotterOpeningBalance>
 @{
-    /**/
+                /**/
 
-    ViewBag.Title = "Blotter Opening Balance";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+                /**/
+
+                ViewBag.Title = "Blotter Opening Balance";
+                Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Blotter Opening Balance</h2>
@@ -66,7 +68,8 @@
 <!--Search By Date -->
 <div>
 
-    @*<script src="Scripts/moment.js"></script>*@
+    @*<
+        script src="Scripts/moment.js"></script>*@
     <table id="customers" class="table table-striped table-bordered table-hover ">
         <thead>
             <tr>
@@ -89,8 +92,8 @@
                     {
                         <td align="right" width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>
                     }
-                    <td align="right" width="10%">@Html.DisplayFor(modelItem => item.BalDate)</td>
-                    <td align="left" width="8%">@Html.DisplayFor(modelItem => item.OpenBalActual)</td>
+                    <td align="left" width="10%">@Html.DisplayFor(modelItem => item.BalDate)</td>
+                    <td align="right" width="8%">@Html.DisplayFor(modelItem => item.OpenBalActual)</td>
 
 
                     <td width="18%" align="right">

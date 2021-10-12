@@ -1,0 +1,64 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetSBPBlotterOpeningClosingBalanceDIfferential_Result>
+
+@{
+    /**/
+
+    ViewBag.Title = "BlotterCRD";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/Custom.css" rel="stylesheet" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#chkAll").change(function () {
+            $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+        });
+    });
+</script>
+
+<h3>BLOTTER Opening Closing Balance Differential</h3>
+
+<br>
+
+@using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    <div class="btn-group d-inline my-2 my-lg-0 navbar-right" style="margin-right: 10px !important;" role="group">
+        <input id="SearchByDateId" name="SearchByDate" type="date" value="@ViewBag.DateVal" onchange="this.form.submit()" class="form-control datepicker text-box single-line" />
+    </div>
+}
+
+@using (Html.BeginForm("Update", "BlotterBalanceDIfferential", FormMethod.Post))
+{
+    <table id="customers" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Data Type</th>
+                <th>Date</th>
+                <th>In Flow</th>
+                <th>Out Flow</th>
+                <th><input type="checkbox" id="chkAll" name="chkAll" /></th>
+            </tr>
+        </thead>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tbody>
+                    <tr>
+                        <td width="8%">@Html.DisplayFor(modelItem => item.DataType)</td>
+                        <td width="8%">@Html.DisplayFor(modelItem => item.Date)</td>
+                        <td width="10%" align="right">@Html.DisplayFor(modelItem => item.InFlow)</td>
+                        <td width="10%" align="right">@Html.DisplayFor(modelItem => item.OutFLow)</td>
+                        <td width="18%">
+                            <input type="checkbox" name="BalDiffIds" id="BalDiffIds" value="@item.SNo" />
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        }
+    </table>
+    <input type="submit" class="btn btn-danger" value="Reset" />
+}

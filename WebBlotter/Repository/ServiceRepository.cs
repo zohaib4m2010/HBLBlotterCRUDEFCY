@@ -17,7 +17,7 @@ namespace WebBlotter.Repository
             Client.BaseAddress = new Uri(ConfigurationManager.AppSettings["ServiceUrl"].ToString());
         }
 
-        public HttpResponseMessage GetResponse(string url)
+        public HttpResponseMessage GetResponse(string url)  
         {
             return Client.GetAsync(url).Result;
         }

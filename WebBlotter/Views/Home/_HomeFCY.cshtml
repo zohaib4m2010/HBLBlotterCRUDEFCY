@@ -1,0 +1,161 @@
+﻿@model IEnumerable<WebBlotter.Models.SP_GetSBP_CRRReportingFCYCurrWise_Result>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+@{
+    ViewBag.Title = "FCY Blotter SPA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div>
+    @using (Html.BeginForm(Session["ActiveController"].ToString(), Session["ActiveAction"].ToString(), FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="Clearing_Date">Start Date</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control datepicker text-box single-line" data-val="true" data-val-date="The field Date must be a date." id="startdate" name="startdate" type="date" value="@ViewBag.SetStartDate">
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">End Date</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control datepicker text-box single-line" data-val="true" data-val-date="The field Date must be a date." id="enddate" name="enddate" type="date" value="@ViewBag.SetEndDate">
+            </div>
+
+            <div class="col-md-2">
+                <input type="submit" id="SearchManualDataByDate" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <table id="BlotterFCYReportCurrWise" class="table table-striped table-bordered table-hover ">
+            <thead>
+                <tr>
+                    <th>
+                        CCY
+                    </th>
+                    <th>
+                        REVAL RATE
+                    </th>
+                    <th>
+                        TOTAL DEPOSIT
+                    </th>
+                    <th>
+                        EQUIVALENT USD
+                    </th>
+                    <th>
+                        CRR-5%
+                    </th>
+                    <th>
+                        SCRR-10%
+                    </th>
+                </tr>
+            </thead>
+            @if (ViewBag.SBP_BlotterCRRFCYReportCurrencyWise.Count > 0)
+            {
+                <tbody>
+                    @foreach (var item in ViewBag.SBP_BlotterCRRFCYReportCurrencyWise)
+                    {
+                        <tr>
+                            <td align="left" width="8%">@item.CCY</td>
+                            @for (int i = 0; i < ViewBag.ConversionRateCRR.Count; i++)
+                            {
+                                if (item.CCY == ViewBag.ConversionRateCRR[i].CCY)
+                                {
+                                    <td align="right" width="8%">@ViewBag.ConversionRateCRR[i].ExchangeRate</td>
+                                }
+                            }
+                            <td align="right" width="8%">@((item.Deposit).ToString("#,##0"))</td>
+                            <td align="right" width="8%" class="EquivalentUSD">@((Convert.ToDecimal(item.EquivalentUSD)).ToString("#,##0"))</td>
+                            <td align="right" width="8%" class="CRRBal5PcrReq">@((Convert.ToDecimal(item.CRRBal5PcrReq)).ToString("#,##0"))</td>
+                            <td align="right" width="8%" class="CRRBal10PcrReq">@((Convert.ToDecimal(item.CRRBal10PcrReq)).ToString("#,##0"))</td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="16%">Total Equivalent USD </td>
+                        @*<script>
+                                $(document).ready(function () {
+                                      //EquivalentUSD
+                                    sumval = 0;
+                                    sumBal = 0;
+                                    $('#BlotterFCYReportCurrWise .EquivalentUSD').each(function () {
+                                        debugger;
+                                        sumval = this.innerText;
+                                        sumval = sumval.replace(/\,/g, '');
+                                        sumBal += parseFloat(sumval)
+                                    });
+                                });
+                            </script>*@
+                        <td align="right" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        @*<label id="lblEquivalentUSD"></label>*@
+                        <td align="right" width="8%">@Convert.ToInt64(Model.Sum(i => i.EquivalentUSD)).ToString("#,##0")</td>
+                        <td align="right" width="8%">
+                            @Convert.ToInt64(Model.Sum(i => i.CRRBal5PcrReq)).ToString("#,##0")
+                            @*<label id="lblCRRBal5PcrReq"></label>*@
+                        </td>
+                        <td align="right" width="8%">
+                            @Convert.ToInt64(Model.Sum(i => i.CRRBal10PcrReq)).ToString("#,##0")
+                            @*<label id="lblCRRBal10PcrReq"></label>*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="16%">In Equivalent Rupees</td>
+                        <td align="left" width="8%"></td>
+                        <td align="right" width="8%">
+                            @*<label id="lblEquivalentRupees"></label>*@
+                        </td>
+                        <td align="right" width="8%">
+                            @Convert.ToInt64(Model.Sum(i => i.EquivalentUSD) * ViewBag.ConversionUSDRate).ToString("#,##0")
+                        </td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="24%">Balance maintained Previous Week</td>
+                        <td align="left" width="8%"></td>
+                        <td align="right" width="8%">@ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek5PcrReq.ToString("#,##0")</td>
+                        <td align="right" width="8%">@ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek10PcrReq.ToString("#,##0")</td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="8%"></td>
+                        <td align="left" width="24%">If Previous Week > than todays then Withdrawal</td>
+                        <td align="left" width="8%"></td>
+                        <td align="right" width="8%"> @Convert.ToInt64(Model.Sum(i => i.CRRBal5PcrReq) - ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek5PcrReq).ToString("#,##0")</td>
+                        <td align="right" width="8%">@Convert.ToInt64(Model.Sum(i => i.CRRBal10PcrReq) - ViewBag.SBP_BlotterCRRFCYReportCurrencyWise[0].PreWeek10PcrReq).ToString("#,##0")</td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+</div>
