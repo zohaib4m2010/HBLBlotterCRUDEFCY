@@ -23,6 +23,7 @@ namespace WebBlotter.Models
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Display(Name = "Their Books")]
         public Nullable<decimal> TheirBooks { get; set; }
+        public Nullable<decimal> EstimatedOpenBal { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Display(Name = "Conversion Rate")]
@@ -47,6 +48,5 @@ namespace WebBlotter.Models
         public int BID { get; set; }
         public int CurID { get; set; }
         public string Flag { get; set; }
-        public string BankName { get; set; }
     }
 }

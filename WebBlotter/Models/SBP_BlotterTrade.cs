@@ -37,5 +37,6 @@ namespace WebBlotter.Models
         public string Flag { get; set; }
         public string DataType { get; set; }
         public string BankCode { get; set; }
+
     }
 }

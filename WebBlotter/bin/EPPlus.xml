@@ -24,6 +24,11 @@
             Use this attribute to indicate that the attribute target should be ignored.
             </summary>
         </member>
+        <member name="P:OfficeOpenXml.Attributes.EpplusNestedTableColumnAttribute.Order">
+            <summary>
+            Order of the columns value, default value is 0
+            </summary>
+        </member>
         <member name="M:OfficeOpenXml.Attributes.EpplusTableAttribute.#ctor">
             <summary>
             Constructor
@@ -4746,6 +4751,192 @@
             <param name="row">The row of the cell to calculate from</param>
             <param name="col">The column of the cell to calculate from</param>
             <returns>The address in R1C1 notation</returns>        
+        </member>
+        <member name="T:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams">
+            <summary>
+            Parameters for the <see cref="M:OfficeOpenXml.ExcelRangeBase.FillDateTime(System.Action{OfficeOpenXml.Core.Worksheet.Fill.FillDateParams})" /> method 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams.StartValue">
+            <summary>
+            The start value. If null, the first value in the row/column is used. 
+            <seealso cref="P:OfficeOpenXml.Core.Worksheet.Fill.FillParams.Direction"/>
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams.EndValue">
+            <summary>
+            When this value is exceeded the fill stops
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams.StepValue">
+            <summary>
+            The value to add for each step. 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams.DateTimeUnit">
+            <summary>
+            The date unit added per cell
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams._excludedWeekdays">
+            <summary>
+            Only fill weekdays
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillDateParams._holidayCalendar">
+            <summary>
+            A list with weekdays treated as holydays.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Core.Worksheet.Fill.FillListParams">
+            <summary>
+            Parameters for the <see cref="M:OfficeOpenXml.ExcelRangeBase.FillList``1(System.Collections.Generic.IEnumerable{``0},System.Action{OfficeOpenXml.Core.Worksheet.Fill.FillListParams})" /> method 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillListParams.StartIndex">
+            <summary>
+            The start index in the list. 
+            <seealso cref="P:OfficeOpenXml.Core.Worksheet.Fill.FillParams.Direction"/>
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams">
+            <summary>
+            Parameters for the <see cref="M:OfficeOpenXml.ExcelRangeBase.FillNumber(System.Action{OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams})" /> method 
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams.StartValue">
+            <summary>
+            The start value. If null, the first value in the row/column is used. 
+            <seealso cref="P:OfficeOpenXml.Core.Worksheet.Fill.FillParams.Direction"/>
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams.EndValue">
+            <summary>
+            When this value is exceeded the fill stops
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams.StepValue">
+            <summary>
+            The value to use in the calculation for each step. 
+            <seealso cref="P:OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams.CalculationMethod"/>
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillNumberParams.CalculationMethod">
+            <summary>
+            The calculation method to use 
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Core.Worksheet.Fill.FillParams">
+            <summary>
+            Shared base class for <see cref="T:OfficeOpenXml.ExcelRangeBase"/> Fill-methods
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillParams.StartPosition">
+            <summary>
+            If the fill starts from the top-left cell or the bottom right cell.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillParams.Direction">
+            <summary>
+            The direction of the fill
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Core.Worksheet.Fill.FillParams.NumberFormat">
+            <summary>
+            The number format to be appled to the range.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.eCalculationMethod">
+            <summary>
+            Calculation Method for number fill operations
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eCalculationMethod.Add">
+            <summary>
+            Add the value to the next fill
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eCalculationMethod.Multiply">
+            <summary>
+            Multiply the value to the next fill
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.eDateTimeUnit">
+            <summary>
+            The date units for date fill operations
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Year">
+            <summary>
+            Adds a Year
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Month">
+            <summary>
+            Adds a Month
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Week">
+            <summary>
+            Adds 7 Days
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Day">
+            <summary>
+            Adds a Day
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Hour">
+            <summary>
+            Adds an Hour
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Minute">
+            <summary>
+            Adds a Minute
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Second">
+            <summary>
+            Adds a Second
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eDateTimeUnit.Ticks">
+            <summary>
+            Adds ticks
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.eFillDirection">
+            <summary>
+            If the fill is performed Down/Up (Column) or Left/Right (Row).
+            Also see <see cref="T:OfficeOpenXml.eFillStartPosition"/>
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eFillDirection.Row">
+            <summary>
+            The fill is performed row-wise
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eFillDirection.Column">
+            <summary>
+            The fill is performed column-wise
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.eFillStartPosition">
+            <summary>
+            If the fill starts from the top-left cell or the bottom-right cell.
+            Also see <seealso cref="T:OfficeOpenXml.eFillDirection"/>
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eFillStartPosition.TopLeft">
+            <summary>
+            The fill starts from the top-left cell and fills to the left and down depending on the <see cref="T:OfficeOpenXml.eFillDirection"/>
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.eFillStartPosition.BottomRight">
+            <summary>
+            The fill starts from the bottom-right cell and fills to the right and up depending on the <see cref="T:OfficeOpenXml.eFillDirection"/>
+            </summary>
         </member>
         <member name="T:OfficeOpenXml.DataValidation.Contracts.IExcelDataValidation">
             <summary>
@@ -10296,7 +10487,12 @@
         </member>
         <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartLegend">
             <summary>
-            A chart ledger
+            A chart legend
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Entries">
+            <summary>
+            A list of individual settings for legend entries.
             </summary>
         </member>
         <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Position">
@@ -10347,6 +10543,31 @@
         <member name="M:OfficeOpenXml.Drawing.Chart.ExcelChartLegend.Add">
             <summary>
             Adds a legend to the chart
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartLegendEntry">
+            <summary>
+            An individual serie item within the chart legend
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegendEntry.Index">
+            <summary>
+            The index of the item
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegendEntry.Deleted">
+            <summary>
+            If the items has been deleted or is visible.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegendEntry.Font">
+            <summary>
+            The Font properties
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.Drawing.Chart.ExcelChartLegendEntry.TextBody">
+            <summary>
+            Access to text body properties
             </summary>
         </member>
         <member name="T:OfficeOpenXml.Drawing.Chart.ExcelChartStyleItem">
@@ -17356,6 +17577,11 @@
             Column position for a comment
             </summary>
         </member>
+        <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment.Fill">
+            <summary>
+            Fill properties for the comment
+            </summary>
+        </member>
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingControl.Dx">
             <summary>
             Item height for an individual item
@@ -17364,6 +17590,11 @@
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingControl.Page">
             <summary>
             Number of items in a listbox.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingFill">
+            <summary>
+            Fill settings for a vml drawing
             </summary>
         </member>
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingFill.Style">
@@ -17413,11 +17644,16 @@
             Rotate fill with shape
             </summary>
         </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingGradientFill">
+            <summary>
+            Fill settings for a vml gradient fill
+            </summary>
+        </member>
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingGradientFill.ColorsString">
             <summary>
             A semicolon separated list of colors used for gradient fill. 
             Each color item starts with a percent and a color. Starting from 0% and ending and 100%.
-            Use <see cref="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingGradientFill.SetGradientColors(OfficeOpenXml.Drawing.Vml.VmlGradiantColor[])"> to set this property</see>
+            Use <seealso cref="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingGradientFill.SetGradientColors(OfficeOpenXml.Drawing.Vml.VmlGradiantColor[])"/>  to set this property.
             </summary>
         </member>
         <member name="M:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingGradientFill.SetGradientColors(OfficeOpenXml.Drawing.Vml.VmlGradiantColor[])">
@@ -17537,6 +17773,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureFill">
+            <summary>
+            Fill settings for a vml pattern or picture fill
+            </summary>
+        </member>
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureFill.SecondColor">
             <summary>
             Fill color 2. 
@@ -17550,7 +17791,7 @@
         </member>
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureFill.AspectRatio">
             <summary>
-            
+            The aspect ratio 
             </summary>
         </member>
         <member name="P:OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingPictureFill.Size">
@@ -23267,13 +23508,14 @@
             Creates an instance of ExcelDrawingFillBase
             </summary>
         </member>
-        <member name="M:OfficeOpenXml.Drawing.Style.Fill.ExcelDrawingFillBase.#ctor(System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.String)">
+        <member name="M:OfficeOpenXml.Drawing.Style.Fill.ExcelDrawingFillBase.#ctor(System.Xml.XmlNamespaceManager,System.Xml.XmlNode,System.String,System.Action)">
             <summary>
             Creates an instance of ExcelDrawingFillBase
             </summary>
             <param name="nsm">Namespace manager</param>
             <param name="topNode">The top node</param>
             <param name="fillPath">XPath to the fill</param>
+            <param name="initXml">Xml initialize method</param>
         </member>
         <member name="P:OfficeOpenXml.Drawing.Style.Fill.ExcelDrawingFillBase.Style">
             <summary>
@@ -23952,7 +24194,7 @@
         </member>
         <member name="F:OfficeOpenXml.eSlicerStyle.Custom">
             <summary>
-            A custom style set by the <see cref="!:ExcelSlicer.Style"/> property
+            A custom style set by the <see cref="P:OfficeOpenXml.Drawing.Slicer.ExcelSlicer`1.Style"/> property
             </summary>
         </member>
         <member name="F:OfficeOpenXml.eSlicerStyle.Light1">
@@ -24708,6 +24950,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:OfficeOpenXml.ExcelAddressBase.GetHashCode">
+            <summary>
+            A hash code for the current object.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:OfficeOpenXml.ExcelAddressBase.FirstAddress">
             <summary>
             returns the first address if the address is a multi address.
@@ -24898,7 +25146,8 @@
             <param name="fixedFromColumn">Is the from column fixed?</param>
             <param name="fixedToRow">Is the to row fixed?</param>
             <param name="fixedToColumn">Is the to column fixed?</param>
-            <param name="ws">The worksheet for the formula</param>
+            <param name="wb">A reference to the workbook object</param>
+            <param name="wsName">The worksheet name used for addresses without a worksheet reference.</param>
             <returns></returns>
         </member>
         <member name="M:OfficeOpenXml.ExcelCellBase.GetRowColFromAddress(System.String,System.Int32@,System.Int32@)">
@@ -26116,11 +26365,24 @@
             </summary>
             <param name="newFile">If newFile exists, it is opened.  Otherwise it is created from scratch.</param>
         </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.#ctor(System.String)">
+            <summary>
+            Create a new instance of the ExcelPackage class based on a existing file or creates a new file. 
+            </summary>
+            <param name="path">If newFile exists, it is opened.  Otherwise it is created from scratch.</param>
+        </member>
         <member name="M:OfficeOpenXml.ExcelPackage.#ctor(System.IO.FileInfo,System.String)">
             <summary>
             Create a new instance of the ExcelPackage class based on a existing file or creates a new file. 
             </summary>
             <param name="newFile">If newFile exists, it is opened.  Otherwise it is created from scratch.</param>
+            <param name="password">Password for an encrypted package</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.#ctor(System.String,System.String)">
+            <summary>
+            Create a new instance of the ExcelPackage class based on a existing file or creates a new file. 
+            </summary>
+            <param name="path">If newFile exists, it is opened.  Otherwise it is created from scratch.</param>
             <param name="password">Password for an encrypted package</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelPackage.#ctor(System.IO.FileInfo,System.IO.FileInfo)">
@@ -26138,6 +26400,15 @@
             </summary>
             <param name="newFile">The name of the Excel file to be created</param>
             <param name="template">The name of the Excel template to use as the basis of the new Excel file</param>
+            <param name="password">Password to decrypted the template</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Create a new instance of the ExcelPackage class based on a existing template.
+            If newFile exists, it will be overwritten when the Save method is called
+            </summary>
+            <param name="newFilePath">The name of the Excel file to be created</param>
+            <param name="templatePath">The name of the Excel template to use as the basis of the new Excel file</param>
             <param name="password">Password to decrypted the template</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelPackage.#ctor(System.IO.FileInfo,System.Boolean)">
@@ -26275,12 +26546,28 @@
             </summary>
             <param name="file">The file location</param>
         </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.SaveAs(System.String)">
+            <summary>
+            Saves the workbook to a new file
+            The package is closed after it has been saved        
+            </summary>
+            <param name="filePath">The file location</param>
+        </member>
         <member name="M:OfficeOpenXml.ExcelPackage.SaveAs(System.IO.FileInfo,System.String)">
             <summary>
             Saves the workbook to a new file
             The package is closed after it has been saved
             </summary>
             <param name="file">The file</param>
+            <param name="password">The password to encrypt the workbook with. 
+            This parameter overrides the Encryption.Password.</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.SaveAs(System.String,System.String)">
+            <summary>
+            Saves the workbook to a new file
+            The package is closed after it has been saved
+            </summary>
+            <param name="filePath">The file</param>
             <param name="password">The password to encrypt the workbook with. 
             This parameter overrides the Encryption.Password.</param>
         </member>
@@ -26406,12 +26693,27 @@
             <param name="fileInfo">The input file.</param>
             <param name="cancellationToken">The cancellation token</param>
         </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.LoadAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Loads the specified package data from a stream.
+            </summary>
+            <param name="filePath">The input file.</param>
+            <param name="cancellationToken">The cancellation token</param>
+        </member>
         <member name="M:OfficeOpenXml.ExcelPackage.LoadAsync(System.IO.FileInfo,System.String,System.Threading.CancellationToken)">
             <summary>
             Loads the specified package data from a stream.
             </summary>
             <param name="fileInfo">The input file.</param>
             <param name="Password">The password</param>
+            <param name="cancellationToken">The cancellation token</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.LoadAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Loads the specified package data from a stream.
+            </summary>
+            <param name="filePath">The input file.</param>
+            <param name="password">The password</param>
             <param name="cancellationToken">The cancellation token</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelPackage.LoadAsync(System.IO.FileInfo,System.IO.Stream,System.String,System.Threading.CancellationToken)">
@@ -26421,6 +26723,15 @@
             <param name="fileInfo">The input file.</param>
             <param name="output">The out stream. Sets the Stream property</param>
             <param name="Password">The password</param>
+            <param name="cancellationToken">The cancellation token</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.LoadAsync(System.String,System.IO.Stream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Loads the specified package data from a stream.
+            </summary>
+            <param name="filePath">The input file.</param>
+            <param name="output">The out stream. Sets the Stream property</param>
+            <param name="password">The password</param>
             <param name="cancellationToken">The cancellation token</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelPackage.LoadAsync(System.IO.Stream,System.Threading.CancellationToken)">
@@ -26474,12 +26785,30 @@
             <param name="file">The file location</param>
             <param name="cancellationToken">The cancellation token</param>
         </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.SaveAsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Saves the workbook to a new file
+            The package is closed after it has been saved        
+            </summary>
+            <param name="filePath">The file location</param>
+            <param name="cancellationToken">The cancellation token</param>
+        </member>
         <member name="M:OfficeOpenXml.ExcelPackage.SaveAsAsync(System.IO.FileInfo,System.String,System.Threading.CancellationToken)">
             <summary>
             Saves the workbook to a new file
             The package is closed after it has been saved
             </summary>
             <param name="file">The file</param>
+            <param name="password">The password to encrypt the workbook with. 
+            This parameter overrides the Encryption.Password.</param>
+            <param name="cancellationToken">The cancellation token</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelPackage.SaveAsAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Saves the workbook to a new file
+            The package is closed after it has been saved
+            </summary>
+            <param name="filePath">The file</param>
             <param name="password">The password to encrypt the workbook with. 
             This parameter overrides the Encryption.Password.</param>
             <param name="cancellationToken">The cancellation token</param>
@@ -27531,16 +27860,30 @@
         </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.Copy(OfficeOpenXml.ExcelRangeBase)">
             <summary>
-            Copies the range of cells to an other range
+            Copies the range of cells to another range. 
             </summary>
-            <param name="Destination">The start cell where the range will be copied.</param>
+            <param name="Destination">The top-left cell where the range will be copied.</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.Copy(OfficeOpenXml.ExcelRangeBase,System.Nullable{OfficeOpenXml.ExcelRangeCopyOptionFlags})">
             <summary>
             Copies the range of cells to an other range
             </summary>
             <param name="Destination">The start cell where the range will be copied.</param>
-            <param name="excelRangeCopyOptionFlags">Cell parts that will not be copied. If Formulas are specified, the formulas will NOT be copied.</param>
+            <param name="excelRangeCopyOptionFlags">Cell properties that will not be copied.</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.Copy(OfficeOpenXml.ExcelRangeBase,OfficeOpenXml.ExcelRangeCopyOptionFlags[])">
+            <summary>
+            Copies the range of cells to an other range
+            </summary>
+            <param name="Destination">The start cell where the range will be copied.</param>
+            <param name="excelRangeCopyOptionFlags">Cell properties that will not be copied.</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.CopyStyles(OfficeOpenXml.ExcelRangeBase)">
+            <summary>
+            Copy the styles from the source range to the destination range.
+            If the destination range is larger than the source range, the styles of the column to the right and the row at the bottom will be expanded to the destination.
+            </summary>
+            <param name="Destination">The destination range</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.Clear">
             <summary>
@@ -27578,7 +27921,7 @@
             <summary>
             Iterate to the next cell
             </summary>
-            <returns></returns>
+            <returns>False if no more cells exists</returns>
         </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.Reset">
             <summary>
@@ -27668,6 +28011,77 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:OfficeOpenXml.ExcelRangeBase.EntireColumn">
+            <summary>
+            A reference to the column properties for column(s= referenced by this range.
+            If multiple ranges are addressed (e.g a1:a2,c1:c3), only the first address is used.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeBase.EntireRow">
+            <summary>
+            A reference to the row properties for row(s) referenced by this range.
+            If multiple ranges are addressed (e.g a1:a2,c1:c3), only the first address is used.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.GetCellValue``1(System.Int32,System.Int32)">
+            <summary>
+            Gets the value of a cell using an offset from the top-left cell in the range.
+            </summary>
+            <param name="rowOffset">Row offset from the top-left cell in the range</param>
+            <param name="columnOffset">Column offset from the top-left cell in the range</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.SetCellValue(System.Int32,System.Int32,System.Object)">
+            <summary>
+            Sets the value of a cell using an offset from the top-left cell in the range.
+            </summary>
+            <param name="rowOffset">Row offset from the top-left cell in the range</param>
+            <param name="columnOffset">Column offset from the top-left cell in the range</param>
+            <param name="value">The value to set.</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillNumber">
+            <summary>
+            Fills the range by adding 1 to each cell starting from the value in the top left cell by column
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillNumber(System.Nullable{System.Double},System.Double)">
+            <summary>
+            Fills a range by adding the step value to the start Value. If <paramref name="startValue"/> is null the first value in the row/column is used.
+            Fill is done by column from top to bottom
+            </summary>
+            <param name="startValue">The start value of the first cell. If this value is null the value of the first cell is used.</param>
+            <param name="stepValue">The value used for each step</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillDateTime">
+            <summary>
+            Fills the range by adding 1 day to each cell starting from the value in the top left cell by column.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillDateTime(System.Nullable{System.DateTime},OfficeOpenXml.eDateTimeUnit,System.Int32)">
+            <summary>
+            Fills the range by adding 1 day to each cell per column starting from <paramref name="startValue"/>.
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillDateTime(System.Action{OfficeOpenXml.Core.Worksheet.Fill.FillDateParams})">
+            <summary>
+            Fill the range with dates.
+            </summary>
+            <param name="options">Options how to perform the fill</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillList``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Fills the range columnwise using the values in the list. 
+            </summary>
+            <typeparam name="T">Type used in the list.</typeparam>
+            <param name="list">The list to use.</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeBase.FillList``1(System.Collections.Generic.IEnumerable{``0},System.Action{OfficeOpenXml.Core.Worksheet.Fill.FillListParams})">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="options"></param>
+        </member>
         <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDataReader(System.Data.IDataReader,System.Boolean,System.String,OfficeOpenXml.Table.TableStyles)">
             <summary>
             Load the data from the datareader starting from the top left cell of the range
@@ -27714,7 +28128,7 @@
             <param name="cancellationToken">The cancellation token to use</param>
             <returns>The filled range</returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDataTable(System.Data.DataTable,System.Boolean,OfficeOpenXml.Table.TableStyles)">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDataTable(System.Data.DataTable,System.Boolean,System.Nullable{OfficeOpenXml.Table.TableStyles})">
             <summary>
             Load the data from the datatable starting from the top left cell of the range
             </summary>
@@ -27780,7 +28194,7 @@
             <param name="PrintHeaders">Print the property names on the first row. If the property is decorated with a <see cref="T:System.ComponentModel.DisplayNameAttribute"/> or a <see cref="T:System.ComponentModel.DescriptionAttribute"/> that attribute will be used instead of the reflected member name.</param>
             <returns>The filled range</returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromCollection``1(System.Collections.Generic.IEnumerable{``0},System.Boolean,OfficeOpenXml.Table.TableStyles)">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromCollection``1(System.Collections.Generic.IEnumerable{``0},System.Boolean,System.Nullable{OfficeOpenXml.Table.TableStyles})">
             <summary>
             Load a collection of T into the worksheet starting from the top left row of the range.
             Default option will load all public instance properties of T
@@ -27791,7 +28205,7 @@
             <param name="TableStyle">Will create a table with this style. If set to TableStyles.None no table will be created</param>
             <returns>The filled range</returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromCollection``1(System.Collections.Generic.IEnumerable{``0},System.Boolean,OfficeOpenXml.Table.TableStyles,System.Reflection.BindingFlags,System.Reflection.MemberInfo[])">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromCollection``1(System.Collections.Generic.IEnumerable{``0},System.Boolean,System.Nullable{OfficeOpenXml.Table.TableStyles},System.Reflection.BindingFlags,System.Reflection.MemberInfo[])">
             <summary>
             Load a collection into the worksheet starting from the top left row of the range.
             </summary>
@@ -27837,13 +28251,13 @@
             <param name="Format">Information how to load the text</param>
             <returns>The range containing the data</returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromText(System.String,OfficeOpenXml.ExcelTextFormat,OfficeOpenXml.Table.TableStyles,System.Boolean)">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromText(System.String,OfficeOpenXml.ExcelTextFormat,System.Nullable{OfficeOpenXml.Table.TableStyles},System.Boolean)">
             <summary>
             Loads a CSV text into a range starting from the top left cell.
             </summary>
             <param name="Text">The Text</param>
             <param name="Format">Information how to load the text</param>
-            <param name="TableStyle">Create a table with this style</param>
+            <param name="TableStyle">Create a table with this style. If this parameter is not null no table will be created.</param>
             <param name="FirstRowIsHeader">Use the first row as header</param>
             <returns></returns>
         </member>
@@ -27862,7 +28276,7 @@
             <param name="Format">Information how to load the text</param>
             <returns></returns>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromText(System.IO.FileInfo,OfficeOpenXml.ExcelTextFormat,OfficeOpenXml.Table.TableStyles,System.Boolean)">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromText(System.IO.FileInfo,OfficeOpenXml.ExcelTextFormat,System.Nullable{OfficeOpenXml.Table.TableStyles},System.Boolean)">
             <summary>
             Loads a CSV file into a range starting from the top left cell.
             </summary>
@@ -27958,7 +28372,7 @@
             </code>
             </example>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDictionaries(System.Collections.Generic.IEnumerable{System.Collections.Generic.IDictionary{System.String,System.Object}},System.Boolean,OfficeOpenXml.Table.TableStyles)">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDictionaries(System.Collections.Generic.IEnumerable{System.Collections.Generic.IDictionary{System.String,System.Object}},System.Boolean,System.Nullable{OfficeOpenXml.Table.TableStyles})">
             <summary>
             Load a collection of dictionaries (or dynamic/ExpandoObjects) into the worksheet starting from the top left row of the range.
             These dictionaries should have the same set of keys.
@@ -27990,7 +28404,7 @@
             </code>
             </example>
         </member>
-        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDictionaries(System.Collections.Generic.IEnumerable{System.Collections.Generic.IDictionary{System.String,System.Object}},System.Boolean,OfficeOpenXml.Table.TableStyles,System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:OfficeOpenXml.ExcelRangeBase.LoadFromDictionaries(System.Collections.Generic.IEnumerable{System.Collections.Generic.IDictionary{System.String,System.Object}},System.Boolean,System.Nullable{OfficeOpenXml.Table.TableStyles},System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Load a collection of dictionaries (or dynamic/ExpandoObjects) into the worksheet starting from the top left row of the range.
             These dictionaries should have the same set of keys.
@@ -28098,6 +28512,186 @@
             <param name="stream">The strem to write to</param>
             <param name="Format">Information how to create the csv text</param>
         </member>
+        <member name="T:OfficeOpenXml.IExcelColumn">
+            <summary>
+            A column in a worksheet
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelColumn.Collapsed">
+            <summary>
+            If the column is collapsed in outline mode
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelColumn.OutlineLevel">
+            <summary>
+            Outline level. Zero if no outline
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelColumn.Phonetic">
+            <summary>
+            Phonetic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelColumn.BestFit">
+            <summary>
+            If set to true a column automaticlly resize(grow wider) when a user inputs numbers in a cell. 
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.IExcelColumn.AutoFit(System.Double,System.Double)">
+            <summary>
+            Set the column width from the content.
+            Note: Cells containing formulas are ignored unless a calculation is performed.
+                  Wrapped and merged cells are also ignored.
+            </summary>
+            <param name="MinimumWidth">Minimum column width</param>
+            <param name="MaximumWidth">Maximum column width</param>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelColumn.PageBreak">
+            <summary>
+            Adds a manual page break after the column.
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.ExcelRangeColumn">
+            <summary>
+            Represents a range of columns
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.StartColumn">
+            <summary>
+            The first column in the collection
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.EndColumn">
+            <summary>
+            The last column in the collection
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Collapsed">
+            <summary>
+            If the column is collapsed in outline mode
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.OutlineLevel">
+            <summary>
+            Outline level. Zero if no outline
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Phonetic">
+            <summary>
+            True if the column should show phonetic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.BestFit">
+            <summary>
+            Indicates that the column should resize when numbers are entered into the column to fit the size of the text.
+            This only applies to columns where the size has not been set.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Hidden">
+            <summary>
+            If the column is hidden.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Width">
+            <summary>
+            Row width of the column.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.PageBreak">
+            <summary>
+            Adds a manual page break after the column.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Style">
+            <summary>
+            The Style applied to the whole column(s). Only effects cells with no individual style set. 
+            Use Range object if you want to set specific styles.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.StyleName">
+            <summary>
+            Sets the style for the entire column using a style name.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.StyleID">
+            <summary>
+            Sets the style for the entire column using the style ID.           
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Current">
+            <summary>
+            The current range when enumerating
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.System#Collections#IEnumerator#Current">
+            <summary>
+            The current range when enumerating
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.AutoFit">
+            <summary>
+            Set the column width from the content of the range. Columns outside of the worksheets dimension are ignored.
+            The minimum width is the value of the ExcelWorksheet.defaultColumnWidth property.
+            </summary>
+            <remarks>
+            Cells containing formulas must be calculated before autofit is called.
+            Wrapped and merged cells are also ignored.
+            </remarks>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.AutoFit(System.Double)">
+            <summary>
+            Set the column width from the content of the range. Columns outside of the worksheets dimension are ignored.
+            </summary>
+            <remarks>
+            This method will not work if you run in an environment that does not support GDI.
+            Cells containing formulas are ignored if no calculation is made.
+            Wrapped and merged cells are also ignored.
+            </remarks>
+            <param name="MinimumWidth">Minimum column width</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.AutoFit(System.Double,System.Double)">
+            <summary>
+            Set the column width from the content of the range. Columns outside of the worksheets dimension are ignored.
+            </summary>
+            <remarks>
+            This method will not work if you run in an environment that does not support GDI.
+            Cells containing formulas are ignored if no calculation is made.
+            Wrapped and merged cells are also ignored.
+            </remarks>        
+            <param name="MinimumWidth">Minimum column width</param>
+            <param name="MaximumWidth">Maximum column width</param>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeColumn.Range">
+            <summary>
+            Reference to the cell range of the column(s)
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.GetEnumerator">
+            <summary>
+            Gets the enumerator
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets the enumerator
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.MoveNext">
+            <summary>
+            Iterate to the next row
+            </summary>
+            <returns>False if no more row exists</returns>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.Reset">
+            <summary>
+            Reset the enumerator
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeColumn.Dispose">
+            <summary>
+            Disposes this object
+            </summary>
+        </member>
         <member name="T:OfficeOpenXml.ExcelRangeCopyOptionFlags">
             <summary>
             Flag enum, specify all flags that you want to exclude from the copy.
@@ -28105,7 +28699,195 @@
         </member>
         <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeFormulas">
             <summary>
-            Exclude formulas from being copied
+            Exclude formulas from being copied. Only the value of the cell will be copied
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeValues">
+            <summary>
+            Will exclude formulas and values from being copied
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeStyles">
+            <summary>
+            Exclude styles from being copied. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeComments">
+            <summary>
+            Exclude comments from being copied. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeThreadedComments">
+            <summary>
+            Exclude threaded comments from being copied. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeHyperLinks">
+            <summary>
+            Exclude hyperlinks from being copied. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeMergedCells">
+            <summary>
+            Exclude merged cells from being copied. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeDataValidations">
+            <summary>
+            Exclude data validations from being copied. 
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ExcelRangeCopyOptionFlags.ExcludeConditionalFormatting">
+            <summary>
+            Exclude conditional formatting from being copied. 
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.IExcelRow">
+            <summary>
+            A row in a worksheet
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.Collapsed">
+            <summary>
+            If the row is collapsed in outline mode
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.OutlineLevel">
+            <summary>
+            Outline level. Zero if no outline
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.Phonetic">
+            <summary>
+            True if the row should show phonetic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.Hidden">
+            <summary>
+            If the row is hidden.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.Height">
+            <summary>
+            Row height in points if specified manually.
+            <seealso cref="P:OfficeOpenXml.IExcelRow.CustomHeight"/>
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.PageBreak">
+            <summary>
+            Adds a manual page break after the column.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.IExcelRow.CustomHeight">
+            <summary>
+            True if height is set manually
+            </summary>
+        </member>
+        <member name="T:OfficeOpenXml.ExcelRangeRow">
+            <summary>
+            Represents a range of rows
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.StartRow">
+            <summary>
+            The first row in the collection
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.EndRow">
+            <summary>
+            The last row in the collection
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Collapsed">
+            <summary>
+            If the row is collapsed in outline mode
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.OutlineLevel">
+            <summary>
+            Outline level. Zero if no outline
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Phonetic">
+            <summary>
+            True if the row should show phonetic
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Hidden">
+            <summary>
+            If the row is hidden.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Height">
+            <summary>
+            Row height in points. Setting this property will also set <see cref="P:OfficeOpenXml.ExcelRangeRow.CustomHeight"/> to true.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.CustomHeight">
+            <summary>
+            True if the row <see cref="P:OfficeOpenXml.ExcelRangeRow.Height" /> has been manually set.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.PageBreak">
+            <summary>
+            Adds a manual page break after the column.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Style">
+            <summary>
+            The Style applied to the whole row(s). Only effects cells with no individual style set. 
+            Use the Range object if you want to set specific styles.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.StyleName">
+            <summary>
+            Sets the style for the entire row using a style name.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.StyleID">
+            <summary>
+            Sets the style for the entire column using the style ID.           
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Range">
+            <summary>
+            Reference to the cell range of the row(s)
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.Current">
+            <summary>
+            The current row object in the iteration
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelRangeRow.System#Collections#IEnumerator#Current">
+            <summary>
+            The current row object in the iteration
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeRow.GetEnumerator">
+            <summary>
+            Gets the enumerator
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeRow.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets the enumerator
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeRow.MoveNext">
+            <summary>
+            Iterate to the next row
+            </summary>
+            <returns>False if no more row exists</returns>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeRow.Reset">
+            <summary>
+            Reset the enumerator
+            </summary>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelRangeRow.Dispose">
+            <summary>
+            Disposes this object
             </summary>
         </member>
         <member name="T:OfficeOpenXml.ExcelRow">
@@ -29641,6 +30423,16 @@
             <param name="obj">The worksheet</param>
             <returns>The hashcode</returns>
         </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheet.Rows">
+            <summary>
+            A collection of row specific properties in the worksheet.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheet.Columns">
+            <summary>
+            A collection of column specific properties in the worksheet.
+            </summary>
+        </member>
         <member name="M:OfficeOpenXml.ExcelWorksheet.GetCoreValueInner(System.Int32,System.Int32)">
             <summary>
             Get accessor of sheet value
@@ -29719,7 +30511,7 @@
         </member>
         <member name="M:OfficeOpenXml.ExcelWorksheet.ExistsValueInner(System.Int32,System.Int32,System.Object@)">
             <summary>
-            Existance check of sheet value
+            Existence check of sheet value
             </summary>
             <param name="row">row</param>
             <param name="col">column</param>
@@ -29728,7 +30520,7 @@
         </member>
         <member name="M:OfficeOpenXml.ExcelWorksheet.ExistsStyleInner(System.Int32,System.Int32,System.Int32@)">
             <summary>
-            Existance check of sheet styleId
+            Existence check of sheet styleId
             </summary>
             <param name="row">row</param>
             <param name="col">column</param>
@@ -29914,19 +30706,97 @@
             Dispose the worksheets collection
             </summary>
         </member>
+        <member name="F:OfficeOpenXml.ePaneState.Frozen">
+            <summary>
+            Panes are frozen, but were not split being frozen.In this state, when the panes are unfrozen again, a single pane results, with no split. In this state, the split bars are not adjustable.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ePaneState.FrozenSplit">
+            <summary>
+            Frozen Split
+            Panes are frozen and were split before being frozen. In this state, when the panes are unfrozen again, the split remains, but is adjustable.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ePaneState.Split">
+            <summary>
+            Panes are split, but not frozen.In this state, the split bars are adjustable by the user.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ePanePosition.BottomLeft">
+            <summary>
+            Bottom Left Pane.
+            Used when worksheet view has both vertical and horizontal splits.
+            Also used when the worksheet is horizontaly split only, specifying this is the bottom pane.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ePanePosition.BottomRight">
+            <summary>
+            Bottom Right Pane. 
+            This property is only used when the worksheet has both vertical and horizontal splits.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ePanePosition.TopLeft">
+            <summary>
+            Top Left Pane.
+            Used when worksheet view has both vertical and horizontal splits.
+            Also used when the worksheet is horizontaly split only, specifying this is the top pane.
+            </summary>
+        </member>
+        <member name="F:OfficeOpenXml.ePanePosition.TopRight">
+            <summary>
+            Top Right Pane
+            Used when the worksheet view has both vertical and horizontal splits.
+            Also used when the worksheet is verticaly split only, specifying this is the right pane.
+            </summary>
+        </member>
         <member name="T:OfficeOpenXml.ExcelWorksheetView">
             <summary>
             Represents the different view states of the worksheet
             </summary>
         </member>
+        <member name="T:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetViewPaneSettings">
+            <summary>
+            Defines general properties for the panes, if the worksheet is frozen or split.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetViewPaneSettings.ActivePanePosition">
+            <summary>
+            The active pane
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetViewPaneSettings.XSplit">
+            <summary>
+            The horizontal position of the split. 1/20 of a point if the pane is split. Number of columns in the top pane if this pane is frozen.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetViewPaneSettings.YSplit">
+            <summary>
+            The vertical position of the split. 1/20 of a point if the pane is split. Number of rows in the left pane if this pane is frozen.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetViewPaneSettings.TopLeftCell">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetPanes">
             <summary>
-            The worksheet panes after a freeze or split.
+            The selection properties for panes after a freeze or split.
             </summary>
         </member>
         <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetPanes.ActiveCell">
             <summary>
             Set the active cell. Must be set within the SelectedRange.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetPanes.Position">
+            <summary>
+            The position of the pane.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetPanes.ActiveCellId">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:OfficeOpenXml.ExcelWorksheetView.ExcelWorksheetPanes.SelectedRange">
@@ -29964,6 +30834,11 @@
             Selected Cells in the worksheet. Used in combination with ActiveCell.
             If the active cell is not inside the selected range, the active cell will be set to the first cell in the selected range.
             If the selected range has multiple adresses, these are separated with space. If the active cell is not within the first address in this list, the attribute ActiveCellId must be set (not supported, so it must be set via the XML).
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.PaneSettings">
+            <summary>
+            Contains settings for the active pane
             </summary>
         </member>
         <member name="P:OfficeOpenXml.ExcelWorksheetView.TabSelected">
@@ -30018,12 +30893,48 @@
             Reference to the panes
             </summary>
         </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.TopLeftPane">
+            <summary>
+            The top left pane or the top pane if the sheet is horizontaly split. This property returns null if the pane does not exist in the <see cref="P:OfficeOpenXml.ExcelWorksheetView.Panes"/> array.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.TopRightPane">
+            <summary>
+            The top right pane. This property returns null if the pane does not exist in the <see cref="P:OfficeOpenXml.ExcelWorksheetView.Panes"/> array.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.BottomLeftPane">
+            <summary>
+            The bottom left pane. This property returns null if the pane does not exist in the <see cref="P:OfficeOpenXml.ExcelWorksheetView.Panes"/> array.
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.ExcelWorksheetView.BottomRightPane">
+            <summary>
+            The bottom right pane. This property returns null if the pane does not exist in the <see cref="P:OfficeOpenXml.ExcelWorksheetView.Panes"/> array.
+            </summary>
+        </member>
         <member name="M:OfficeOpenXml.ExcelWorksheetView.FreezePanes(System.Int32,System.Int32)">
             <summary>
             Freeze the columns/rows to left and above the cell
             </summary>
             <param name="Row"></param>
             <param name="Column"></param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelWorksheetView.SplitPanesPixels(System.Int32,System.Int32)">
+            <summary>
+            Split panes at the position in pixels from the top-left corner.
+            </summary>
+            <param name="pixelsY">Vertical pixels</param>
+            <param name="pixelsX">Horizontal pixels</param>
+        </member>
+        <member name="M:OfficeOpenXml.ExcelWorksheetView.SplitPanes(System.Int32,System.Int32)">
+            <summary>
+            Split the window at the supplied row/column. 
+            The split is performed using the current width/height of the visible rows and columns, so any changes to column width or row heights after the split will not effect the split position.
+            To remove split call this method with zero as value of both paramerters or use <seealso cref="M:OfficeOpenXml.ExcelWorksheetView.UnFreezePanes"/>
+            </summary>
+            <param name="rowsTop">Splits the panes at the coordinate after this visible row. Zero mean no split on row level</param>
+            <param name="columnsLeft">Splits the panes at the coordinate after this visible column. Zero means no split on column level.</param>
         </member>
         <member name="M:OfficeOpenXml.ExcelWorksheetView.UnFreezePanes">
             <summary>
@@ -30559,7 +31470,7 @@
         </member>
         <member name="P:OfficeOpenXml.ExternalReferences.ExcelExternalLinkAsType.ExternalWorkbook">
             <summary>
-            Return the external link as an external workbook. If the external link is not of type <see cref="!:ExcelExternalBook" />, null is returned
+            Return the external link as an external workbook. If the external link is not of type <see cref="T:OfficeOpenXml.ExternalReferences.ExcelExternalWorkbook" />, null is returned
             </summary>
         </member>
         <member name="P:OfficeOpenXml.ExternalReferences.ExcelExternalLinkAsType.DdeLink">
@@ -31609,6 +32520,12 @@
             This is used as .NET and Excel does not measure font widths in pixels in a similar way.
             </summary>
         </member>
+        <member name="F:OfficeOpenXml.FontSize.FontHeightsOld">
+            <summary>
+            Dictionary containing Font Width and heights in pixels.
+            You can add your own fonts and sizes here.
+            </summary>
+        </member>
         <member name="F:OfficeOpenXml.FontSize.FontHeights">
             <summary>
             Dictionary containing Font Width and heights in pixels.
@@ -32349,6 +33266,7 @@
             <param name="ignoreErrors">If a cell contains an error, that error will be ignored if this method is set to true</param>
             <param name="arguments"></param>
             <param name="context"></param>
+            <param name="ignoreNonNumeric"></param>
             <returns></returns>
         </member>
         <member name="M:OfficeOpenXml.FormulaParsing.Excel.Functions.ExcelFunction.ArgsToDoubleEnumerable(System.Boolean,System.Collections.Generic.IEnumerable{OfficeOpenXml.FormulaParsing.Excel.Functions.FunctionArgument},OfficeOpenXml.FormulaParsing.ParsingContext,System.Boolean)">
@@ -32358,6 +33276,7 @@
             <param name="ignoreHiddenCells">If a cell is hidden and this value is true the value of that cell will be ignored</param>
             <param name="arguments"></param>
             <param name="context"></param>
+            <param name="ignoreNonNumeric"></param>
             <returns></returns>
         </member>
         <member name="M:OfficeOpenXml.FormulaParsing.Excel.Functions.ExcelFunction.ArgsToDoubleEnumerable(System.Boolean,System.Collections.Generic.IEnumerable{OfficeOpenXml.FormulaParsing.Excel.Functions.FunctionArgument},OfficeOpenXml.FormulaParsing.ParsingContext)">
@@ -32366,7 +33285,7 @@
             </summary>
             <param name="ignoreHiddenCells">If a cell is hidden and this value is true the value of that cell will be ignored</param>
             <param name="arguments"></param>
-            <param name="context"></param>
+            <param name="context"></param>        
             <returns></returns>
         </member>
         <member name="M:OfficeOpenXml.FormulaParsing.Excel.Functions.ExcelFunction.ArgsToObjectEnumerable(System.Boolean,System.Collections.Generic.IEnumerable{OfficeOpenXml.FormulaParsing.Excel.Functions.FunctionArgument},OfficeOpenXml.FormulaParsing.ParsingContext)">
@@ -34019,6 +34938,12 @@
         <member name="P:OfficeOpenXml.LoadFunctions.LoadFunctionFunctionParamsBase.PrintHeaders">
             <summary>
             If true a row with headers will be added above the data
+            </summary>
+        </member>
+        <member name="P:OfficeOpenXml.LoadFunctions.LoadFunctionFunctionParamsBase.TableName">
+            <summary>
+            A custom name for the table, if created. 
+            The TableName must be unique within the workbook and be a valid table name.
             </summary>
         </member>
         <member name="P:OfficeOpenXml.LoadFunctions.LoadFunctionFunctionParamsBase.TableStyle">
@@ -57538,7 +58463,7 @@
         <member name="P:OfficeOpenXml.Table.PivotTable.ExcelPivotTableField.AutoSort">
             <summary>
             Auto sort for a field. Sort is set on a data field for a row/column field.
-            Use <see cref="!:SetAutoSort(ExcelPivotTableDataField)"/> to set auto sort 
+            Use <see cref="M:OfficeOpenXml.Table.PivotTable.ExcelPivotTableField.SetAutoSort(OfficeOpenXml.Table.PivotTable.ExcelPivotTableDataField,OfficeOpenXml.Table.PivotTable.eSortType)"/> to set auto sort 
             Use <seealso cref="M:OfficeOpenXml.Table.PivotTable.ExcelPivotTableField.RemoveAutoSort"/> to remove auto sort and set this property to null
             </summary>
         </member>
@@ -58905,7 +59830,7 @@
         </member>
         <member name="T:OfficeOpenXml.Utils.CompundDocument.CompoundDocumentFile">
             <summary>
-            Read and write a compound document.
+            Reads and writes a compound documents.
             Read spec here https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-CFB/[MS-CFB].pdf
             </summary>
         </member>

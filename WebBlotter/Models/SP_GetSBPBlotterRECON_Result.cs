@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,10 +8,7 @@ namespace WebBlotter.Models
     public class SP_GetSBPBlotterRECON_Result
     {
         public long ID { get; set; }
-        public long NostroBankId { get; set; }
-
-        [DataType(DataType.Date, ErrorMessage = "Date only")]
-        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        public string BankCode { get; set; }
         public Nullable<System.DateTime> LastStatementDate { get; set; }
         public Nullable<decimal> OurBooks { get; set; }
         public Nullable<decimal> TheirBooks { get; set; }

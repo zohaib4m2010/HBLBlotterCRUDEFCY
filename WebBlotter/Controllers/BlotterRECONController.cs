@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
+using Excel = Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
