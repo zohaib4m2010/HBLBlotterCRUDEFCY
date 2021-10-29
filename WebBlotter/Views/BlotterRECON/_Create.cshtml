@@ -33,16 +33,45 @@
             $("#EquivalentUSDID").val("");
         }
     }
-  
+
 
 </script>
-@using (Html.BeginForm("_Create", "BlotterRECON", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h2>Create Blotter RECON</h2>
-        <hr />
+
+<div class="form-horizontal">
+    <h2>Create Blotter RECON</h2>
+
+    @* Excel Upload Start *@
+
+    <hr />
+    @using (Html.BeginForm("UploadExcel", "BlotterRECON", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div class="row">
+            <div class="col-md-2">Download Format:</div>
+            <div class="col-md-1">
+                <a href="~/Content/ExcelSheets/RECONSheet.xlsx">
+                    <img src="~/Content/images/Excel.ico" width="25" height="25" title="Download Excel format" alt="excel" />
+                </a>
+            </div>
+            <div class="col-md-2">Bulk Upload:</div>
+            <div class="col-md-3">
+                <input type="file" id="FileUpload" name="postedFile" />
+            </div>
+            <div class="col-md-2 pull-right">
+                <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
+            </div>
+
+        </div>
+    }
+
+
+    @* End *@
+
+    <hr />
+    @using (Html.BeginForm("Update", "BlotterRECON", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
@@ -87,7 +116,7 @@
             @Html.LabelFor(model => model.EquivalentUSD, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.EquivalentUSD, new { htmlAttributes = new { @class = "form-control", id = "EquivalentUSDID" } })
-                    @Html.ValidationMessageFor(model => model.EquivalentUSD, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.EquivalentUSD, "", new { @class = "text-danger" })
                 @*<input type="hidden" class="form-control" value="@Model.EquivalentUSD" id="EquivalentUSDID" name="EquivalentUSDID"  />*@
             </div>
         </div>
@@ -113,5 +142,6 @@
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
-    </div>
-}
+    }
+</div>
+

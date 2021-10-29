@@ -1,15 +1,20 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Web;
 using System.Web.Mvc;
 using WebBlotter.Classes;
 using WebBlotter.Models;
 using WebBlotter.Repository;
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
+using System.Linq;
+using System.Web;
+using OfficeOpenXml;
+using System.IO;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
+using System.Configuration;
 
 namespace WebBlotter.Controllers
 {
@@ -19,7 +24,7 @@ namespace WebBlotter.Controllers
 
         UtilityClass UC = new UtilityClass();
         // GET: BlotterTrade
-        private List<Models.SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
+        private List<SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
         {
             try
             {
@@ -31,21 +36,23 @@ namespace WebBlotter.Controllers
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBankFromOpicsDDL?currId=" + currid + "&BRCode=" + Session["BR"].ToString());
                 response.EnsureSuccessStatusCode();
-                List<Models.SP_GetNostroBankFromOPICS_Result> blotterNB = new List<Models.SP_GetNostroBankFromOPICS_Result>();
+                List<SP_GetNostroBankFromOPICS_Result> blotterNB = new List<SP_GetNostroBankFromOPICS_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     var JsonLinq = JObject.Parse(jsonResponse);
-                    WebApiResponse getreponse = new WebApiResponse();
-                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
-                    getreponse.Message = JsonLinq["Message"].ToString();
-                    getreponse.Data = JsonLinq["Data"].ToString();
+                    WebApiResponse getreponse = new WebApiResponse
+                    {
+                        Status = Convert.ToBoolean(JsonLinq["Status"]),
+                        Message = JsonLinq["Message"].ToString(),
+                        Data = JsonLinq["Data"].ToString()
+                    };
                     if (getreponse.Message == "Success")
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterNB = JsonConvert.DeserializeObject<List<Models.SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
+                        blotterNB = JsonConvert.DeserializeObject<List<SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
                         ViewBag.NostroBanksDDL = blotterNB;
                     }
                 }
@@ -56,7 +63,7 @@ namespace WebBlotter.Controllers
                 throw;
             }
         }
-        private List<Models.SP_GETAllTransactionTitles_Result> GetAllTradeTransactionTitles()
+        private List<SP_GETAllTransactionTitles_Result> GetAllTradeTransactionTitles()
         {
             try
             {
@@ -64,21 +71,23 @@ namespace WebBlotter.Controllers
                 HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterTrade/GetAllTradeTransactionTitles");
                 response.EnsureSuccessStatusCode();
                 //List<Models.SP_GETAllTransactionTitles_Result> blotterTTT = response.Content.ReadAsAsync<List<Models.SP_GETAllTransactionTitles_Result>>().Result;
-                List<Models.SP_GETAllTransactionTitles_Result> blotterTTT = new List<Models.SP_GETAllTransactionTitles_Result>();
+                List<SP_GETAllTransactionTitles_Result> blotterTTT = new List<SP_GETAllTransactionTitles_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     var JsonLinq = JObject.Parse(jsonResponse);
-                    WebApiResponse getreponse = new WebApiResponse();
-                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
-                    getreponse.Message = JsonLinq["Message"].ToString();
-                    getreponse.Data = JsonLinq["Data"].ToString();
+                    WebApiResponse getreponse = new WebApiResponse
+                    {
+                        Status = Convert.ToBoolean(JsonLinq["Status"]),
+                        Message = JsonLinq["Message"].ToString(),
+                        Data = JsonLinq["Data"].ToString()
+                    };
                     if (getreponse.Message == "Success")
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterTTT = JsonConvert.DeserializeObject<List<Models.SP_GETAllTransactionTitles_Result>>(ResponseDD["Data"]);
+                        blotterTTT = JsonConvert.DeserializeObject<List<SP_GETAllTransactionTitles_Result>>(ResponseDD["Data"]);
                     }
                 }
                 return blotterTTT;
@@ -118,21 +127,23 @@ namespace WebBlotter.Controllers
                 response.EnsureSuccessStatusCode();
                 // List<Models.SP_GetAll_SBPBlotterTrade_Result> blotterTrade = response.Content.ReadAsAsync<List<Models.SP_GetAll_SBPBlotterTrade_Result>>().Result;
 
-                List<Models.SP_GetAll_SBPBlotterTrade_Result> blotterTrade = new List<Models.SP_GetAll_SBPBlotterTrade_Result>();
+                List<SP_GetAll_SBPBlotterTrade_Result> blotterTrade = new List<SP_GetAll_SBPBlotterTrade_Result>();
 
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     var JsonLinq = JObject.Parse(jsonResponse);
-                    WebApiResponse getreponse = new WebApiResponse();
-                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
-                    getreponse.Message = JsonLinq["Message"].ToString();
-                    getreponse.Data = JsonLinq["Data"].ToString();
-                    if (getreponse.Status == true)
+                    WebApiResponse getreponse = new WebApiResponse
+                    {
+                        Status = Convert.ToBoolean(JsonLinq["Status"]),
+                        Message = JsonLinq["Message"].ToString(),
+                        Data = JsonLinq["Data"].ToString()
+                    };
+                    if (getreponse.Status)
                     {
                         JavaScriptSerializer ser = new JavaScriptSerializer();
                         Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterTrade = JsonConvert.DeserializeObject<List<Models.SP_GetAll_SBPBlotterTrade_Result>>(ResponseDD["Data"]);
+                        blotterTrade = JsonConvert.DeserializeObject<List<SP_GetAll_SBPBlotterTrade_Result>>(ResponseDD["Data"]);
                     }
                     else
                         TempData["DataStatus"] = "Data not available";
@@ -156,8 +167,8 @@ namespace WebBlotter.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            var ActiveAction = RouteData.Values["action"].ToString();
-            var ActiveController = RouteData.Values["controller"].ToString();
+            string ActiveAction = RouteData.Values["action"].ToString();
+            string ActiveController = RouteData.Values["controller"].ToString();
             Session["ActiveAction"] = ActiveController;
             Session["ActiveController"] = ActiveAction;
 
@@ -174,7 +185,7 @@ namespace WebBlotter.Controllers
                     ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
             return PartialView("_Create", model);
 
         }
@@ -241,10 +252,12 @@ namespace WebBlotter.Controllers
                     {
                         string jsonResponse = response.Content.ReadAsStringAsync().Result;
                         var JsonLinq = JObject.Parse(jsonResponse);
-                        WebApiResponse getreponse = new WebApiResponse();
-                        getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
-                        getreponse.Message = JsonLinq["Message"].ToString();
-                        getreponse.Data = JsonLinq["Data"].ToString();
+                        WebApiResponse getreponse = new WebApiResponse
+                        {
+                            Status = Convert.ToBoolean(JsonLinq["Status"]),
+                            Message = JsonLinq["Message"].ToString(),
+                            Data = JsonLinq["Data"].ToString()
+                        };
                         if (getreponse.Status == true)
                             TempData["DataStatus"] = getreponse.Message;
                         else
@@ -312,7 +325,7 @@ namespace WebBlotter.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(Models.SBP_BlotterTrade BlotterTrade, FormCollection form)
+        public ActionResult Update(SBP_BlotterTrade BlotterTrade, FormCollection form)
         {
             try
             {
@@ -368,12 +381,14 @@ namespace WebBlotter.Controllers
                 {
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     var JsonLinq = JObject.Parse(jsonResponse);
-                    WebApiResponse getreponse = new WebApiResponse();
-                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
-                    getreponse.Message = JsonLinq["Message"].ToString();
-                    getreponse.Data = JsonLinq["Data"].ToString();
+                    WebApiResponse getreponse = new WebApiResponse
+                    {
+                        Status = Convert.ToBoolean(JsonLinq["Status"]),
+                        Message = JsonLinq["Message"].ToString(),
+                        Data = JsonLinq["Data"].ToString()
+                    };
 
-                    if (getreponse.Status == true)
+                    if (getreponse.Status)
                     {
                         TempData["DataStatus"] = getreponse.Message;
                     }
@@ -384,6 +399,169 @@ namespace WebBlotter.Controllers
             catch (Exception ex) { }
 
             return RedirectToAction("BlotterTrade");
+        }
+
+
+        public ActionResult UploadExcel(HttpPostedFileBase postedFile)
+        {
+            try
+            {
+                if (postedFile != null)
+                {
+                    ViewBag.NostroBanksDDL = GetAllNostroBanks();
+                    ViewBag.TradeTransactionTitles = GetAllTradeTransactionTitles();
+                    HttpPostedFileBase file = Request.Files["postedFile"];
+                    string Remarks = string.Empty;
+
+                    if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                    {
+                        string fileContentType = file.ContentType;
+                        byte[] fileBytes = new byte[file.ContentLength];
+                        string str = Path.GetExtension(file.FileName);
+
+                        FileInfo fi = new FileInfo(file.FileName);
+                        string justFileName = fi.Name.Substring(0, file.FileName.Length - str.Length);
+                        string NewFileName = justFileName + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+                        string filePath = Server.MapPath(ConfigurationManager.AppSettings["ExcelFile"]);
+
+                        ExcelPackage.LicenseContext = LicenseContext.Commercial;
+                        FileInfo newfile = new FileInfo(filePath + NewFileName);
+                        using (ExcelPackage excel = new ExcelPackage(file.InputStream))
+                        {
+                            excel.SaveAs(newfile);
+                        }
+
+                        if (str == ".xlsx")
+                        {
+                            using (ExcelPackage package = new ExcelPackage(newfile))
+                            {
+                                ExcelWorksheets currentSheet = package.Workbook.Worksheets;
+                                ExcelWorksheet workSheet = currentSheet.First();
+
+                                int noOfCol = workSheet.Dimension.End.Column;
+                                int noOfRow = workSheet.Dimension.End.Row;
+                                SP_GetAll_SBPBlotterTrade_Result blotterTradeNewItem = new SP_GetAll_SBPBlotterTrade_Result();
+                                ServiceRepository serviceObj = new ServiceRepository();
+                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                {
+                                    SBP_BlotterTrade trade = new SBP_BlotterTrade();
+                                    if (workSheet.Cells[rowIterator, 1].Value == null || Convert.ToInt64(workSheet.Cells[rowIterator, 1].Value) == 0)
+                                    {
+                                        trade.SNo = 0;
+                                    }
+                                    else
+                                    {
+                                        trade.SNo = Convert.ToInt64(workSheet.Cells[rowIterator, 1].Value);
+                                    }
+
+                                    if (workSheet.Cells[rowIterator, 7].Value.ToString() == "N")
+                                    {
+                                        trade.Flag = "N";
+                                    }
+                                    else if (workSheet.Cells[rowIterator, 7].Value.ToString() == "U")
+                                    {
+                                        trade.Flag = "U";
+                                    }
+                                    else if (workSheet.Cells[rowIterator, 7].Value.ToString() == "D")
+                                    {
+                                        trade.Flag = "D";
+                                    }
+                                    try
+                                    {
+                                        foreach (dynamic item in ViewBag.NostroBanksDDL)
+                                        {
+                                            if (item.BankName.Trim() == workSheet.Cells[rowIterator, 2].Value.ToString())
+                                            {
+                                                trade.BankCode = item.BankCode;
+                                            }
+                                        }
+                                        foreach (dynamic item in ViewBag.TradeTransactionTitles)
+                                        {
+                                            if (item.TranctionTitle.Trim() == workSheet.Cells[rowIterator, 3].Value.ToString())
+                                            {
+                                                trade.TTID = item.TTID;
+                                            }
+                                        }
+
+                                        trade.Trade_Date = Convert.ToDateTime(workSheet.Cells[rowIterator, 4].Value);
+                                        string inflow = workSheet.Cells[rowIterator, 5].Value.ToString();
+                                        trade.Trade_InFlow = inflow.Contains(",") ? Convert.ToDecimal(inflow.Replace(",", "")) : Convert.ToDecimal(workSheet.Cells[rowIterator, 5].Value);
+                                        string OutFLow = workSheet.Cells[rowIterator, 6].Value.ToString();
+                                        trade.Trade_OutFLow = OutFLow.Contains(",") ? Convert.ToDecimal(OutFLow.Replace(",", "")) : Convert.ToDecimal(workSheet.Cells[rowIterator, 6].Value);
+
+                                        trade.UserID = Convert.ToInt16(Session["UserID"].ToString());
+                                        trade.BID = Convert.ToInt16(Session["BranchID"].ToString());
+                                        trade.BR = Convert.ToInt16(Session["BR"].ToString());
+                                        trade.CurID = Convert.ToInt16(Session["SelectedCurrency"].ToString());
+                                        trade.CreateDate = DateTime.Now;
+                                        HttpResponseMessage response = serviceObj.PostResponse("api/BlotterTrade/BulkInsertTrade", trade);
+                                        response.EnsureSuccessStatusCode();
+                                        if (response.IsSuccessStatusCode)
+                                        {
+                                            string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                                            JObject JsonLinq = JObject.Parse(jsonResponse);
+                                            WebApiResponse getreponse = new WebApiResponse
+                                            {
+                                                Status = Convert.ToBoolean(JsonLinq["Status"]),
+                                                Message = JsonLinq["Message"].ToString(),
+                                                Data = JsonLinq["Data"].ToString()
+                                            };
+                                            if (getreponse.Status)
+                                            {
+                                                JavaScriptSerializer ser = new JavaScriptSerializer();
+                                                blotterTradeNewItem = JsonConvert.DeserializeObject<SP_GetAll_SBPBlotterTrade_Result>(getreponse.Data);
+                                                if (blotterTradeNewItem.Flag == "N" && (trade.SNo == null || trade.SNo == 0))
+                                                {
+                                                    Remarks = "Data inserted";
+                                                }
+                                                else if ((blotterTradeNewItem.Flag == "U" || blotterTradeNewItem.Flag == "N") && blotterTradeNewItem.SNo > 0)
+                                                {
+                                                    if (blotterTradeNewItem.Flag == "U" && blotterTradeNewItem.SNo > 0)
+                                                    {
+                                                        Remarks = "Data Updated";
+                                                    }
+                                                    else
+                                                    {
+                                                        Remarks = "Data Inserted";
+                                                    }
+                                                }                                               
+                                                else if (blotterTradeNewItem.Flag == "D")
+                                                {
+                                                    Remarks = "Data Deleted";
+                                                }
+                                                workSheet.Cells[rowIterator, 1].Value = blotterTradeNewItem.SNo;
+                                                workSheet.Cells[rowIterator, 8].Value = Remarks;
+                                                package.Save();
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Remarks = ex.Message;
+                                        workSheet.Cells[rowIterator, 1].Value = blotterTradeNewItem.SNo;
+                                        workSheet.Cells[rowIterator, 8].Value = Remarks;
+                                        package.Save();
+                                    }
+                                }
+                                //End Loop
+                                workSheet.Cells["A:AZ"].AutoFitColumns();
+                                Response.Clear();
+                                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                                Response.AddHeader("content-disposition", "attachment: filename=" + newfile);
+                                Response.BinaryWrite(package.GetAsByteArray());
+                                Response.End();
+                            }
+                            // UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(tradeList), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
+                        }
+                    }
+                }
+                return RedirectToAction("BlotterTrade");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

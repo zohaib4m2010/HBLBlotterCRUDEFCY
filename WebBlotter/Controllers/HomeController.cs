@@ -69,30 +69,47 @@ namespace WebBlotter.Controllers
             List<Models.SBP_BlotterCRRReportDaysWiseBal> BlotterCRRReportsDayWiseBal = response.Content.ReadAsAsync<List<Models.SBP_BlotterCRRReportDaysWiseBal>>().Result;
 
             ViewBag.SBP_BlotterCRRReportDaysWiseBal = BlotterCRRReportsDayWiseBal;
-
+            HttpResponseMessage response2 = new HttpResponseMessage();
             //HttpResponseMessage response1 = serviceObj.GetResponse("/api/Blotter/GetLatestBlotterDTLReportForToday?&BR=" + Session["BR"].ToString());
             //response.EnsureSuccessStatusCode();
             //Models.SBP_BlotterCRRReportDaysWiseBal BlotterCRRReportForTodayBal = response.Content.ReadAsAsync<Models.SBP_BlotterCRRReportDaysWiseBal>().Result;
 
             //ViewBag.SBP_BlotterCRRReportForTodayBal = BlotterCRRReportForTodayBal;
-
-            HttpResponseMessage response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString() + "&Date=" + DateTime.Now.ToString("yyyy-MM-dd"));
-            response2.EnsureSuccessStatusCode();
-            Models.SBP_BlotterOpeningBalance BlotterOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
-
-
-            ViewBag.SBP_BlotterOpeningBalaceForToday = BlotterOpeningBalaceForToday;
+            if (selectCurrency == 1)
+            {
+                response2 = serviceObj.GetResponse("/api/Blotter/GetLatestOpeningBalaceForToday?&BR=" + Session["BR"].ToString() + "&Date=" + DateTime.Now.ToString("yyyy-MM-dd"));
+                response2.EnsureSuccessStatusCode();
+                Models.SBP_BlotterOpeningBalance BlotterOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SBP_BlotterOpeningBalance>().Result;
+                ViewBag.SBP_BlotterOpeningBalaceForToday = BlotterOpeningBalaceForToday;
+            }
+            else
+            {
+                response2 = serviceObj.GetResponse("/api/Blotter/GetLatestFCYOpeningBalaceForToday?&BR=" + Session["BR"].ToString() + "&Date=" + DateTime.Now.ToString("yyyy-MM-dd"));
+                response2.EnsureSuccessStatusCode();
+                Models.SP_GetFCYOpeningBalance_Result BlotterFCYOpeningBalaceForToday = response2.Content.ReadAsAsync<Models.SP_GetFCYOpeningBalance_Result>().Result;
+                ViewBag.SBP_BlotterFCYOpeningBalaceForToday = BlotterFCYOpeningBalaceForToday;
+            }
+            
+            GetAllNostroBanks();
             return View();
         }
 
 
-        public ActionResult FillBlotterManualData(string Date, string flag, int Recon)
+        public ActionResult FillBlotterManualData(string Date, string flag,int Recon ,string NostroCode)
         {
             Models.GetBlotterMnualDataParam BMDP = new Models.GetBlotterMnualDataParam();
             BMDP.Recon = (Recon == 1) ? true : false;
             BMDP.DateFor = Convert.ToDateTime(Date);
             BMDP.flag = flag;
             BMDP.BR = Convert.ToInt32(Session["BR"].ToString());
+            if (!string.IsNullOrEmpty(NostroCode))
+            {
+                BMDP.NostroCode = NostroCode;
+            }
+            else
+            {
+                BMDP.NostroCode = null;
+            }
             BMDP.CurId = Convert.ToInt32(Session["SelectedCurrency"].ToString());
 
             ServiceRepository serviceObj = new ServiceRepository();
@@ -102,11 +119,51 @@ namespace WebBlotter.Controllers
 
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(OPICSManualData), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             ViewBag.FillBlotterManualData = OPICSManualData;
-
+            GetAllNostroBanks();
 
             return PartialView("_FillManualData");
 
         }
+
+
+        private List<Models.SP_GetNostroBankFromOPICS_Result> GetAllNostroBanks()
+        {
+            try
+            {
+                var currid = (dynamic)null;
+                if (Session["SelectedCurrency"] != null)
+                {
+                    currid = Convert.ToInt32(Session["SelectedCurrency"].ToString());
+                }
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("/api/NostroBank/GetNostroBankFromOpicsDDL?currId=" + currid + "&BRCode=" + Session["BR"].ToString());
+                response.EnsureSuccessStatusCode();
+                List<Models.SP_GetNostroBankFromOPICS_Result> blotterNB = new List<Models.SP_GetNostroBankFromOPICS_Result>();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    var JsonLinq = JObject.Parse(jsonResponse);
+                    WebApiResponse getreponse = new WebApiResponse();
+                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
+                    getreponse.Message = JsonLinq["Message"].ToString();
+                    getreponse.Data = JsonLinq["Data"].ToString();
+                    if (getreponse.Message == "Success")
+                    {
+                        JavaScriptSerializer ser = new JavaScriptSerializer();
+                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
+                        blotterNB = JsonConvert.DeserializeObject<List<Models.SP_GetNostroBankFromOPICS_Result>>(ResponseDD["Data"]);
+                        ViewBag.NostroBanksDDL = blotterNB;
+                    }
+                }
+                return blotterNB;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
 
         public ActionResult About()
         {
@@ -180,117 +237,11 @@ namespace WebBlotter.Controllers
             ServiceRepository serviceObj = new ServiceRepository();
             HttpResponseMessage response = serviceObj.PutResponse("api/Blotter/Update", BlotterCRRdayWise);
             response.EnsureSuccessStatusCode();
+            GetAllNostroBanks();
             UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), JsonConvert.SerializeObject(BlotterCRRdayWise), this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
             return RedirectToAction("index", "Home");
         }
 
-    
-        public ActionResult CRRFCYReportingCurrencyWise(FormCollection form)
-        {
-            #region Added by shakir (Currency parameter)
-            var selectCurrency = (dynamic)null;
-            string StartDate = string.Empty;
-            string EndDate = string.Empty;
 
-            if (form["selectCurrency"] != null)
-                selectCurrency = Convert.ToInt32(form["selectCurrency"].ToString());
-            else
-                selectCurrency = Convert.ToInt32(Session["SelectedCurrency"].ToString());
-
-            UtilityClass.GetSelectedCurrecy(selectCurrency);
-            #endregion
-
-            if (form["startdate"] != null)
-            {
-                StartDate = form["startdate"].ToString();
-                ViewBag.SetStartDate = StartDate;
-            }
-            else
-            {
-                ViewBag.SetStartDate = DateTime.Now.ToString("yyyy-MM-dd");
-            }
-            if (form["enddate"] != null)
-            {
-                EndDate = form["enddate"].ToString();
-                ViewBag.SetEndDate = EndDate;
-            }
-            else
-            {
-                ViewBag.SetEndDate = DateTime.Now.ToString("yyyy-MM-dd");
-            }
-            //UtilityClass.ActivityMonitor(Convert.ToInt32(Session["UserID"]), Session.SessionID, Request.UserHostAddress.ToString(), new Guid().ToString(), "", this.RouteData.Values["action"].ToString(), Request.RawUrl.ToString());
-            ServiceRepository serviceObj = new ServiceRepository();
-            HttpResponseMessage response = serviceObj.GetResponse("/api/Blotter/GetLatestBlotterCRRFCYReportCurrencyWise?&BR=" + Session["BR"].ToString() + "&BID=" + Session["BranchID"].ToString() + "&UserID=" + Session["UserID"].ToString() + "&StartDate=" + StartDate + "&EndDate=" + EndDate);
-            response.EnsureSuccessStatusCode();
-            List<Models.SP_GetSBP_CRRReportingFCYCurrWise_Result> SBP_BlotterCRRFCYReportCurrencyWise = response.Content.ReadAsAsync<List<Models.SP_GetSBP_CRRReportingFCYCurrWise_Result>>().Result;
-            if (SBP_BlotterCRRFCYReportCurrencyWise.Count > 0)
-            {
-                ViewBag.SBP_BlotterCRRFCYReportCurrencyWise = SBP_BlotterCRRFCYReportCurrencyWise;
-                GetConversionRate();
-            }
-            else
-            {
-
-                ViewBag.SBP_BlotterCRRFCYReportCurrencyWise = SBP_BlotterCRRFCYReportCurrencyWise;
-                ViewBag.ConversionRateCRR = null;
-                ViewBag.ConversionUSDRate = null;
-                //SBP_BlotterCRRFCYReportCurrencyWise[0].CRRBal5PcrReq = 0;
-                //SBP_BlotterCRRFCYReportCurrencyWise[0].CRRBal10PcrReq = 0;
-                //SBP_BlotterCRRFCYReportCurrencyWise[0].Deposit = 0;
-                //ViewBag.ConversionRateCRR = SBP_BlotterCRRFCYReportCurrencyWise;
-                //ViewBag.ConversionUSDRate = SBP_BlotterCRRFCYReportCurrencyWise[0].EquivalentUSD;
-
-            }
-
-            return PartialView("_HomeFCY", SBP_BlotterCRRFCYReportCurrencyWise);
-        }
-
-        private Models.SP_Get_SBPBlotterConversionRate_Result GetConversionRate()
-        {
-            try
-            {
-                ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("/api/BlotterRECON/GetConversionRate?currID=0" + "&BR=" + Session["BR"].ToString());
-                response.EnsureSuccessStatusCode();
-                List<Models.SP_Get_SBPBlotterConversionRate_Result> blotterCR = new List<Models.SP_Get_SBPBlotterConversionRate_Result>();
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
-                    var JsonLinq = JObject.Parse(jsonResponse);
-                    WebApiResponse getreponse = new WebApiResponse();
-                    getreponse.Status = Convert.ToBoolean(JsonLinq["Status"]);
-                    getreponse.Message = JsonLinq["Message"].ToString();
-                    getreponse.Data = JsonLinq["Data"].ToString();
-                    if (getreponse.Message == "Success")
-                    {
-                        JavaScriptSerializer ser = new JavaScriptSerializer();
-                        Dictionary<string, dynamic> ResponseDD = ser.Deserialize<Dictionary<string, dynamic>>(JsonLinq.ToString());
-                        blotterCR = JsonConvert.DeserializeObject<List<Models.SP_Get_SBPBlotterConversionRate_Result>>(ResponseDD["Data"]);
-                        if (blotterCR != null)
-                        {
-                            ViewBag.ConversionRateCRR = blotterCR;
-                            ViewBag.ConversionUSDRate = blotterCR[0].USDRate;
-                        }
-                        else
-                        {
-                            blotterCR[0].CurrencyID = 0;
-                            blotterCR[0].SPOTRATE_8 = 0;
-                            blotterCR[0].USDRate = 0;
-                            ViewBag.ConversionRateCRR = blotterCR;
-                            ViewBag.ConversionUSDRate = blotterCR[0].USDRate;
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.ConversionRateCRR = blotterCR;
-                    }
-                }
-                return blotterCR[0];
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
     }
 }
