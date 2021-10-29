@@ -14,8 +14,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebBlotter</RootNamespace>
-    <AssemblyName>WebBlotter</AssemblyName>
+    <RootNamespace>WebBlotterFCY</RootNamespace>
+    <AssemblyName>WebBlotterFCY</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -37,7 +37,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,14 +47,43 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=5.7.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.7.5\lib\net45\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="LINQtoCSV, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LINQtoCSV.1.5.0.0\lib\net35\LINQtoCSV.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqToExcel, Version=1.10.1.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel_x64.1.10.1\lib\LinqToExcel.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net45\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="moment.net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\moment.net.1.1.0\lib\netstandard2.0\moment.net.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="Remotion, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel_x64.1.10.1\lib\Remotion.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Data.Linq, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel_x64.1.10.1\lib\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Interfaces, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel_x64.1.10.1\lib\Remotion.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -64,6 +92,8 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -146,14 +176,12 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\WebApiResponse.cs" />
     <Compile Include="Controllers\BlotterBai_MuajjalController.cs" />
-    <Compile Include="Controllers\BlotterBalDIffController.cs" />
     <Compile Include="Controllers\BlotterBreakupsController.cs" />
     <Compile Include="Controllers\BlotterClearingController.cs" />
     <Compile Include="Controllers\BlotterController.cs" />
     <Compile Include="Controllers\BlotterCRDController.cs" />
     <Compile Include="Controllers\BlotterCRRFINCONController.cs" />
     <Compile Include="Controllers\BlotterCRRReportFCYController.cs" />
-    <Compile Include="Controllers\BlotterDMMOController.cs" />
     <Compile Include="Controllers\BlotterDTLController.cs" />
     <Compile Include="Controllers\BlotterDTLDBController.cs" />
     <Compile Include="Controllers\BlotterEstAdjBalController.cs" />
@@ -165,13 +193,13 @@
     <Compile Include="Controllers\BlotterOpenBalController.cs" />
     <Compile Include="Controllers\BlotterOpeningController.cs" />
     <Compile Include="Controllers\BlotterRECONController.cs" />
-    <Compile Include="Controllers\BlotterReservedController.cs" />
     <Compile Include="Controllers\BlotterRTGSController.cs" />
     <Compile Include="Controllers\BlotterSetupController.cs" />
     <Compile Include="Controllers\BlotterTBOController.cs" />
     <Compile Include="Controllers\BlotterTradeController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\ChangePasswordController.cs" />
+    <Compile Include="Controllers\GazettedHolidayController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NostroBanksController.cs" />
     <Compile Include="Controllers\UserPageRelationController.cs" />
@@ -182,8 +210,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\BlotterDataColor_Result.cs" />
-    <Compile Include="Models\BlotterSBP_Reserved.cs" />
     <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\GazettedHoliday.cs" />
     <Compile Include="Models\SBP_BlotterBai_Muajjal.cs" />
     <Compile Include="Models\SBP_BlotterCRD.cs" />
     <Compile Include="Models\SBP_BlotterCRRReportFCY.cs" />
@@ -211,7 +239,6 @@
     <Compile Include="Models\SBP_BlotterSetup.cs" />
     <Compile Include="Models\SBP_BlotterTBO.cs" />
     <Compile Include="Models\SBP_BlotterTrade.cs" />
-    <Compile Include="Models\SBP_DMMO.cs" />
     <Compile Include="Models\SBP_LoginInfo.cs" />
     <Compile Include="Models\SP_ADD_SessionStart.cs" />
     <Compile Include="Models\SP_FXBlotter_Result.cs" />
@@ -225,18 +252,17 @@
     <Compile Include="Models\SP_GetAll_SBPBlotterRTGS_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterTBO_Result.cs" />
     <Compile Include="Models\SP_GetAll_SBPBlotterTrade_Result.cs" />
+    <Compile Include="Models\SP_GetFCYOpeningBalance_Result.cs" />
     <Compile Include="Models\SP_GetLatestBreakup_Result.cs" />
     <Compile Include="Models\SP_GetNostroBankFromOPICS_Result.cs" />
     <Compile Include="Models\SP_GetOPICSManualData_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterCRD_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterCRRReportFCY_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterFR_Result.cs" />
-    <Compile Include="Models\SP_GetSBPBlotterOpeningClosingBalanceDIfferential_Result.cs" />
+    <Compile Include="Models\SP_GetSBPBlotterGH_Result.cs" />
     <Compile Include="Models\SP_GetSBPBlotterRECON_Result.cs" />
     <Compile Include="Models\SP_GetSBP_BlotterImportExport_Result.cs" />
     <Compile Include="Models\SP_GetSBP_CRRReportingFCYCurrWise_Result.cs" />
-    <Compile Include="Models\SP_GetSBP_DMMO_Result.cs" />
-    <Compile Include="Models\SP_GetSBP_Reserved_Result.cs" />
     <Compile Include="Models\SP_Get_SBPBlotterConversionRate_Result.cs" />
     <Compile Include="Models\SP_SBPBlotterRunningBal.cs" />
     <Compile Include="Models\SP_SBPBlotter_FCY_Result.cs" />
@@ -255,63 +281,6 @@
     <Compile Include="ViewModel\BlotterMultiModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Antlr3.Runtime.dll" />
-    <Content Include="bin\Antlr3.Runtime.pdb" />
-    <Content Include="bin\EPPlus.dll" />
-    <Content Include="bin\EPPlus.xml" />
-    <Content Include="bin\LINQtoCSV.dll" />
-    <Content Include="bin\LinqToExcel.dll" />
-    <Content Include="bin\LinqToExcel.xml" />
-    <Content Include="bin\log4net.dll" />
-    <Content Include="bin\log4net.xml" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
-    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
-    <Content Include="bin\Microsoft.IO.RecyclableMemoryStream.dll" />
-    <Content Include="bin\Microsoft.IO.RecyclableMemoryStream.xml" />
-    <Content Include="bin\Microsoft.Office.Interop.Excel.dll" />
-    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
-    <Content Include="bin\moment.net.dll" />
-    <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.xml" />
-    <Content Include="bin\Remotion.Data.Linq.dll" />
-    <Content Include="bin\Remotion.dll" />
-    <Content Include="bin\Remotion.Interfaces.dll" />
-    <Content Include="bin\roslyn\csc.exe" />
-    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
-    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
-    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
-    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
-    <Content Include="bin\roslyn\vbc.exe" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe" />
-    <Content Include="bin\System.Net.Http.Formatting.dll" />
-    <Content Include="bin\System.Net.Http.Formatting.xml" />
-    <Content Include="bin\System.Web.Helpers.dll" />
-    <Content Include="bin\System.Web.Helpers.xml" />
-    <Content Include="bin\System.Web.Http.dll" />
-    <Content Include="bin\System.Web.Http.WebHost.dll" />
-    <Content Include="bin\System.Web.Http.WebHost.xml" />
-    <Content Include="bin\System.Web.Http.xml" />
-    <Content Include="bin\System.Web.Mvc.dll" />
-    <Content Include="bin\System.Web.Mvc.xml" />
-    <Content Include="bin\System.Web.Optimization.dll" />
-    <Content Include="bin\System.Web.Optimization.xml" />
-    <Content Include="bin\System.Web.Razor.dll" />
-    <Content Include="bin\System.Web.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
-    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
-    <Content Include="bin\System.Web.WebPages.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.dll" />
-    <Content Include="bin\System.Web.WebPages.Razor.xml" />
-    <Content Include="bin\System.Web.WebPages.xml" />
-    <Content Include="bin\WebBlotter.dll" />
-    <Content Include="bin\WebBlotter.pdb" />
-    <Content Include="bin\WebBlotterFCY.dll" />
-    <Content Include="bin\WebBlotterFCY.pdb" />
-    <Content Include="bin\WebGrease.dll" />
-    <Content Include="bin\xunit.abstractions.dll" />
-    <Content Include="bin\xunit.core.dll" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -1113,6 +1082,9 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </Content>
     <None Include=".bin\git.cmd" />
     <None Include=".bin\node.cmd" />
     <None Include=".bin\npm.cmd" />
@@ -1131,11 +1103,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
-    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
-    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
-    <Content Include="bin\WebBlotter.dll.config" />
-    <Content Include="bin\WebBlotterFCY.dll.config" />
+    <Content Include="Content\ExcelSheets\RECONSheet.xlsx" />
+    <Content Include="Content\ExcelSheets\TradeSheet.xlsx" />
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />
@@ -1379,20 +1348,22 @@
     <Content Include="Views\BlotterBai_Muajjal\_BlotterBai_Muajjal.cshtml" />
     <Content Include="Views\BlotterBai_Muajjal\_Create.cshtml" />
     <Content Include="Views\BlotterBai_Muajjal\_Edit.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_BlotterCRRReportFCY.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_Create.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_Edit.cshtml" />
+    <Content Include="Views\Home\_HomeFCY.cshtml" />
     <Content Include="Views\BlotterImportExport\_BlotterImportExport.cshtml" />
     <Content Include="Views\BlotterImportExport\_Create.cshtml" />
     <Content Include="Views\BlotterImportExport\_Edit.cshtml" />
     <Content Include="Views\Shared\_NostroBankDDL.cshtml" />
-    <Content Include="Views\BlotterBalanceDifferential\_BlotterOpenCloseBalDiff.cshtml" />
-    <Content Include="Views\BlotterDMMO\_BlotterDMMO.cshtml" />
-    <Content Include="Views\BlotterReserved\_BlotterReserved.cshtml" />
-    <Content Include="Views\Home\_HomeFCY.cshtml" />
-    <Content Include="Views\BlotterCRRReportFCY\_Create.cshtml" />
-    <Content Include="Views\BlotterCRRReportFCY\_BlotterCRRReportFCY.cshtml" />
-    <Content Include="Views\BlotterCRRReportFCY\_Edit.cshtml" />
+    <Content Include="Views\GazettedHoliday\_Create.cshtml" />
+    <Content Include="Views\GazettedHoliday\_Edit.cshtml" />
+    <Content Include="Views\GazettedHoliday\_BlotterGH.cshtml" />
+    <Content Include="Views\BlotterCRRReportFCY\_BlotterCRRFCYWorking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\ExcelSheets\Updated_excel\" />
     <Folder Include="Views\BlotterCashFlow\" />
   </ItemGroup>
   <ItemGroup>
