@@ -523,7 +523,7 @@ namespace WebBlotter.Controllers
                                             recon.LimitAvailable = 0;
                                         }
                                         //---------------------------USD Conversion Rate-------------------------\\
-                                        if (recon.TheirBooks > 0)
+                                        if (recon.TheirBooks != 0)
                                         {
                                             decimal SPOTRATE_8Val = Convert.ToDecimal(ViewBag.ConversionRate.SPOTRATE_8);
                                             decimal USDRateVal = Convert.ToDecimal(ViewBag.ConversionRate.USDRate);

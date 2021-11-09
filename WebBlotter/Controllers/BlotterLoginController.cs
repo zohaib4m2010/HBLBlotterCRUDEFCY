@@ -89,10 +89,15 @@ namespace WebBlotter.Controllers
                             (new AuthAccessAttribute()).SetSessionStart(item.ID, Session.SessionID, Request.UserHostAddress, new Guid().ToString(), DateTime.Now, cookie.Expires);
 
                             HttpContext.Cache["_LoginUsersID" + item.ID] = Session.SessionID;
-                            if(item.ChangePassword)
+                            if (item.ChangePassword)
                                 Response.Redirect(new Uri(Request.Url, Url.Action("ChangePassword", "ChangePassword")).ToString(), false);
                             else
-                                Response.Redirect(new Uri(Request.Url, Url.Action("Index", "Home")).ToString(), false);
+                            {
+                                if (item.DefaultPage != null)
+                                    Response.Redirect(new Uri(Request.Url, Url.Action(item.DefaultPage.Split('/')[1], item.DefaultPage.Split('/')[0])).ToString(), false);
+                                else
+                                    Response.Redirect(new Uri(Request.Url, Url.Action("Default", "Home")).ToString(), false);
+                            }
                         }
                         else if (item.UserExists == "User Does not Exists")
 

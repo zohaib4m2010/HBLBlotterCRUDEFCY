@@ -1340,6 +1340,7 @@
     <Content Include="Views\BlotterCRRReportFCY\_Create.cshtml" />
     <Content Include="Views\BlotterCRRReportFCY\_BlotterCRRReportFCY.cshtml" />
     <Content Include="Views\BlotterCRRReportFCY\_Edit.cshtml" />
+    <Content Include="Views\Home\Default.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
